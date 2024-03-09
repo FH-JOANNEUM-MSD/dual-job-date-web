@@ -1,0 +1,16 @@
+﻿{
+  "generic": {
+
+  },
+  "pages": {
+    "mainPage": {
+      "navigation": {
+        "home": "Home",
+        "users": "Benutzer"
+      }
+    },
+    "userPage": {
+
+    }
+  }
+}
