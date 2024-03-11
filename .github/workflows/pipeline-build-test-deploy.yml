@@ -6,6 +6,10 @@ on:
       - feature/ci-containerization
   workflow_dispatch:
 
+env:
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }}
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -34,3 +38,26 @@ jobs:
               with:
                 name: dist
                 path: dist/
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Download artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: dist
+                path: dist
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v3
+              with:
+                registry: ${{ env.REGISTRY }}
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                context: .
+                push: true
+                tags: ${{ env.REGISTRY }}/${{github.repository_owner}}/${{ env.IMAGE_NAME }}:build-develop
+
