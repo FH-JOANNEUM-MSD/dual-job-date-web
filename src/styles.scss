@@ -1,1 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
+/* General Styles */
+
+@font-face {
+    font-family: 'Parka';
+    src: url('/assets/font/Parka/Parka-Bold_sOT/ParkaBold.otf') format('opentype');
+    font-weight: 700; /* Bold */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Parka';
+    src: url('/assets/font/Parka/Parka-Medium_sOT/ParkaMedium.otf') format('opentype');
+    font-weight: 500; /* Medium */
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Parka';
+    src: url('/assets/font/Parka/Parka-Regular_sOT/ParkaRegular.otf') format('opentype');
+    font-weight: 400; /* Regular */
+    font-style: normal;
+}
+
+
+html, body{
+    font-family: 'Parka', sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* General Template */
+
+:root {
+    font-size: 48px;
+  --primary-color-buttons: #53851E;
+  --secondary-color-buttons: #73B72A;
+  --primary-color-text-white: #F2F2F3;
+  --secondary-color-text-black: #000000;
+  --card-shadow: #CDECAC;
+  --font-size-text1: 1em;
+  --font-size-text2: 0.8333333333333334em;
+  --font-size-19px: 0.3958333333333333em;
+  --font-size-16px: 0.3333333333333333em;
+  --font-size-14px: 0.2916666666666667em;
+}
+
+h1{
+    font-size: 1.5em;
+    font-weight: 700;
+}
+h2{
+    font-size: 1.3333333333333333em;
+    font-weight: 500;
+}
+h3{
+    font-size: 1.1666666666666667em;
+    font-weight: 500;
+}
