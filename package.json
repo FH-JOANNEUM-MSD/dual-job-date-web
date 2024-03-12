@@ -10,6 +10,9 @@
     "generate-api": "openapi-generator-cli generate -i ./swagger.json -g typescript-angular -o ./generated-api",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "build:ci": "ng build --configuration production"
+    "generate-api": "openapi-generator-cli generate -i ./swagger.json -g typescript-angular -o ./generated-api",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCustom",
+    "build:ci": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
@@ -41,6 +44,8 @@
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
     "puppeteer": "^22.4.1",
+    "puppeteer": "^22.4.1",
     "typescript": "^5.3.3"
   }
 }
+
