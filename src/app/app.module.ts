@@ -9,10 +9,21 @@ import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./pages/home/view/home.component";
 import {CompanyComponent} from "./pages/company/view/company.component";
 import {StudentComponent} from "./pages/student/view/student.component";
+import {environment} from "../environments/environment";
+import {ApiModule, Configuration, ConfigurationParameters} from "../../generated-api";
+
+export function apiConfigFactory(): Configuration {
+  const params: ConfigurationParameters = {
+    basePath: environment.apiBasePath,
+  };
+  return new Configuration(params);
+}
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent, CompanyComponent, StudentComponent],
-  imports: [BrowserModule, AppRoutingModule, TranslateModule, HttpClientModule],
+  imports: [
+    ApiModule.forRoot(apiConfigFactory),
+    BrowserModule, AppRoutingModule, TranslateModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })
