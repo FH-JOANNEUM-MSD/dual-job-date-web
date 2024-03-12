@@ -9,8 +9,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./pages/home/view/home.component";
 import {CompanyComponent} from "./pages/company/view/company.component";
 import {StudentComponent} from "./pages/student/view/student.component";
-import {ApiModule, Configuration, ConfigurationParameters} from "../../generated-api";
 import {environment} from "../environments/environment";
+import {ApiModule, Configuration, ConfigurationParameters} from "../../generated-api";
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
