@@ -1,0 +1,435 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Music API",
+    "description": "API for managing albums, artists, and tracks"
+  },
+  "paths": {
+    "/v1/albums": {
+      "get": {
+        "summary": "Get all albums",
+        "description": "Retrieve a list of all albums",
+        "tags": [
+          "Albums"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new album",
+        "description": "Create a new album",
+        "tags": [
+          "Albums"
+        ],
+        "parameters": [
+          {
+            "name": "album",
+            "in": "body",
+            "description": "Album object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Album"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Album created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/v1/albums/{id}": {
+      "get": {
+        "summary": "Get an album by ID",
+        "description": "Retrieve an album by its ID",
+        "tags": [
+          "Albums"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the album",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Album not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an album by ID",
+        "description": "Update an album by its ID",
+        "tags": [
+          "Albums"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the album",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "album",
+            "in": "body",
+            "description": "Album object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Album"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Album updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Album not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an album by ID",
+        "description": "Delete an album by its ID",
+        "tags": [
+          "Albums"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the album",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Album deleted successfully"
+          },
+          "404": {
+            "description": "Album not found"
+          }
+        }
+      }
+    },
+    "/v1/artists": {
+      "get": {
+        "summary": "Get all artists",
+        "description": "Retrieve a list of all artists",
+        "tags": [
+          "Artists"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new artist",
+        "description": "Create a new artist",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "name": "artist",
+            "in": "body",
+            "description": "Artist object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Artist"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Artist created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/v1/artists/{id}": {
+      "get": {
+        "summary": "Get an artist by ID",
+        "description": "Retrieve an artist by its ID",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the artist",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Artist not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an artist by ID",
+        "description": "Update an artist by its ID",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the artist",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "artist",
+            "in": "body",
+            "description": "Artist object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Artist"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Artist updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Artist not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an artist by ID",
+        "description": "Delete an artist by its ID",
+        "tags": [
+          "Artists"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the artist",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Artist deleted successfully"
+          },
+          "404": {
+            "description": "Artist not found"
+          }
+        }
+      }
+    },
+    "/v1/tracks": {
+      "get": {
+        "summary": "Get all tracks",
+        "description": "Retrieve a list of all tracks",
+        "tags": [
+          "Tracks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new track",
+        "description": "Create a new track",
+        "tags": [
+          "Tracks"
+        ],
+        "parameters": [
+          {
+            "name": "track",
+            "in": "body",
+            "description": "Track object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Track"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Track created successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          }
+        }
+      }
+    },
+    "/v1/tracks/{id}": {
+      "get": {
+        "summary": "Get a track by ID",
+        "description": "Retrieve a track by its ID",
+        "tags": [
+          "Tracks"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Track not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a track by ID",
+        "description": "Update a track by its ID",
+        "tags": [
+          "Tracks"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "track",
+            "in": "body",
+            "description": "Track object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Track"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Track updated successfully"
+          },
+          "400": {
+            "description": "Invalid input data"
+          },
+          "404": {
+            "description": "Track not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a track by ID",
+        "description": "Delete a track by its ID",
+        "tags": [
+          "Tracks"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the track",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Track deleted successfully"
+          },
+          "404": {
+            "description": "Track not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Album": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "release": {
+          "type": "integer"
+        },
+        "genre": {
+          "type": "string"
+        },
+        "artistId": {
+          "type": "integer"
+        }
+      }
+    },
+    "Artist": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Track": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "integer"
+        },
+        "albumId": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
