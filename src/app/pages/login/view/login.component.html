@@ -1,1 +1,27 @@
-<p>{{ 'login works!' }}</p>
+<div class="wrapper">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="username">Username:</label>
+    <input type="text" id="username" formControlName="username">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" formControlName="password">
+
+    <button type="submit">Login</button>
+  </form>
+  <div class="top-right-wave">
+    <svg width="864" height="722" viewBox="0 0 864 722" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M257 140C121.4 152.8 29.1667 52 0 0L864 3.5V721.5H767.5C468.7 683.5 519 532 581.5 461C618 411.167 684 291.1 656 209.5C621 107.5 426.5 124 257 140Z" fill="#73B72A"/>
+    </svg>
+  </div>
+  <div class="bottom-left-circle">
+    <svg width="278" height="379" viewBox="0 0 278 379" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M278 362C278 561.927 115.927 724 -84 724C-283.927 724 -446 561.927 -446 362C-446 162.073 -283.927 0 -84 0C115.927 0 278 162.073 278 362Z" fill="#73B72A"/>
+    </svg>
+    <div class="inner-circle">
+      <svg width="202" height="303" viewBox="0 0 202 303" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="-84" cy="286" r="286" fill="#CDECAC"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
