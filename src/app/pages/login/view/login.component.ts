@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginService} from "../core/login.service";
 
 @Component({
@@ -6,8 +6,14 @@ import {LoginService} from "../core/login.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  
+export class LoginComponent implements OnInit {
+
   constructor(private loginService: LoginService) {
+  }
+
+  ngOnInit() {
+    this.loginService.getAlbums().subscribe(result => {
+      result.at(0).
+    })
   }
 }
