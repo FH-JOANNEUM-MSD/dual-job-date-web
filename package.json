@@ -10,9 +10,6 @@
     "generate-api": "openapi-generator-cli generate -i ./swagger.json -g typescript-angular -o ./generated-api",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "build:ci": "ng build --configuration production"
-    "generate-api": "openapi-generator-cli generate -i ./swagger.json -g typescript-angular -o ./generated-api",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCustom",
-    "build:ci": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
