@@ -3,7 +3,7 @@ name: Dual Job Date Build Deploy
 on:
   push:
     branches:
-      - feature/ci-containerization
+      - main
   workflow_dispatch:
 
 env:
