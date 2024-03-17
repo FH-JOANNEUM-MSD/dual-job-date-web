@@ -1,27 +1,96 @@
-# DualDating
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.7.
 
-## Development server
+# DualDating Web App
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Prerequisites
 
-## Code scaffolding
+- **Node.js**: This project requires a current, active LTS, or maintenance LTS version of Node.js, not lower than 18.13.0. Download and install it from [Node.js](https://nodejs.org).
+- **Angular**: Install Angular CLI version 16.2.7. You can find it at [Angular CLI](https://github.com/angular/angular-cli).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Install Angular CLI
+
+To install Angular CLI globally on your machine, run the following command:
+
+```bash
+npm install -g @angular/cli
+```
+
+## Getting Started
+
+Follow these steps to get the project up and running on your local machine:
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/FH-JOANNEUM-MSD/dual-job-date-web.git
+```
+
+2. **Install npm modules**
+
+Navigate to the project directory and install the required npm modules:
+
+```bash
+npm install
+```
+
+3. **Start the project**
+
+You can start the project using npm by running:
+
+```bash
+npm start
+```
+
+*Alternatively*, run the following command for a development server:
+
+```bash
+ng serve
+```
+
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+## Development Server
+
+For detailed instructions on setting up the development server, refer to the Angular CLI documentation or the section above on starting the project.
+
+## Code Scaffolding
+
+To generate a new component or other Angular elements, use the Angular CLI command:
+
+```bash
+ng generate component <component-name>
+```
+
+You can also generate directives, pipes, services, classes, guards, interfaces, enums, or modules using this command.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+To build the project, run:
 
-## Running unit tests
+```bash
+ng build
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The build artifacts will be stored in the `dist/` directory.
 
-## Running end-to-end tests
+## Running Unit Tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Execute the unit tests via [Karma](https://karma-runner.github.io) by running:
 
-## Further help
+```bash
+ng test
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Running End-to-End Tests
+
+Execute the end-to-end tests via a platform of your choice. To use this command, you first need to add a package that implements end-to-end testing capabilities:
+
+```bash
+ng e2e
+```
+
+## Further Help
+
+For more assistance with the Angular CLI, use the `ng help` command or visit the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
