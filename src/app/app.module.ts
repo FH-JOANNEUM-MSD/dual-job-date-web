@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './pages/home/view/home.component';
 import { CompanyComponent } from './pages/company/view/company.component';
 import { StudentComponent } from './pages/student/view/student.component';
-import { HeadernavigationComponent } from './stylingcomponents/headernavigation/view/headernavigation.component';
+import { HeadernavigationComponent } from './custom-components/header-navigation/view/header-navigation.component';
 
 @NgModule({
   declarations: [
