@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './pages/login/view/login.component';
@@ -11,6 +9,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./pages/home/view/home.component";
 import {CompanyComponent} from "./pages/company/view/company.component";
 import {StudentComponent} from "./pages/student/view/student.component";
+import { HeadernavigationComponent } from './custom-components/header-navigation/view/header-navigation.component';
 import {environment} from "../environments/environment";
 import {ApiModule, Configuration, ConfigurationParameters} from "../../generated-api";
 
@@ -22,12 +21,16 @@ export function apiConfigFactory(): Configuration {
 }
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, CompanyComponent, StudentComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent, CompanyComponent, StudentComponent, HeadernavigationComponent],
   imports: [
     ApiModule.forRoot(apiConfigFactory),
-    BrowserModule, AppRoutingModule, TranslateModule, HttpClientModule, ReactiveFormsModule],
+    BrowserModule,
+    AppRoutingModule,
+    TranslateModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}
