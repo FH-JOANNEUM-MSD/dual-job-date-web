@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {AuthService} from "../../../Services/auth.service";
 import {Router} from '@angular/router';
-import {SnackbarService} from "../../../services/snackbar.service";
+import {AuthService} from "../../../service/auth.service";
+import {SnackbarService} from "../../../service/snackbar.service";
+
 
 @Component({
   selector: 'app-login',
