@@ -1,7 +1,6 @@
-import {LoginComponent} from './login.component';
-
+/*
 describe('LoginComponent', () => {
-  /*let component: LoginComponent;
+  let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(() => {
@@ -15,5 +14,6 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });*/
+  });
 });
+*/

@@ -1,7 +1,6 @@
-import {HeadernavigationComponent} from './header-navigation.component';
-
+/*
 describe('HeadernavigationComponent', () => {
-  /*let component: HeadernavigationComponent;
+  let component: HeadernavigationComponent;
   let fixture: ComponentFixture<HeadernavigationComponent>;
 
   beforeEach(async () => {
@@ -16,5 +15,5 @@ describe('HeadernavigationComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });*/
-});
+  });
+});*/

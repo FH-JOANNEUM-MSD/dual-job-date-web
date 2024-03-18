@@ -1,7 +1,5 @@
-import {StudentComponent} from './student.component';
-
-describe('StudentComponent', () => {
-  /*let component: StudentComponent;
+/*describe('StudentComponent', () => {
+  let component: StudentComponent;
   let fixture: ComponentFixture<StudentComponent>;
 
   beforeEach(async () => {
@@ -16,5 +14,5 @@ describe('StudentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });*/
-});
+  });
+});*/
