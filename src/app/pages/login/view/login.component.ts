@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from "../../../Services/auth.service";
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
+import {SnackbarService} from "../../../services/snackbar.service";
 
 @Component({
   selector: 'app-login',
@@ -10,25 +11,35 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  constructor(private authService: AuthService,private router: Router) {
-  }
+  // Todo remove after login is implemented
+  invalidData = false;
 
-  loginForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl('')
+  loginForm = this.fb.group({
+    email: this.fb.nonNullable.control<string>('', {
+      validators: [Validators.required, Validators.email]
+    }),
+    password: this.fb.nonNullable.control<string>('', {
+      validators: [Validators.required]
+    }),
   });
 
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private snackbarService: SnackbarService) {
+  }
+
   onSubmit() {
-    const username = this.loginForm.value.username;
-    const password = this.loginForm.value.password;
-
-    if(typeof username === 'string' && typeof password === 'string'){
-      this.authService.login(username,password)
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
     }
 
+    const email = this.loginForm.controls.email.value;
+    const password = this.loginForm.controls.password.value;
+    this.authService.login(email, password)
 
-    if (this.authService.isAuthenticated()) {
+    /*TODO if (this.authService.isAuthenticated()) {
       this.router.navigate(['/home']);
-    }
+    }*/
+
+    this.invalidData = true;
   }
 }
