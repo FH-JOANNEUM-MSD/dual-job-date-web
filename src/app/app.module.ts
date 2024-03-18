@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './pages/login/view/login.component';
@@ -24,7 +24,11 @@ export function apiConfigFactory(): Configuration {
   declarations: [AppComponent, LoginComponent, HomeComponent, CompanyComponent, StudentComponent, HeadernavigationComponent],
   imports: [
     ApiModule.forRoot(apiConfigFactory),
-    BrowserModule, AppRoutingModule, TranslateModule, HttpClientModule
+    BrowserModule,
+    AppRoutingModule,
+    TranslateModule,
+    HttpClientModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
