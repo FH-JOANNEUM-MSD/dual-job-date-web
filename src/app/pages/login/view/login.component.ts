@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AuthService} from "../../../service/auth.service";
-import {SnackbarService} from "../../../service/snackbar.service";
+import {AuthService} from "../../../services/auth.service";
 
 
 @Component({
@@ -24,7 +23,7 @@ export class LoginComponent {
     }),
   });
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder, private snackbarService: SnackbarService) {
+  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
   }
 
   onSubmit() {
