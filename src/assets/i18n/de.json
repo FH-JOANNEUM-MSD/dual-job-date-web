@@ -1,16 +1,7 @@
 ﻿{
   "generic": {
-
   },
-  "pages": {
-    "mainPage": {
-      "navigation": {
-        "home": "Home",
-        "users": "Benutzer"
-      }
-    },
-    "userPage": {
-
-    }
+  "loginPage": {
+    "title": "Dual Dating"
   }
 }
