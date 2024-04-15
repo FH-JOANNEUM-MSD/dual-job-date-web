@@ -1,5 +1,7 @@
 # Dual Job Dating Web CI/CD Pipeline
 
+![Build Test Deploy Workflow](https://github.com/FH-JOANNEUM-MSD/dual-job-date-web/actions/workflows/pipeline-build-test-deploy.yml/badge.svg)
+
 A CI/CD Pipeline for the Section Web of the Dual Job Dating project. The goal of this Pipeline is the automatic building/testing and deployment of an Angular to the Github Container Registry.
 
 ## CI/CD Pipeline Documentation
