@@ -12,7 +12,7 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class CompanyComponent implements OnInit {
   dataSource = new MatTableDataSource<UserInput>();
-  displayedColumns: string[] = ['email', 'userType'];
+  displayedColumns: string[] = ['email', 'status', 'userType'];
 
   users: UserInput[] | null = null;
 

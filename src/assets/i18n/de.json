@@ -3,5 +3,12 @@
   },
   "loginPage": {
     "title": "Dual Dating"
+  },
+  "companyPage": {
+    "table": {
+      "email": "Email",
+      "userType": "User Typ",
+      "status": "Status"
+    }
   }
 }
