@@ -36,7 +36,6 @@
         <mat-error *ngIf="loginForm.controls.email.invalid">Verpflichtend und gültige Email benötigt</mat-error>
         <input formControlName="password" id="password" placeholder="Password..." type="password">
         <mat-error *ngIf="loginForm.controls.password.invalid">Verpflichtend</mat-error>
-        <mat-error *ngIf="invalidData">Anmeldedaten ungültig...</mat-error>
         <button type="submit">LOGIN</button>
       </form>
       <div class="forgot">

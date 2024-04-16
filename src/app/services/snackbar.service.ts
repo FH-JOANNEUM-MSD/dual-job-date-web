@@ -18,7 +18,6 @@ export class SnackbarService {
   }
 
   error(message: string, action: string = 'OK', duration: number = 3000) {
-    console.log('error');
     this.snackBar.open(message, action, {
       duration: duration,
       verticalPosition: 'top',
