@@ -30,9 +30,8 @@ The `build` job performs the following steps:
 1. **Checkout code**: This step checks out the repository code using the [actions/checkout@v4](https://github.com/actions/checkout) action.
 2. **Setup Node**: This step sets up the Node.js environment using the [actions/setup-node@v4](https://github.com/actions/setup-node) action with caching enabled for npm.
 3. **Install dependencies**: This step installs the project dependencies using the pipeline friendly `npm ci` command.
-4. **Generate api**: This step generates the API using the predefined `npm run generate-api` command. The command can be found in the [package.json](../../package.json) file.
-5. **Build**: This step builds the Angular Application using the predefined `npm run build:ci` command. The command can be found in the [package.json](../../package.json) file.
-6. **Archive Application**: This step saves the dist folder as an artifact using the [actions/upload-artifact@v4](https://github.com/actions/upload-artifact) action.
+4. **Build**: This step builds the Angular Application using the predefined `npm run build:ci` command. The command can be found in the [package.json](../../package.json) file.
+5. **Archive Application**: This step saves the dist folder as an artifact using the [actions/upload-artifact@v4](https://github.com/actions/upload-artifact) action.
 
 #### Deploy Job
 

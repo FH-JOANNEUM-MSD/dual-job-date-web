@@ -47,9 +47,6 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Generate api
-              run: npm run generate-api
-
             - name: Build
               run: npm run build:ci
 
