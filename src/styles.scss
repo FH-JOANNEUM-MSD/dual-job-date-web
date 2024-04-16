@@ -1,4 +1,6 @@
-/* General Styles */
+@use '@angular/material' as mat;
+@import "assets/style/theme";
+@import "assets/style/const";
 
 @font-face {
   font-family: 'Parka';
@@ -75,3 +77,117 @@ mat-error {
 .error-snackbar {
   background-color: #f44336;
 }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dialog-container {
+  max-width: 33vw;
+  width: 33vw;
+  height: 100vh;
+  position: fixed !important;
+  top: 0;
+  right: 0;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      margin-bottom: 0;
+    }
+  }
+
+  mat-dialog-content {
+    height: 100%;
+    max-height: unset;
+
+    form {
+      mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+
+  mat-dialog-actions {
+    padding-right: $padding-medium !important;
+    margin-left: auto;
+  }
+}
+
+.primary-button {
+  margin: $margin-medium 0;
+  background-color: mat.get-color-from-palette($primary-palette, 500) !important;
+  color: white !important;
+  border-radius: 4px !important;
+
+  &.mat-mdc-button-disabled {
+    background-color: mat.get-color-from-palette($primary-palette, 100) !important;
+  }
+}
+
+.warn-button {
+  margin: $margin-medium 0;
+  background-color: darkred !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+// Angular Components Styles
+
+mat-form-field {
+  .mat-mdc-text-field-wrapper {
+    background-color: white !important;
+    border: 1px solid mat.get-color-from-palette($primary-palette, 500) !important;
+    border-radius: 4px !important;
+  }
+}
+
+ng-select {
+
+  .ng-select-container {
+    border: 1px solid mat.get-color-from-palette($primary-palette, 500) !important;
+    border-radius: 4px !important;
+
+    .ng-value-container {
+      border-top: unset !important;
+
+      .ng-placeholder,
+      .ng-select-container .ng-value-container .ng-input input,
+      .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+        // Options
+      }
+
+      .ng-value {
+        background-color: mat.get-color-from-palette($primary-palette, 500) !important;
+        border-radius: 4px !important;
+        padding: $padding-small !important;
+        margin: $margin-x-small $margin-small !important;
+        color: white !important;
+      }
+    }
+  }
+}
+

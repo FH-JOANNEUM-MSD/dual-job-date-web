@@ -1,0 +1,67 @@
+﻿@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary-palette: (
+  50: #e1ebf7,
+  100: #b3d1ef,
+  200: #80b3e6,
+  300: #4d95dd,
+  400: #267dd6,
+  500: #00529F,
+  600: #004c8c,
+  700: #004378,
+  800: #003b65,
+  900: #002d48,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+  ),
+);
+
+// Akzentfarbe Palette
+$accent-palette: (
+  50: #fffde7,
+  100: #fff9c4,
+  200: #fff59d,
+  300: #fff176,
+  400: #ffee58,
+  500: #FFD200,
+  600: #fdd835,
+  700: #fbc02d,
+  800: #f9a825,
+  900: #f57f17,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #000,
+    600: #000,
+    700: #000,
+    800: #000,
+    900: #000,
+  ),
+);
+
+$theme: mat.define-light-theme(
+    (
+      color: (
+        primary: mat.define-palette($primary-palette),
+        accent: mat.define-palette($accent-palette),
+      ),
+      typography: mat.define-typography-config(),
+      density: 0,
+    )
+);
+
+@include mat.all-component-themes($theme);

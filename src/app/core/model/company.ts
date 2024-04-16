@@ -1,7 +1,6 @@
 import {CompanyActivity} from './companyActivity';
 import {User} from './user';
 import {Address} from './address';
-import {StudentCompany} from './studentCompany';
 import {Activity} from './activity';
 import {Institution} from './institution';
 import {CompanyDetails} from './companyDetails';
@@ -23,7 +22,7 @@ export interface Company {
   activities: Array<Activity> | null;
   companyActivities: Array<CompanyActivity> | null;
   likers: Array<User> | null;
-  studentCompanies: Array<StudentCompany> | null;
+  //studentCompanies: Array<StudentCompany> | null;
   academicProgram: AcademicProgram;
   academicProgramId: number;
   institution: Institution;

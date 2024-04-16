@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {UserService} from "../../../core/services/user.service";
 import {AuthService} from "../../../services/auth.service";
+import {UserService} from "../../../core/services/user.service";
 
 
 @Component({
@@ -40,12 +40,8 @@ export class LoginComponent {
 
         this.authService.setCredentials(result);
 
-        console.log(result);
+        this.router.navigate(['/home']);
       }
     );
-
-    /*TODO if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/home']);
-    }*/
   }
 }

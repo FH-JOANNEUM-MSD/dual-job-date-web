@@ -1,0 +1,45 @@
+$primary-color: #00529F;
+$secondary-color: #FFD200;
+$accent-color: #FFFFFF;
+$white-color: #FFFFFF;
+
+// Typography
+$font-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-secondary: 'Georgia', serif;
+
+// Spacing
+$padding-x-small: 4px;
+$padding-small: 8px;
+$padding-medium: 16px;
+$padding-large: 32px;
+
+$margin-x-small: 4px;
+$margin-small: 8px;
+$margin-medium: 16px;
+$margin-large: 32px;
+
+// Borders
+$border-color: #CCCCCC;
+$border-style: solid;
+$border-width: 1px;
+
+// Buttons
+$button-font-size: 14px;
+$button-padding: 12px 24px;
+$button-border-radius: 4px;
+$button-background-color: $primary-color;
+$button-color: $accent-color;
+
+// Links
+$link-color: $primary-color;
+$link-hover-color: darken($primary-color, 10%);
+
+// Header
+$header-background-color: $secondary-color;
+$header-color: $primary-color;
+$header-padding: $padding-medium;
+
+// Footer
+$footer-background-color: $primary-color;
+$footer-color: $accent-color;
+$footer-padding: $padding-large;

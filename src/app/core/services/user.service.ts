@@ -1,10 +1,10 @@
 ﻿import {Injectable} from '@angular/core';
 import {catchError, Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {UserType} from "../model/userType";
 import {User} from "../model/user";
 import {environment} from "../../../environments/environment";
 import {AuthenticationResponse} from "../model/authenticationResponse";
+import {UserType} from "../enum/userType";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,9 @@ export class UserService {
 
   getUser(userType: UserType): Observable<User[] | null> {
     // TODO institutionId and academicProgramId ???
-    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers?userType=${userType}&institutionId=${''}&academicProgramId=${''}`).pipe(
+    const institutionId = '2';
+    const academicProgramId = '2';
+    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers?userType=${userType}&institutionId=${institutionId}&academicProgramId=${academicProgramId}`).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
@@ -43,6 +45,7 @@ export class UserService {
   // ****** POST ****** \\
 
   login(email: string, password: string): Observable<AuthenticationResponse | null> {
+    // TODO implement Cookie Strategy
     return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Login`, {
       password: password,
       email: email
@@ -117,6 +120,4 @@ export class UserService {
       }),
     );
   }
-
-
 }

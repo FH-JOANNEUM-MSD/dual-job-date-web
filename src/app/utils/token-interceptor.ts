@@ -12,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Füge den Bearer-Token zum Header hinzu, wenn vorhanden
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessTokenKey');
     if (token) {
       request = request.clone({
         setHeaders: {
