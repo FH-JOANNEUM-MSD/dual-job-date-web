@@ -1,9 +1,8 @@
-import {Company} from './company';
-import {StudentCompany} from './studentCompany';
-import {UserType} from './userType';
-import {Institution} from './institution';
-import {AcademicProgram} from './academicProgram';
-
+import { Company } from './company';
+import { StudentCompany } from './studentCompany';
+import { UserType } from '../enum/userType';
+import { Institution } from './institution';
+import { AcademicProgram } from './academicProgram';
 
 export interface User {
   id: string | null;
@@ -32,6 +31,3 @@ export interface User {
   likes: Array<Company> | null;
   studentCompanies: Array<StudentCompany> | null;
 }
-
-
-

@@ -15,8 +15,12 @@ import { CompanyComponent } from './pages/company/view/company.component';
 import { StudentComponent } from './pages/student/view/student.component';
 import { HeadernavigationComponent } from './custom-components/header-navigation/view/header-navigation.component';
 import { environment } from '../environments/environment';
-import { MatError, MatFormField } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import {
+  MatError,
+  MatFormField,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -24,6 +28,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { TokenInterceptor } from './utils/token-interceptor';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MatButtonModule } from '@angular/material/button';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -45,12 +51,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatFormField,
-    MatInput,
-    MatError,
-    MatSnackBarModule,
     MatTableModule,
     MatSortModule,
+    MatButtonModule,
+    NgSelectModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
