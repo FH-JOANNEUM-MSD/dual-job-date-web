@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {UserService} from "../../../core/services/user.service";
 import {AuthService} from "../../../services/auth.service";
 
 
@@ -11,9 +12,6 @@ import {AuthService} from "../../../services/auth.service";
 })
 export class LoginComponent {
 
-  // Todo remove after login is implemented
-  invalidData = false;
-
   loginForm = this.fb.group({
     email: this.fb.nonNullable.control<string>('', {
       validators: [Validators.required, Validators.email]
@@ -23,7 +21,7 @@ export class LoginComponent {
     }),
   });
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
+  constructor(private userService: UserService, private authService: AuthService, private router: Router, private fb: FormBuilder) {
   }
 
   onSubmit() {
@@ -34,12 +32,20 @@ export class LoginComponent {
 
     const email = this.loginForm.controls.email.value;
     const password = this.loginForm.controls.password.value;
-    this.authService.login(email, password)
+    this.userService.login(email, password).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+
+        this.authService.setCredentials(result);
+
+        console.log(result);
+      }
+    );
 
     /*TODO if (this.authService.isAuthenticated()) {
       this.router.navigate(['/home']);
     }*/
-
-    this.invalidData = true;
   }
 }
