@@ -1,4 +1,4 @@
 ﻿export const environment = {
   production: false,
-  apiBasePath: 'http://localhost:8080/'
+  apiBasePath: 'https://dual-dating-backend.msd-moss-test.fh-joanneum.at',
 };

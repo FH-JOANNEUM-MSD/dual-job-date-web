@@ -1,26 +1,25 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { AuthenticationResponse } from '../core/model/authenticationResponse';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  constructor() {
+  accessTokenKey: string = 'accessTokenKey';
+  refreshTokenKey: string = 'refreshTokenKey';
+
+  constructor() {}
+
+  setCredentials(authResponse: AuthenticationResponse): void {
+    localStorage.setItem(this.accessTokenKey, authResponse.accessToken);
+    localStorage.setItem(this.refreshTokenKey, authResponse.refreshToken);
   }
 
-  login(username: string, password: string): void {
-    // TODO implement login logik
-    /*if(localStorage.getItem('isAuthenticated') !== 'true'){
-      localStorage.setItem('isAuthenticated', 'true');
-    }*/
-  }
-
-  // Check if the user is logged in
   isAuthenticated(): boolean {
-    return localStorage.getItem('isAuthenticated') === 'true';
+    return localStorage.getItem(this.accessTokenKey) !== null;
   }
 
-  // Simulate a logout
   logout(): void {
-    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem(this.accessTokenKey);
   }
 }
