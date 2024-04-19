@@ -1,32 +1,42 @@
 <app-headernavigation></app-headernavigation>
-<table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
+@if(isLoadingResults){
+  <mat-spinner></mat-spinner>
+}
+@else {
+  <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
 
-  <ng-container matColumnDef="email">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.email' | translate }}</th>
-    <td *matCellDef="let user" mat-cell>{{ user.email }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="status">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
-    <td *matCellDef="let user" mat-cell> 
-      <div [ngClass]="{'isNotActive': !user.isActive, 'isActive': user.isActive}">
-      {{ user.isActive ? 'Open' : 'Taken' }}
-      </div>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="userType">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.userType' | translate }}</th>
-    <td *matCellDef="let user" mat-cell>{{ 'enum.userType.' + user.userType | translate }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef> Actions</th>
-    <td mat-cell *matCellDef="let element">
-    </td>
-  </ng-container>
-
-
-  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-</table>
+    <ng-container matColumnDef="name">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.name' | translate }}</th>
+      <td *matCellDef="let user" mat-cell>{{ user.company.name }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="email">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.email' | translate }}</th>
+      <td *matCellDef="let user" mat-cell>{{ user.email }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="status">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
+      <td *matCellDef="let user" mat-cell> 
+        <div [ngClass]="{'isNotActive': !user.isActive, 'isActive': user.isActive}">
+        {{ user.isActive ? 'Open' : 'Taken' }}
+        </div>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="industry">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.industry' | translate }}</th>
+      <td *matCellDef="let user" mat-cell>{{ user.company.industry }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="companyWebsite">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.website' | translate }}</th>
+      <td *matCellDef="let user" mat-cell><a href="{{ user.company.website }}">{{ user.company.website }}</a></td>
+    </ng-container>
+  
+    
+  
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+  </table>
+}

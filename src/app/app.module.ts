@@ -30,6 +30,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { TokenInterceptor } from './utils/token-interceptor';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -60,6 +61,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinner,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

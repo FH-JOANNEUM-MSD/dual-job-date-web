@@ -10,24 +10,41 @@ import { UserService } from 'src/app/core/services/user.service';
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss',
 })
-export class CompanyComponent implements OnInit {
+export class CompanyComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<UserInput>();
-  displayedColumns: string[] = ['email', 'status', 'userType'];
-
+  displayedColumns: string[] = [
+    'name',
+    'email',
+    'status',
+    'industry',
+    'companyWebsite',
+  ];
   users: UserInput[] | null = null;
+  isLoadingResults: boolean = true;
 
   constructor(private userService: UserService) {}
 
+  @ViewChild(MatSort) sort!: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
   ngOnInit() {
     this.loadNeededData();
   }
 
   private loadNeededData() {
-    this.userService.getUser(UserType.Company).subscribe((result) => {
-      if (!result) {
-        return;
-      }
-      this.dataSource.data = result;
+    this.userService.getUser(UserType.Company).subscribe({
+      next: (result) => {
+        if (result) {
+          this.dataSource.data = result;
+        }
+        this.isLoadingResults = false;
+      },
+      error: (error) => {
+        console.error('Failed to load user data', error);
+        this.isLoadingResults = false;
+      },
     });
   }
 }
