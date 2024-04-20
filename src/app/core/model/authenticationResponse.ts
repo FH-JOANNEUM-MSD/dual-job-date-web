@@ -4,4 +4,3 @@
   expiresIn: number;
   refreshToken: string;
 }
-

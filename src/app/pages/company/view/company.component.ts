@@ -10,7 +10,7 @@ import { UserService } from 'src/app/core/services/user.service';
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss',
 })
-export class CompanyComponent implements OnInit, AfterViewInit {
+export class CompanyComponent implements OnInit {
   dataSource = new MatTableDataSource<UserInput>();
   displayedColumns: string[] = [
     'name',
@@ -24,11 +24,6 @@ export class CompanyComponent implements OnInit, AfterViewInit {
 
   constructor(private userService: UserService) {}
 
-  @ViewChild(MatSort) sort!: MatSort;
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
   ngOnInit() {
     this.loadNeededData();
   }
@@ -38,6 +33,7 @@ export class CompanyComponent implements OnInit, AfterViewInit {
       next: (result) => {
         if (result) {
           this.dataSource.data = result;
+          console.log(result);
         }
         this.isLoadingResults = false;
       },

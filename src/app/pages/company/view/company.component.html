@@ -4,7 +4,6 @@
 }
 @else {
   <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
-
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.name' | translate }}</th>
       <td *matCellDef="let user" mat-cell>{{ user.company.name }}</td>
@@ -18,24 +17,22 @@
     <ng-container matColumnDef="status">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
       <td *matCellDef="let user" mat-cell> 
-        <div [ngClass]="{'isNotActive': !user.isActive, 'isActive': user.isActive}">
-        {{ user.isActive ? 'Open' : 'Taken' }}
+        <div [ngClass]="{'isNotActive': !user.company.isActive, 'isActive': user.company.isActive}">
+        {{ user.company.isActive ? 'Open' : 'Taken' }}
         </div>
       </td>
     </ng-container>
-  
+
     <ng-container matColumnDef="industry">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.industry' | translate }}</th>
-      <td *matCellDef="let user" mat-cell>{{ user.company.industry }}</td>
+      <td *matCellDef="let user" mat-cell>{{ user.company.industry}}</td>
     </ng-container>
   
     <ng-container matColumnDef="companyWebsite">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.website' | translate }}</th>
       <td *matCellDef="let user" mat-cell><a href="{{ user.company.website }}">{{ user.company.website }}</a></td>
     </ng-container>
-  
-    
-  
+
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
