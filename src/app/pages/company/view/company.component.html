@@ -34,6 +34,6 @@
     </ng-container>
 
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row [routerLink]="['/company-details', row.company.id]"></tr>
   </table>
 }
