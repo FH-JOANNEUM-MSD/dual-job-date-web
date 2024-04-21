@@ -12,6 +12,9 @@
       "status": "Status",
       "website": "Webseite",
       "industry": "Industrie"
+    },
+    "button":{
+      "add": "Unternehmen hinzufügen"
     }
   }
 }

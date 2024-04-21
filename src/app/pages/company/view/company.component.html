@@ -3,6 +3,9 @@
   <mat-spinner></mat-spinner>
 }
 @else {
+  <section>
+      <button mat-flat-button color="primary">{{ 'companyPage.button.add' | translate }}</button>
+  </section>
   <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.name' | translate }}</th>
