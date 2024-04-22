@@ -6,6 +6,7 @@ import {environment} from "../../../environments/environment";
 import {AuthenticationResponse} from "../model/authenticationResponse";
 import {UserType} from "../enum/userType";
 import {RegisterUserInput} from "../model/registerUserInput";
+import {Credentials} from "../model/credentials";
 
 @Injectable({
   providedIn: 'root'
@@ -79,10 +80,8 @@ export class UserService {
     );
   }
 
-  // TODO how should i know my userId if im not logged in
-  resetPassword(userId: string): Observable<any | null> {
-    // TODO implement GlobalStorage / LocalStorage something
-    return this.http.post(`${environment.apiBasePath}${this.urlPath}/ResetPassword`, {id: userId}).pipe(
+  generateUserCredentials(userId: string): Observable<Credentials | null> {
+    return this.http.post<Credentials>(`${environment.apiBasePath}${this.urlPath}/ResetPassword?id=${userId}`, null).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
@@ -130,5 +129,45 @@ export class UserService {
       }),
       map(result => !!result)
     );
+  }
+
+  sendCredentials(user: User, password: string) {
+    // TODO Translate
+    let subject = '';
+    let body = '';
+ 
+    switch (user.userType) {
+      case UserType.Student:
+        subject = 'Einladung zum Dual Job Dating';
+        body = `Liebe/r Student,\n\n` +
+          'Wir laden dich herzlich zum Dual Job Dating ein.\n' +
+          '\n' +
+          'Hier sind deine Anmeldedaten:\n' +
+          `\nE-Mail: ${user.email}\n` +
+          `Passwort: ${password}\n` +
+          '\n' +
+          'Wir freuen uns darauf, dich beim Job-Dating-Event zu sehen und wünschen dir viel Erfolg!\n' +
+          '\nMit freundlichen Grüßen,\nFH Joanneum';
+        break;
+      case UserType.Company:
+        subject = 'Einladung zur Registrierung für das Dual Job Dating';
+        body = `Sehr geehrte Damen und Herren,\n\n` +
+          'Wir laden Sie herzlich zur Registrierung für das Dual Job Dating ein.\n' +
+          '\n' +
+          'Bitte registrieren Sie sich über folgenden Link:\n' +
+          `${environment.apiBasePath}/login` +
+          '\n' +
+          'Wir freuen uns darauf, Sie beim Job-Dating-Event zu sehen!\n' +
+          '\nMit freundlichen Grüßen,\nFH Joanneum';
+        break;
+      default:
+        subject = 'Neue Anmeldeinformationen';
+        body = 'Hier sind die neuen Anmeldedaten:\n' +
+          `\nE-Mail: ${user.email}\n` +
+          `Passwort: ${password}`;
+        break;
+    }
+
+    window.location.href = `mailto:${user.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 }

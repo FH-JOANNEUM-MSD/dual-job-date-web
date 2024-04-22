@@ -76,6 +76,18 @@ export class CompanyComponent implements OnInit {
       });
   }
 
+  sendMail(user: User, event: MouseEvent) {
+    event.stopPropagation();
+
+    this.userService.generateUserCredentials(user.id).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.userService.sendCredentials(user, result.password)
+      });
+  }
+
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Company, 2, 2),

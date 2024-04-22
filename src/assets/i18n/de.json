@@ -32,6 +32,7 @@
       "add": "Unternehmen hinzufügen",
       "status": "Status",
       "import": "Import Unternehmen"
+      "sendMail": "Nutzerdaten senden"
     }
   },
   "studentDialog": {
