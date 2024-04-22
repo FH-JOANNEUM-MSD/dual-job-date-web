@@ -41,11 +41,9 @@ export class UserService {
     );
   }
 
-
   // ****** POST ****** \\
 
   login(email: string, password: string): Observable<AuthenticationResponse | null> {
-    // TODO implement Cookie Strategy
     return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Login`, {
       password: password,
       email: email

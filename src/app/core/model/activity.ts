@@ -1,8 +1,7 @@
-import {Company} from './company';
-import {CompanyActivity} from './companyActivity';
-import {Institution} from './institution';
-import {AcademicProgram} from './academicProgram';
-
+import { Company } from './company';
+import { CompanyActivity } from './companyActivity';
+import { Institution } from './institution';
+import { AcademicProgram } from './academicProgram';
 
 export interface Activity {
   id: number;
@@ -14,4 +13,3 @@ export interface Activity {
   institution: Institution;
   institutionId: number;
 }
-

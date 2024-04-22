@@ -191,3 +191,10 @@ ng-select {
   }
 }
 
+.mat-mdc-row {
+  &:hover {
+    background-color: var(--card-shadow);
+    cursor: pointer;
+  }
+}
+

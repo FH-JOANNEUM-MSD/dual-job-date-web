@@ -5,21 +5,21 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './pages/login/view/login.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from "@angular/common/http";
-import {HomeComponent} from "./pages/home/view/home.component";
-import {CompanyComponent} from "./pages/company/view/company.component";
-import {StudentComponent} from "./pages/student/view/student.component";
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule,} from '@angular/common/http';
+import {HomeComponent} from './pages/home/view/home.component';
+import {CompanyComponent} from './pages/company/view/company.component';
+import {StudentComponent} from './pages/student/view/student.component';
 import {HeadernavigationComponent} from './custom-components/header-navigation/view/header-navigation.component';
-import {MatError, MatFormField, MatFormFieldModule} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {TranslateHttpLoader} from "@ngx-translate/http-loader";
-import {TokenInterceptor} from "./utils/token-interceptor";
-import {MatTableModule} from "@angular/material/table";
-import {MatSortModule} from "@angular/material/sort";
-import {MatButtonModule} from "@angular/material/button";
-import {NgSelectModule} from "@ng-select/ng-select";
+import {MatFormFieldModule,} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+import {TokenInterceptor} from './utils/token-interceptor';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatDialogModule} from "@angular/material/dialog";
 import {StudentDialogComponent} from "./dialogs/student-dialog/student-dialog.component";
 import {MatIconModule} from "@angular/material/icon";
@@ -29,7 +29,15 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent, CompanyComponent, StudentComponent, HeadernavigationComponent, StudentDialogComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    HomeComponent,
+    CompanyComponent,
+    StudentComponent,
+    HeadernavigationComponent,
+    StudentDialogComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -37,10 +45,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatFormField,
-    MatInput,
-    MatError,
-    MatSnackBarModule,
+    MatTableModule,
+    MatSortModule,
+    MatButtonModule,
+    NgSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressSpinner,
+    MatDialogModule,
+    MatIconModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -48,22 +62,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    MatTableModule,
-    MatSortModule,
-    MatButtonModule,
-    NgSelectModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule
-
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
   ],
   bootstrap: [AppComponent],
 })

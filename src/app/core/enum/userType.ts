@@ -3,6 +3,5 @@ export enum UserType {
   Company = 3,
   Institution = 2,
   Admin = 1,
-  Default = 0
+  Default = 0,
 }
-

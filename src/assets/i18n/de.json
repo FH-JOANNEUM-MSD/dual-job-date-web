@@ -13,6 +13,21 @@
   "loginPage": {
     "title": "Dual Dating"
   },
+  "companyPage": {
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "userType": "User Typ",
+      "status": "Status",
+      "statusOpen": "Offen",
+      "statusTaken": "Besetzt",
+      "website": "Webseite",
+      "industry": "Industrie"
+    },
+    "button": {
+      "add": "Unternehmen hinzufügen"
+    }
+  },
   "studentDialog": {
     "title": "Registriere neuen User"
   },

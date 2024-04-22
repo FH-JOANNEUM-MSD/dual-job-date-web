@@ -1,5 +1,5 @@
-import {CompanyInput} from "./companyInput";
 import {UserType} from "../enum/userType";
+import {Company} from "./company";
 
 
 export interface User {
@@ -10,8 +10,5 @@ export interface User {
   userType: UserType;
   isNew: boolean;
   email: string | null;
-  company: CompanyInput;
+  company: Company;
 }
-
-
-

@@ -21,7 +21,12 @@ export class LoginComponent {
     }),
   });
 
-  constructor(private userService: UserService, private authService: AuthService, private router: Router, private fb: FormBuilder) {
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
   }
 
   onSubmit() {
@@ -32,16 +37,15 @@ export class LoginComponent {
 
     const email = this.loginForm.controls.email.value;
     const password = this.loginForm.controls.password.value;
-    this.userService.login(email, password).subscribe(
-      result => {
-        if (!result) {
-          return;
-        }
-
-        this.authService.setCredentials(result);
-
-        this.router.navigate(['/home']);
+    this.userService.login(email, password).subscribe((result) => {
+      if (!result) {
+        return;
       }
-    );
+
+      this.authService.setCredentials(result);
+
+      this.router.navigate(['/home']);
+    });
+
   }
 }

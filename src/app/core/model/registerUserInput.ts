@@ -7,6 +7,3 @@ export interface RegisterUserInput {
   academicProgramId: number | null;
   companyId: number | null;
 }
-
-
-
