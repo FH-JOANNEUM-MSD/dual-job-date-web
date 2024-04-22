@@ -31,7 +31,7 @@
     <div class="form-wrapper">
       <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
 
-        <input formControlName="email" id="email" placeholder="Email..." type="text">
+        <input formControlName="email" id="email" placeholder="Email..." type="email">
         <!-- TODO implement correct form errors -->
         <mat-error *ngIf="loginForm.controls.email.invalid">Verpflichtend und gültige Email benötigt</mat-error>
         <input formControlName="password" id="password" placeholder="Password..." type="password">

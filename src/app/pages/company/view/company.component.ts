@@ -60,8 +60,7 @@ export class CompanyComponent implements OnInit {
   }
 
   openCompanyDialog(id?: string): void {
-    // TODO Change to CompanyDialog ?
-    this.dialogService.openStudentDialog(id).subscribe();
+    this.dialogService.openCompanyDialog(id).subscribe();
   }
 
   updateStatus(user: User, event: MouseEvent): void {

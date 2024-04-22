@@ -1,9 +1,9 @@
 import {UserType} from "../enum/userType";
 
 export interface RegisterUserInput {
-  email: string | null;
+  email: string;
   role: UserType;
-  institutionId: number | null;
-  academicProgramId: number | null;
+  institutionId: number;
+  academicProgramId: number;
   companyId: number | null;
 }

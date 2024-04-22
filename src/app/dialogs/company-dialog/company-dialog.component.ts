@@ -1,30 +1,27 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, Validators} from "@angular/forms";
-import {Institution} from "../../core/model/institution";
 import {AcademicProgram} from "../../core/model/academicProgram";
-import {UserService} from "../../core/services/user.service";
-import {RegisterUserInput} from "../../core/model/registerUserInput";
-import {User} from "../../core/model/user";
-import {InstitutionService} from "../../core/services/institution.service";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {forkJoin, of} from "rxjs";
-import {UserType} from "../../core/enum/userType";
+import {User} from "../../core/model/user";
+import {CompanyService} from "../../core/services/company.service";
+import {RegisterCompany} from "../../core/model/registerCompany";
+import {UserService} from "../../core/services/user.service";
 
 @Component({
-  selector: 'app-student-dialog',
-  templateUrl: './student-dialog.component.html',
-  styleUrl: './student-dialog.component.scss'
+  selector: 'app-company-dialog',
+  templateUrl: './company-dialog.component.html',
+  styleUrl: './company-dialog.component.scss'
 })
-export class StudentDialogComponent implements OnInit {
-
+export class CompanyDialogComponent implements OnInit {
   isLoading = true;
   form = this.fb.group({
     email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
       validators: [Validators.required]
     }),
-    institution: this.fb.nonNullable.control<Institution | null>(
-      {value: null, disabled: !!this.data},
+    name: this.fb.nonNullable.control<string>(
+      {value: '', disabled: !!this.data},
       {validators: [Validators.required]}
     ),
     academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
@@ -32,16 +29,15 @@ export class StudentDialogComponent implements OnInit {
       {validators: [Validators.required]}
     ),
   });
-  institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
   userId: string | null = this.data;
 
   constructor(
     private fb: FormBuilder,
+    private companyService: CompanyService,
     private userService: UserService,
-    private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
-    private dialogRef: MatDialogRef<StudentDialogComponent>,
+    private dialogRef: MatDialogRef<CompanyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -59,7 +55,7 @@ export class StudentDialogComponent implements OnInit {
     const input = this.getInputFromForm();
 
 
-    this.userService.register(input)
+    this.companyService.register(input)
       .subscribe(
         result => {
           if (!result) {
@@ -90,7 +86,6 @@ export class StudentDialogComponent implements OnInit {
 
     forkJoin({
       user: this.userId ? this.userService.getUserById(this.userId) : of(null),
-      institutions: this.institutionService.getInstitutions(),
       academicPrograms: this.academicProgramService.getAcademicPrograms()
     }).subscribe(result => {
       if (result.user) {
@@ -99,32 +94,24 @@ export class StudentDialogComponent implements OnInit {
       if (result.academicPrograms) {
         this.academicPrograms = result.academicPrograms;
       }
-      if (result.institutions) {
-        this.institutions = result.institutions;
-      }
       this.isLoading = false;
     })
 
   }
 
-  private getInputFromForm(): RegisterUserInput {
-
+  private getInputFromForm(): RegisterCompany {
     return {
-      email: this.form.controls.email.value,
-      institutionId: this.form.controls.institution.value!.id ?? null,
-      academicProgramId: this.form.controls.academicProgram.value!.id ?? null,
-      role: UserType.Student,
-      companyId: null
+      companyName: this.form.controls.name.value,
+      userEmail: this.form.controls.email.value,
+      academicProgramId: this.form.controls.academicProgram.value!.id,
     }
-
   }
 
   private initForm(user: User) {
     this.form.patchValue({
       email: user.email ?? '',
       academicProgram: user.academicProgram,
-      institution: user.institution
+      name: user.company.name ?? ''
     })
   }
 }
-

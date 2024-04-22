@@ -1,11 +1,12 @@
-﻿import { Injectable } from '@angular/core';
-import { catchError, Observable, of, throwError } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Company } from '../model/company';
-import { Activity } from '../model/activity';
-import { ActivityInput } from '../model/activityInput';
-import { CompanyDetails } from '../model/companyDetails';
+﻿import {Injectable} from '@angular/core';
+import {catchError, Observable, of, throwError} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {Company} from '../model/company';
+import {Activity} from '../model/activity';
+import {ActivityInput} from '../model/activityInput';
+import {CompanyDetails} from '../model/companyDetails';
+import {RegisterCompany} from "../model/registerCompany";
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ import { CompanyDetails } from '../model/companyDetails';
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   // ****** GET ****** \\
 
@@ -79,17 +81,11 @@ export class CompanyService {
 
   // ****** POST ****** \\
 
-  createCompany(
-    email: string,
-    companyName: string,
-    academicProgramId: string
+  register(
+    input: RegisterCompany
   ): Observable<Company | null> {
     return this.http
-      .post<Company>(`${environment.apiBasePath}${this.urlPath}/Register`, {
-        companyName: companyName,
-        email: email,
-        academicProgramId: academicProgramId,
-      })
+      .post<Company>(`${environment.apiBasePath}${this.urlPath}/Register`, input)
       .pipe(
         catchError((error) => {
           // TODO implement Error Handling
@@ -98,6 +94,7 @@ export class CompanyService {
         })
       );
   }
+
   // TODO: NEEDED ?
 
   createCompanyActivities(activities: ActivityInput[]): Observable<any> {

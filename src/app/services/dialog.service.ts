@@ -3,6 +3,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {ComponentType} from "@angular/cdk/overlay";
 import {StudentDialogComponent} from "../dialogs/student-dialog/student-dialog.component";
+import {CompanyDialogComponent} from "../dialogs/company-dialog/company-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,12 @@ export class DialogService {
 
   openStudentDialog(id?: string): Observable<any> {
     const dialogRef = this.openGenericDialog(id, StudentDialogComponent)
+
+    return dialogRef.afterClosed();
+  }
+
+  openCompanyDialog(id?: string): Observable<any> {
+    const dialogRef = this.openGenericDialog(id, CompanyDialogComponent)
 
     return dialogRef.afterClosed();
   }

@@ -17,7 +17,9 @@
       formControlName="academicProgram"
     ></ng-select>
 
-    <button mat-flat-button class="primary-button">{{ 'companyPage.button.add' | translate }}</button>
+    <button (click)="openCompanyDialog()" mat-flat-button
+            class="primary-button">{{ 'companyPage.button.add' | translate }}
+    </button>
   </form>
   @if (userLoading) {
     <mat-spinner></mat-spinner>

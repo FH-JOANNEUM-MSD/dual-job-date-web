@@ -1,14 +1,14 @@
-/*describe('CompanyProfileComponent', () => {
-  let component: CompanyProfileComponent;
-  let fixture: ComponentFixture<CompanyProfileComponent>;
+/*describe('CompanyDialogComponent', () => {
+  let component: CompanyDialogComponent;
+  let fixture: ComponentFixture<CompanyDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CompanyProfileComponent]
+      imports: [CompanyDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CompanyProfileComponent);
+    fixture = TestBed.createComponent(CompanyDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
