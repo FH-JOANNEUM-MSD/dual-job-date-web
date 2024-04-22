@@ -10,7 +10,7 @@ import {HomeComponent} from './pages/home/view/home.component';
 import {CompanyComponent} from './pages/company/view/company.component';
 import {StudentComponent} from './pages/student/view/student.component';
 import {HeadernavigationComponent} from './custom-components/header-navigation/view/header-navigation.component';
-import {MatFormFieldModule,} from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -20,9 +20,10 @@ import {TokenInterceptor} from './utils/token-interceptor';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatDialogModule} from "@angular/material/dialog";
-import {StudentDialogComponent} from "./dialogs/student-dialog/student-dialog.component";
-import {MatIconModule} from "@angular/material/icon";
+import {MatDialogModule} from '@angular/material/dialog';
+import {StudentDialogComponent} from './dialogs/student-dialog/student-dialog.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -36,7 +37,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CompanyComponent,
     StudentComponent,
     HeadernavigationComponent,
-    StudentDialogComponent
+    StudentDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,14 +56,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatProgressSpinner,
     MatDialogModule,
     MatIconModule,
+    FormsModule,
+    MatMenuModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
-    FormsModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

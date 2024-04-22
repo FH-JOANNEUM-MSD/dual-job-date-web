@@ -10,6 +10,7 @@ import {InstitutionService} from "../../../core/services/institution.service";
 import {AcademicProgramService} from "../../../core/services/academic-program.service";
 import {forkJoin} from "rxjs";
 import {DialogService} from "../../../services/dialog.service";
+import {CompanyService} from "../../../core/services/company.service";
 
 @Component({
   selector: 'app-company',
@@ -35,6 +36,7 @@ export class CompanyComponent implements OnInit {
     'status',
     'industry',
     'companyWebsite',
+    'actions',
   ];
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
@@ -45,6 +47,7 @@ export class CompanyComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private companyService: CompanyService,
     private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService
@@ -59,6 +62,18 @@ export class CompanyComponent implements OnInit {
   openCompanyDialog(id?: string): void {
     // TODO Change to CompanyDialog ?
     this.dialogService.openStudentDialog(id).subscribe();
+  }
+
+  updateStatus(user: User, event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.companyService
+      .activateOrDeactivateCompany(user.company.id, !user.company.isActive)
+      .subscribe({
+        next: (_) => {
+          user.company.isActive = !user.company.isActive;
+        },
+      });
   }
 
   private loadNeededData() {
