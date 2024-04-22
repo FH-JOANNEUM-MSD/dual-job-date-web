@@ -31,7 +31,7 @@
     "button": {
       "add": "Unternehmen hinzufügen",
       "status": "Status",
-      "import": "Import Unternehmen"
+      "import": "Import Unternehmen",
       "sendMail": "Nutzerdaten senden"
     }
   },
