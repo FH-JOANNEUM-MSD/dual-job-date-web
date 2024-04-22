@@ -5,7 +5,7 @@ import {AcademicProgram} from "./academicProgram";
 
 
 export interface User {
-  id: string | null;
+  id: string;
   academicProgram: AcademicProgram | null;
   institution: Institution | null;
   isActive: boolean;

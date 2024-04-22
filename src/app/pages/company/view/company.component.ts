@@ -76,6 +76,15 @@ export class CompanyComponent implements OnInit {
       });
   }
 
+  sendMail(user: User, event: MouseEvent) {
+    event.stopPropagation();
+
+    this.userService.resetPassword(user.id).subscribe(
+      password => this.userService.sendCredentials(user, password)
+    );
+
+  }
+
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Company, 2, 2),

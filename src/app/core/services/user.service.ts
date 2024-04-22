@@ -82,7 +82,7 @@ export class UserService {
   // TODO how should i know my userId if im not logged in
   resetPassword(userId: string): Observable<any | null> {
     // TODO implement GlobalStorage / LocalStorage something
-    return this.http.post(`${environment.apiBasePath}${this.urlPath}/ResetPassword`, {id: userId}).pipe(
+    return this.http.post(`${environment.apiBasePath}${this.urlPath}/ResetPassword?id=${userId}`, null, {responseType: 'text'}).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
@@ -130,5 +130,26 @@ export class UserService {
       }),
       map(result => !!result)
     );
+  }
+
+  sendCredentials(user: User, password: string) {
+    // TODO Translate
+    const subject = 'Einladung zu DualJobDate';
+    const body =
+      'wir laden dich herzlich zum Dual Job Dating ein.\n' +
+      '\n' +
+      'Hier sind deine Anmeldedaten:\n' +
+      '\n' +
+      `E-Mail: ${user.email}` +
+      `Passwort: ${password}` +
+      '\n' +
+      'Wir freuen uns darauf, dich beim Job-Dating-Event zu sehen und wünschen dir viel Erfolg!\n' +
+      '\n' +
+      'Mit freundlichen Grüßen,\n' +
+      'FH Joanneum \n' +
+      `${user.institution?.name ?? ''}` +
+      `${user.academicProgram?.name ?? ''}`;
+
+    window.location.href = `mailto:${user.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 }
