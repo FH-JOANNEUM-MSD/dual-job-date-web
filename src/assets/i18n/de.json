@@ -8,6 +8,9 @@
     "table": {
       "userType": "User Typ",
       "email": "Email"
+    },
+    "button": {
+      "import": "Import Studenten"
     }
   },
   "loginPage": {
@@ -27,7 +30,8 @@
     },
     "button": {
       "add": "Unternehmen hinzufügen",
-      "status": "Status"
+      "status": "Status",
+      "import": "Import Unternehmen"
     }
   },
   "studentDialog": {

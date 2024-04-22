@@ -1,16 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {UserType} from 'src/app/core/enum/userType';
-import {UserService} from 'src/app/core/services/user.service';
-import {User} from "../../../core/model/user";
-import {Institution} from "../../../core/model/institution";
-import {FormBuilder, Validators} from "@angular/forms";
-import {AcademicProgram} from "../../../core/model/academicProgram";
-import {InstitutionService} from "../../../core/services/institution.service";
-import {AcademicProgramService} from "../../../core/services/academic-program.service";
-import {forkJoin} from "rxjs";
-import {DialogService} from "../../../services/dialog.service";
-import {CompanyService} from "../../../core/services/company.service";
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { UserType } from 'src/app/core/enum/userType';
+import { UserService } from 'src/app/core/services/user.service';
+import { User } from '../../../core/model/user';
+import { Institution } from '../../../core/model/institution';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AcademicProgram } from '../../../core/model/academicProgram';
+import { InstitutionService } from '../../../core/services/institution.service';
+import { AcademicProgramService } from '../../../core/services/academic-program.service';
+import { forkJoin } from 'rxjs';
+import { DialogService } from '../../../services/dialog.service';
+import { CompanyService } from '../../../core/services/company.service';
+import { CsvParserService } from 'src/app/services/csv-parser.service';
 
 @Component({
   selector: 'app-company',
@@ -19,14 +20,12 @@ import {CompanyService} from "../../../core/services/company.service";
 })
 export class CompanyComponent implements OnInit {
   form = this.fb.group({
-    institution: this.fb.nonNullable.control<Institution | null>(
-      null,
-      {validators: [Validators.required]}
-    ),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
-      null,
-      {validators: [Validators.required]}
-    ),
+    institution: this.fb.nonNullable.control<Institution | null>(null, {
+      validators: [Validators.required],
+    }),
+    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(null, {
+      validators: [Validators.required],
+    }),
   });
 
   dataSource = new MatTableDataSource<User>();
@@ -43,6 +42,7 @@ export class CompanyComponent implements OnInit {
 
   isLoadingResults: boolean = true;
   userLoading = false;
+  csvData: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -50,13 +50,13 @@ export class CompanyComponent implements OnInit {
     private companyService: CompanyService,
     private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
-    private dialogService: DialogService
-  ) {
-  }
+    private dialogService: DialogService,
+    private csvParser: CsvParserService
+  ) {}
 
   ngOnInit() {
     this.loadNeededData();
-    this.form.valueChanges.subscribe(_ => this.reloadUser());
+    this.form.valueChanges.subscribe((_) => this.reloadUser());
   }
 
   openCompanyDialog(id?: string): void {
@@ -80,8 +80,8 @@ export class CompanyComponent implements OnInit {
     forkJoin({
       users: this.userService.getUser(UserType.Company, 2, 2),
       institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms()
-    }).subscribe(result => {
+      academicPrograms: this.academicProgramService.getAcademicPrograms(),
+    }).subscribe((result) => {
       if (result.users) {
         this.dataSource.data = result.users;
       }
@@ -92,7 +92,7 @@ export class CompanyComponent implements OnInit {
         this.institutions = result.institutions;
       }
       this.isLoadingResults = false;
-    })
+    });
   }
 
   private reloadUser() {
@@ -100,15 +100,34 @@ export class CompanyComponent implements OnInit {
 
     const institutionId = this.form.controls.institution.value?.id ?? 1;
     const academicProgramId = this.form.controls.academicProgram.value?.id ?? 1;
-    this.userService.getUser(UserType.Company, institutionId, academicProgramId).subscribe(
-      result => {
+    this.userService
+      .getUser(UserType.Company, institutionId, academicProgramId)
+      .subscribe((result) => {
         this.userLoading = false;
 
         if (!result) {
           return;
         }
         this.dataSource.data = result;
-      }
-    )
+      });
+  }
+
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.csvParser
+        .parseExcel(file)
+        .then((jsonData) => {
+          console.log('Parsed JSON Data:', jsonData);
+        })
+        .catch((error) => {
+          console.error('Error parsing file:', error);
+        });
+    }
+  }
+
+  fileInputClick() {
+    const fileInput = document.getElementById('file') as HTMLInputElement;
+    fileInput.click();
   }
 }
