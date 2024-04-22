@@ -32,7 +32,7 @@ export class StudentComponent implements OnInit {
   isLoading = true;
   userLoading = false;
 
-  displayedColumns: string[] = ['email', 'userType'];
+  displayedColumns: string[] = ['email', 'userType', 'actions'];
   dataSource = new MatTableDataSource<User>();
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
@@ -59,6 +59,18 @@ export class StudentComponent implements OnInit {
       }
       this.reloadUser();
     });
+  }
+
+  sendMail(user: User, event: MouseEvent) {
+    event.stopPropagation();
+
+    this.userService.generateUserCredentials(user.id).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.userService.sendCredentials(user, result.password)
+      });
   }
 
   private loadNeededData() {

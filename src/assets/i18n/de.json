@@ -27,7 +27,8 @@
     },
     "button": {
       "add": "Unternehmen hinzufügen",
-      "status": "Status"
+      "status": "Status",
+      "sendMail": "Nutzerdaten senden"
     }
   },
   "studentDialog": {
