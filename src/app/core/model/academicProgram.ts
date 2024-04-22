@@ -2,7 +2,7 @@ import {Company} from './company';
 import {User} from './user';
 import {Activity} from './activity';
 import {Institution} from './institution';
-import {AcademicDegree} from './academicDegree';
+import {AcademicDegree} from "../enum/academicDegree";
 
 
 export interface AcademicProgram {
