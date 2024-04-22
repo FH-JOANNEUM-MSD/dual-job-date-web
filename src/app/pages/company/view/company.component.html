@@ -18,6 +18,13 @@
     ></ng-select>
 
     <button mat-flat-button class="primary-button">{{ 'companyPage.button.add' | translate }}</button>
+    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".csv, .xslx" style="display: none;">
+    <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+      <mat-icon>file_upload</mat-icon>
+      {{ 'companyPage.button.import' | translate }}
+    </button>
+
+
   </form>
   @if (userLoading) {
     <mat-spinner></mat-spinner>
