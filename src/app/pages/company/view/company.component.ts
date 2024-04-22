@@ -19,7 +19,7 @@ export class CompanyComponent implements OnInit {
     'industry',
     'companyWebsite',
   ];
-  users: UserInput[] | null = null;
+  users: UserInput[] = [];
   isLoadingResults: boolean = true;
 
   constructor(private userService: UserService) {}
@@ -35,10 +35,6 @@ export class CompanyComponent implements OnInit {
           this.dataSource.data = result;
           console.log(result);
         }
-        this.isLoadingResults = false;
-      },
-      error: (error) => {
-        console.error('Failed to load user data', error);
         this.isLoadingResults = false;
       },
     });
