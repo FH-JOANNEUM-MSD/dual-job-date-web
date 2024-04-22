@@ -1,9 +1,8 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { UserType } from 'src/app/core/enum/userType';
-import { UserInput } from 'src/app/core/model/userInput';
-import { UserService } from 'src/app/core/services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {UserType} from 'src/app/core/enum/userType';
+import {UserService} from 'src/app/core/services/user.service';
+import {User} from "../../../core/model/user";
 
 @Component({
   selector: 'app-company',
@@ -11,7 +10,7 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrl: './company.component.scss',
 })
 export class CompanyComponent implements OnInit {
-  dataSource = new MatTableDataSource<UserInput>();
+  dataSource = new MatTableDataSource<User>();
   displayedColumns: string[] = [
     'name',
     'email',
@@ -19,10 +18,11 @@ export class CompanyComponent implements OnInit {
     'industry',
     'companyWebsite',
   ];
-  users: UserInput[] = [];
+  users: User[] = [];
   isLoadingResults: boolean = true;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit() {
     this.loadNeededData();

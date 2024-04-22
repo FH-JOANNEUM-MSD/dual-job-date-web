@@ -1,42 +1,42 @@
 <app-headernavigation></app-headernavigation>
-@if(isLoadingResults){
+@if (isLoadingResults) {
   <mat-spinner></mat-spinner>
-}
-@else {
+} @else {
   <section>
-      <button mat-flat-button class="primary-button">{{ 'companyPage.button.add' | translate }}</button>
+    <button mat-flat-button class="primary-button">{{ 'companyPage.button.add' | translate }}</button>
   </section>
   <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.name' | translate }}</th>
       <td *matCellDef="let user" mat-cell>{{ user.company.name }}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="email">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.email' | translate }}</th>
       <td *matCellDef="let user" mat-cell>{{ user.email }}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="status">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
-      <td *matCellDef="let user" mat-cell> 
+      <td *matCellDef="let user" mat-cell>
         <div [ngClass]="{'isNotActive': !user.company.isActive, 'isActive': user.company.isActive}">
-        {{ user.company.isActive ? 'companyPage.table.statusOpen' | translate : 'companyPage.table.statusTaken' | translate }}
+          {{ (user.company.isActive ? 'companyPage.table.statusOpen' : 'companyPage.table.statusTaken') | translate }}
         </div>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="industry">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.industry' | translate }}</th>
-      <td *matCellDef="let user" mat-cell>{{ user.company.industry}}</td>
+      <td *matCellDef="let user" mat-cell>{{ user.company.industry }}</td>
     </ng-container>
-  
+
     <ng-container matColumnDef="companyWebsite">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.website' | translate }}</th>
       <td *matCellDef="let user" mat-cell><a href="{{ user.company.website }}">{{ user.company.website }}</a></td>
     </ng-container>
 
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumns;" mat-row [routerLink]="['/company-details', row.company.id]"></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row
+        [routerLink]="['/company-details', row.company.id]"></tr>
   </table>
 }

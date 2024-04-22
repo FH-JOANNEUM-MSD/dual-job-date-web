@@ -1,0 +1,30 @@
+<div class="header">
+  <h1 mat-dialog-title>{{ 'studentDialog.title' | translate }}</h1>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input formControlName="email" matInput>
+      <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+      <!-- TODO Show correct formError -->
+    </mat-form-field>
+
+    <!-- <ng-select
+      [clearable]="false"
+      [items]="userRoles"
+      appendTo="body"
+      bindLabel="view"
+      bindValue="value"
+      formControlName="role"
+    ></ng-select>-->
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
+  <button (click)="save()" [disabled]="form.invalid" class="primary-button" mat-button
+          type="submit">{{ 'generic.save' | translate }}
+  </button>
+</mat-dialog-actions>
+

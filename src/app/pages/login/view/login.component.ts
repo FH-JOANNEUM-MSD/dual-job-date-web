@@ -1,21 +1,23 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserService } from '../../../core/services/user.service';
-import { AuthService } from '../../../services/auth.service';
+import {Component} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from "../../../services/auth.service";
+import {UserService} from "../../../core/services/user.service";
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+
   loginForm = this.fb.group({
     email: this.fb.nonNullable.control<string>('', {
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required, Validators.email]
     }),
     password: this.fb.nonNullable.control<string>('', {
-      validators: [Validators.required],
+      validators: [Validators.required]
     }),
   });
 
@@ -24,7 +26,8 @@ export class LoginComponent {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   onSubmit() {
     if (this.loginForm.invalid) {
@@ -41,12 +44,8 @@ export class LoginComponent {
 
       this.authService.setCredentials(result);
 
-      console.log(result);
       this.router.navigate(['/home']);
     });
 
-    /*TODO if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/home']);
-    }*/
   }
 }

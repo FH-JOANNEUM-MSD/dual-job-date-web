@@ -1,26 +1,22 @@
-.isNotActive{
-    background-color: #F0F1FA;
-    color: #4F5AED;
-    display: inline-block;
-    padding: 5px;
-    border-radius: 10px;
+.isNotActive {
+  background-color: #F0F1FA;
+  color: #4F5AED;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 10px;
 }
-.isActive{
-    background-color: #E1FCEF;
-    color: #14804A;
-    display: inline-block;
-    padding: 5px;
-    border-radius: 10px;
+
+.isActive {
+  background-color: #E1FCEF;
+  color: #14804A;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 10px;
 }
-.mat-mdc-row{
-    &:hover{
-        background-color: var(--card-shadow);
-        cursor: pointer;
-    }
-}
-section{
-    display: flex;
-    justify-content: flex-end;
-    margin: 40px 40px 40px 0;
+
+section {
+  display: flex;
+  justify-content: flex-end;
+  margin: 40px 40px 40px 0;
 
 }

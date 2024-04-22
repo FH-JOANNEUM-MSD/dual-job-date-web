@@ -1,4 +1,4 @@
-import { UserType } from '../enum/userType';
+import {UserType} from "../enum/userType";
 
 export interface RegisterUserInput {
   email: string | null;

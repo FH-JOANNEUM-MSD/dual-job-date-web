@@ -1,5 +1,14 @@
 ﻿{
   "generic": {
+    "save": "Speichern",
+    "cancel": "Abbrechen"
+  },
+  "studentPage": {
+    "registerStudent": "Registriere Studenten",
+    "table": {
+      "userType": "User Typ",
+      "email": "Email"
+    }
   },
   "loginPage": {
     "title": "Dual Dating"
@@ -15,8 +24,15 @@
       "website": "Webseite",
       "industry": "Industrie"
     },
-    "button":{
+    "button": {
       "add": "Unternehmen hinzufügen"
+    }
+  },
+  "studentDialog": {
+    "title": "Registriere neuen User"
+  },
+  "enum": {
+    "userType": {
     }
   }
 }
