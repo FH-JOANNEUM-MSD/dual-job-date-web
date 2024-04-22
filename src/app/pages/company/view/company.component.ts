@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {UserType} from 'src/app/core/enum/userType';
-import {UserService} from 'src/app/core/services/user.service';
-import {User} from "../../../core/model/user";
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { UserType } from 'src/app/core/enum/userType';
+import { UserService } from 'src/app/core/services/user.service';
+import { User } from '../../../core/model/user';
+import { CompanyService } from 'src/app/core/services/company.service';
 
 @Component({
   selector: 'app-company',
@@ -17,12 +18,15 @@ export class CompanyComponent implements OnInit {
     'status',
     'industry',
     'companyWebsite',
+    'actions',
   ];
   users: User[] = [];
   isLoadingResults: boolean = true;
 
-  constructor(private userService: UserService) {
-  }
+  constructor(
+    private userService: UserService,
+    private companyService: CompanyService
+  ) {}
 
   ngOnInit() {
     this.loadNeededData();
@@ -38,5 +42,17 @@ export class CompanyComponent implements OnInit {
         this.isLoadingResults = false;
       },
     });
+  }
+
+  updateStatus(user: User, event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.companyService
+      .activateOrDeactivateCompany(user.company.id, !user.company.isActive)
+      .subscribe({
+        next: (result) => {
+          user.company.isActive = !user.company.isActive;
+        },
+      });
   }
 }

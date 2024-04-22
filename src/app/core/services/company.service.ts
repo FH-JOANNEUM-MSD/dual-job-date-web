@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Company } from '../model/company';
 import { Activity } from '../model/activity';
@@ -130,17 +130,22 @@ export class CompanyService {
       );
   }
 
-  activateOrDeactivateCompany(id: string, isActive: boolean): Observable<any> {
+  activateOrDeactivateCompany(
+    id: number,
+    isActive: boolean
+  ): Observable<Company> {
+    const params = new HttpParams()
+      .set('id', id)
+      .set('isActive', isActive.toString());
+
     return this.http
-      .put<any>(`${environment.apiBasePath}${this.urlPath}/IsActive`, {
-        id: id,
-        isActive: isActive,
+      .put<any>(`${environment.apiBasePath}${this.urlPath}/IsActive`, null, {
+        params: params,
       })
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
+          console.error('Failed to update company status', error);
+          return throwError(() => new Error('Failed to update company status'));
         })
       );
   }

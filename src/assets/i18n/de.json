@@ -22,10 +22,12 @@
       "statusOpen": "Aktiv",
       "statusTaken": "Inaktiv",
       "website": "Webseite",
-      "industry": "Industrie"
+      "industry": "Industrie",
+      "actions": "Aktionen"
     },
     "button": {
-      "add": "Unternehmen hinzufügen"
+      "add": "Unternehmen hinzufügen",
+      "status": "Status"
     }
   },
   "studentDialog": {
