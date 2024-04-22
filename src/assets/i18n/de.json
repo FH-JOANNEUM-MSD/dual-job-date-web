@@ -19,8 +19,8 @@
       "email": "Email",
       "userType": "User Typ",
       "status": "Status",
-      "statusOpen": "Offen",
-      "statusTaken": "Besetzt",
+      "statusOpen": "Aktiv",
+      "statusTaken": "Inaktiv",
       "website": "Webseite",
       "industry": "Industrie"
     },
