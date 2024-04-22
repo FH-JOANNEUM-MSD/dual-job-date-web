@@ -6,6 +6,10 @@ import {AcademicProgram} from "../../core/model/academicProgram";
 import {UserService} from "../../core/services/user.service";
 import {RegisterUserInput} from "../../core/model/registerUserInput";
 import {User} from "../../core/model/user";
+import {InstitutionService} from "../../core/services/institution.service";
+import {AcademicProgramService} from "../../core/services/academic-program.service";
+import {forkJoin, of} from "rxjs";
+import {UserType} from "../../core/enum/userType";
 
 @Component({
   selector: 'app-student-dialog',
@@ -16,15 +20,15 @@ export class StudentDialogComponent implements OnInit {
 
   isLoading = true;
   form = this.fb.group({
-    email: this.fb.nonNullable.control('', {
+    email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
       validators: [Validators.required]
     }),
-    institutionId: this.fb.nonNullable.control<string | null>(
-      null,
+    institution: this.fb.nonNullable.control<Institution | null>(
+      {value: null, disabled: !!this.data},
       {validators: [Validators.required]}
     ),
-    academicProgramId: this.fb.nonNullable.control<string | null>(
-      null,
+    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
+      {value: null, disabled: !!this.data},
       {validators: [Validators.required]}
     ),
   });
@@ -35,6 +39,8 @@ export class StudentDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private institutionService: InstitutionService,
+    private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
@@ -52,9 +58,8 @@ export class StudentDialogComponent implements OnInit {
 
     const input = this.getInputFromForm();
 
-    /*
-    this.userService.createStudent(email, role)
-      .pipe(takeUntil(this.destroy$))
+
+    this.userService.register(input)
       .subscribe(
         result => {
           if (!result) {
@@ -62,31 +67,63 @@ export class StudentDialogComponent implements OnInit {
           }
           this.dialogRef.close(result);
         }
-      );*/
+      );
+  }
+
+  delete(): void {
+    if (!this.userId) {
+      return;
+    }
+
+    this.userService.deleteUser(this.userId)
+      .subscribe(
+        result => {
+          if (!result) {
+            return;
+          }
+          this.dialogRef.close(result);
+        }
+      );
   }
 
   private loadNeededData() {
 
-    if (this.userId) {
-      this.userService.getUserById(this.userId).subscribe(result => {
-        if (!result) {
-          return;
-        }
-        this.initForm(result);
-      })
-    }
+    forkJoin({
+      user: this.userId ? this.userService.getUserById(this.userId) : of(null),
+      institutions: this.institutionService.getInstitutions(),
+      academicPrograms: this.academicProgramService.getAcademicPrograms()
+    }).subscribe(result => {
+      if (result.user) {
+        this.initForm(result.user);
+      }
+      if (result.academicPrograms) {
+        this.academicPrograms = result.academicPrograms;
+      }
+      if (result.institutions) {
+        this.institutions = result.institutions;
+      }
+      this.isLoading = false;
+    })
 
   }
 
   private getInputFromForm(): RegisterUserInput {
 
-    throw new DOMException();
+    return {
+      email: this.form.controls.email.value,
+      institutionId: this.form.controls.institution.value?.id ?? null,
+      academicProgramId: this.form.controls.academicProgram.value?.id ?? null,
+      role: UserType.Student,
+      companyId: null
+    }
 
   }
 
   private initForm(user: User) {
     this.form.patchValue({
       email: user.email ?? '',
+      academicProgram: user.academicProgram,
+      institution: user.institution
     })
   }
 }
