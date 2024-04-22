@@ -1,6 +1,5 @@
-import {UserType} from './userType';
-import {CompanyInput} from "./companyInput";
-
+import { UserType } from '../enum/userType';
+import { Company } from './company';
 
 export interface UserInput {
   id: string | null;
@@ -10,8 +9,5 @@ export interface UserInput {
   userType: UserType;
   isNew: boolean;
   email: string | null;
-  company: CompanyInput;
+  company: Company;
 }
-
-
-

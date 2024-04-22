@@ -1,6 +1,5 @@
-import {Company} from './company';
-import {Activity} from './activity';
-
+import { Company } from './company';
+import { Activity } from './activity';
 
 export interface CompanyActivity {
   id: number;
@@ -10,4 +9,3 @@ export interface CompanyActivity {
   activityId: number;
   activity: Activity;
 }
-

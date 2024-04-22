@@ -1,23 +1,30 @@
-﻿import {Injectable} from '@angular/core';
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {SnackbarService} from "../services/snackbar.service";
+﻿import { Injectable } from '@angular/core';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { SnackbarService } from '../services/snackbar.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
+  constructor(private snackBarService: SnackbarService) {}
 
-  constructor(private snackBarService: SnackbarService) {
-  }
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     // Füge den Bearer-Token zum Header hinzu, wenn vorhanden
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessTokenKey');
     if (token) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
     }
 
@@ -30,7 +37,9 @@ export class TokenInterceptor implements HttpInterceptor {
           errorMessage = `Clientfehler: ${error.error.message}`;
         } else {
           // Server-seitiger Fehler
-          errorMessage = `Serverfehler: ${error.status} - ${error.error.message || error.statusText}`;
+          errorMessage = `Serverfehler: ${error.status} - ${
+            error.error.message || error.statusText
+          }`;
         }
         this.openSnackBar(errorMessage);
         return throwError(errorMessage);

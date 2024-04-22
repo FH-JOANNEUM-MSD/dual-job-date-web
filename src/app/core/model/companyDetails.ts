@@ -1,5 +1,4 @@
 export interface CompanyDetails {
-  id: number;
   shortDescription: string | null;
   teamPictureBase64: string | null;
   jobDescription: string | null;
@@ -10,4 +9,3 @@ export interface CompanyDetails {
   trainerProfessionalExperience: string | null;
   trainerPosition: string | null;
 }
-
