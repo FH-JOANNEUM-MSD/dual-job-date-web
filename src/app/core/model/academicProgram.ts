@@ -1,9 +1,8 @@
-
-import { Company } from './company';
-import { User } from './user';
-import { Activity } from './activity';
-import { Institution } from './institution';
-import { AcademicDegree } from '../enum/academicDegree';
+import {Company} from './company';
+import {User} from './user';
+import {Activity} from './activity';
+import {Institution} from './institution';
+import {AcademicDegree} from '../enum/academicDegree';
 
 export interface AcademicProgram {
   id: number;
@@ -11,9 +10,9 @@ export interface AcademicProgram {
   name: string | null;
   keyName: string | null;
   academicDegreeEnum: AcademicDegree;
-  users: Array<User> | null;
-  activities: Array<Activity> | null;
-  companies: Array<Company> | null;
+  users: User[] | null;
+  activities: Activity[] | null;
+  companies: Company[] | null;
   institutionId: number;
   institution: Institution;
 }

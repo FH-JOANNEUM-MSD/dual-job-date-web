@@ -1,10 +1,11 @@
 ﻿import {Injectable} from '@angular/core';
-import {catchError, Observable, of} from "rxjs";
+import {catchError, map, Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {User} from "../model/user";
 import {environment} from "../../../environments/environment";
 import {AuthenticationResponse} from "../model/authenticationResponse";
 import {UserType} from "../enum/userType";
+import {RegisterUserInput} from "../model/registerUserInput";
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +19,7 @@ export class UserService {
 
   // ****** GET ****** \\
 
-  getUser(userType: UserType): Observable<User[] | null> {
-    // TODO institutionId and academicProgramId ???
-    const institutionId = '2';
-    const academicProgramId = '2';
+  getUser(userType: UserType, institutionId: number, academicProgramId: number): Observable<User[] | null> {
     return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers?userType=${userType}&institutionId=${institutionId}&academicProgramId=${academicProgramId}`).pipe(
       catchError(error => {
         // TODO implement Error Handling
@@ -110,12 +108,27 @@ export class UserService {
   // ****** DELETE ****** \\
 
   deleteUser(id: string): Observable<any | null> {
-    return this.http.delete<any>(`${environment.apiBasePath}${this.urlPath}/DeleteUser?id=${id}`).pipe(
+    return this.http.delete(`${environment.apiBasePath}${this.urlPath}/DeleteUser?id=${id}`, {responseType: 'text'}).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
+      map(result => !!result)
+    );
+  }
+
+  // ****** PUT ****** \\
+
+  register(input: RegisterUserInput): Observable<boolean> {
+    return this.http.put(`${environment.apiBasePath}${this.urlPath}/Register`, input, {responseType: 'text'}).pipe(
+      catchError(error => {
+        // TODO implement Error Handling
+        console.log('ERROR')
+        console.error(error);
+        return of(null);
+      }),
+      map(result => !!result)
     );
   }
 }

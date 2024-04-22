@@ -1,18 +1,13 @@
-﻿import { Injectable } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { SnackbarService } from '../services/snackbar.service';
+﻿import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {SnackbarService} from '../services/snackbar.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private snackBarService: SnackbarService) {}
+  constructor(private snackBarService: SnackbarService) {
+  }
 
   intercept(
     request: HttpRequest<any>,
@@ -31,6 +26,7 @@ export class TokenInterceptor implements HttpInterceptor {
     // Handle die Anfrage und fange Fehler ab
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.log(error);
         let errorMessage;
         if (error.error instanceof ErrorEvent) {
           // Client-seitiger Fehler

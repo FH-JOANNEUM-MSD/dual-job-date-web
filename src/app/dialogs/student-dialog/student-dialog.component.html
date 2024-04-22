@@ -1,9 +1,14 @@
-<div class="header">
+<div class="header row">
   <h1 mat-dialog-title>{{ 'studentDialog.title' | translate }}</h1>
+  @if (userId) {
+    <button (click)="delete()" color="warn" mat-icon-button>
+      <mat-icon>delete</mat-icon>
+    </button>
+  }
 </div>
 
 <mat-dialog-content>
-  <form [formGroup]="form">
+  <form [formGroup]="form" class="col">
     <mat-form-field>
       <mat-label>Email</mat-label>
       <input formControlName="email" matInput>
@@ -11,19 +16,25 @@
       <!-- TODO Show correct formError -->
     </mat-form-field>
 
-    <!-- <ng-select
-      [clearable]="false"
-      [items]="userRoles"
+    <ng-select
+      [items]="institutions"
       appendTo="body"
-      bindLabel="view"
-      bindValue="value"
-      formControlName="role"
-    ></ng-select>-->
+      bindLabel="keyName"
+      formControlName="institution"
+    ></ng-select>
+
+    <ng-select
+      [items]="academicPrograms"
+      appendTo="body"
+      bindLabel="keyName"
+      formControlName="academicProgram"
+    ></ng-select>
+
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
-  <button (click)="save()" [disabled]="form.invalid" class="primary-button" mat-button
+  <button (click)="save()" [disabled]="this.userId!! || form.invalid" class="primary-button" mat-button
           type="submit">{{ 'generic.save' | translate }}
   </button>
 </mat-dialog-actions>

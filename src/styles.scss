@@ -36,19 +36,14 @@ html, body {
 /* General Template */
 
 :root {
-  font-size: 48px;
   --primary-color-buttons: #53851E;
   --secondary-color-buttons: #73B72A;
   --primary-color-text-white: #F2F2F3;
   --secondary-color-text-black: #000000;
   --card-shadow: #CDECAC;
-  --font-size-text1: 1em;
-  --font-size-text2: 0.8333333333333334em;
-  --font-size-19px: 0.3958333333333333em;
-  --font-size-16px: 0.3333333333333333em;
-  --font-size-14px: 0.2916666666666667em;
 }
 
+/*
 h1 {
   font-size: 1.5em;
   font-weight: 700;
@@ -62,13 +57,7 @@ h2 {
 h3 {
   font-size: 1.1666666666666667em;
   font-weight: 500;
-}
-
-mat-error {
-  font-size: 0.35em;
-  color: red;
-  align-self: center;
-}
+} */
 
 .success-snackbar {
   background-color: #4caf50;
@@ -92,12 +81,14 @@ body {
 .row {
   display: flex;
   flex-direction: row;
+  gap: 10px;
   align-items: center;
 }
 
 .col {
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
 }
 
@@ -167,7 +158,18 @@ mat-form-field {
 
 ng-select {
 
+  min-width: 125px !important;
+
+  .ng-placeholder {
+    color: #999 !important;
+  }
+
+  .custom-ng-select.ng-touched.ng-dirty .ng-placeholder {
+    color: #666 !important;
+  }
+
   .ng-select-container {
+    min-height: 44px !important;
     border: 1px solid mat.get-color-from-palette($primary-palette, 500) !important;
     border-radius: 4px !important;
 
