@@ -79,10 +79,13 @@ export class CompanyComponent implements OnInit {
   sendMail(user: User, event: MouseEvent) {
     event.stopPropagation();
 
-    this.userService.resetPassword(user.id).subscribe(
-      password => this.userService.sendCredentials(user, password)
-    );
-
+    this.userService.generateUserCredentials(user.id).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.userService.sendCredentials(user, result.password)
+      });
   }
 
   private loadNeededData() {
