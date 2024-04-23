@@ -1,0 +1,37 @@
+.img-wrapper{
+  width: 100%;
+  text-align: center;
+  img{
+    width: auto;
+    height: 38vh;
+    max-width: 100%;
+  }
+}
+.text-box{
+  text-align: center;
+  h1{
+    font-size: 80px;
+  }
+  p{
+    font-size: 20px;
+    margin-bottom: 27px;
+  }
+  .back-btn{
+    margin-bottom: 20px;
+    background-color: black;
+    color: white;
+    padding: 17px 25px;
+    font-size: 16px;
+    border-radius: 13px;
+  }
+}
+@media (max-width: 1240px) {
+  .text-box{
+    h1{
+      font-size: 40px;
+    }
+    p{
+      font-size: 20px;
+    }
+  }
+}

@@ -50,5 +50,10 @@
       "3": "Unternehmen",
       "4": "Student"
     }
+  },
+  "404": {
+    "notFound": "This page could not be found!",
+    "sorry": "We are sorry.But the page you are looking for is not available.",
+    "button": "Back to Login"
   }
 }

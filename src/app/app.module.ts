@@ -25,6 +25,7 @@ import {StudentDialogComponent} from './dialogs/student-dialog/student-dialog.co
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {CompanyDialogComponent} from "./dialogs/company-dialog/company-dialog.component";
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {CompanyProfileComponent} from "./pages/company-profile/view/company-profile.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -41,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HeadernavigationComponent,
     StudentDialogComponent,
     CompanyDialogComponent,
+    PageNotFoundComponent,
     CompanyProfileComponent
   ],
   imports: [
