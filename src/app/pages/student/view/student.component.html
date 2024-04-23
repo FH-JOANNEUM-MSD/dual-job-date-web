@@ -20,7 +20,7 @@
     <button mat-flat-button class="primary-button"
             (click)="openStudentDialog()">{{ 'studentPage.registerStudent' | translate }}
     </button>
-    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".csv, .xslx" style="display: none;">
+    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".csv, .xlsx" style="display: none;">
     <button mat-flat-button class="primary-button" (click)="fileInput.click()">
       <mat-icon>file_upload</mat-icon>
       {{ 'studentPage.button.import' | translate }}
@@ -37,10 +37,20 @@
         <td *matCellDef="let user" mat-cell>{{ user.email }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="userType">
+      <ng-container matColumnDef="institution">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'studentPage.table.institution' | translate }}</th>
+        <td *matCellDef="let user" mat-cell>{{ user.institution.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="academicProgram">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'studentPage.table.academicProgram' | translate }}</th>
+        <td *matCellDef="let user" mat-cell>{{ user.academicProgram.name }}</td>
+      </ng-container>
+
+      <!--<ng-container matColumnDef="userType">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'studentPage.table.userType' | translate }}</th>
         <td *matCellDef="let user" mat-cell>{{ 'enum.userType.' + user.userType | translate }}</td>
-      </ng-container>
+      </ng-container>-->
 
       <ng-container matColumnDef="actions">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.actions' | translate }}</th>
@@ -57,7 +67,7 @@
       </ng-container>
 
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr (click)="openStudentDialog(row.id)" *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+      <tr (dblclick)="openStudentDialog(row.id)" *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
   }
 }
