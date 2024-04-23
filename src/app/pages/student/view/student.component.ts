@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../core/services/user.service';
-import { UserType } from '../../../core/enum/userType';
-import { MatTableDataSource } from '@angular/material/table';
-import { User } from '../../../core/model/user';
-import { DialogService } from '../../../services/dialog.service';
-import { InstitutionService } from '../../../core/services/institution.service';
-import { forkJoin } from 'rxjs';
-import { AcademicProgramService } from '../../../core/services/academic-program.service';
-import { Institution } from '../../../core/model/institution';
-import { AcademicProgram } from '../../../core/model/academicProgram';
-import { FormBuilder, Validators } from '@angular/forms';
-import { CsvParserService } from 'src/app/services/csv-parser.service';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../../core/services/user.service';
+import {UserType} from '../../../core/enum/userType';
+import {MatTableDataSource} from '@angular/material/table';
+import {User} from '../../../core/model/user';
+import {DialogService} from '../../../services/dialog.service';
+import {InstitutionService} from '../../../core/services/institution.service';
+import {forkJoin} from 'rxjs';
+import {AcademicProgramService} from '../../../core/services/academic-program.service';
+import {Institution} from '../../../core/model/institution';
+import {AcademicProgram} from '../../../core/model/academicProgram';
+import {FormBuilder, Validators} from '@angular/forms';
+import {CsvParserService} from 'src/app/services/csv-parser.service';
 
 @Component({
   selector: 'app-student',
@@ -30,7 +30,7 @@ export class StudentComponent implements OnInit {
   isLoading = true;
   userLoading = false;
 
-  displayedColumns: string[] = ['email', 'userType', 'actions'];
+  displayedColumns: string[] = ['email', 'institution', 'academicProgram', 'actions'];
   dataSource = new MatTableDataSource<User>();
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
@@ -42,7 +42,8 @@ export class StudentComponent implements OnInit {
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService,
     private csvParser: CsvParserService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.loadNeededData();
@@ -71,6 +72,20 @@ export class StudentComponent implements OnInit {
       });
   }
 
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.csvParser
+        .parseExcel(file)
+        .then((jsonData) => {
+          console.log('Parsed JSON Data:', jsonData);
+        })
+        .catch((error) => {
+          console.error('Error parsing file:', error);
+        });
+    }
+  }
+  
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Student, 2, 2),
@@ -105,24 +120,5 @@ export class StudentComponent implements OnInit {
         }
         this.dataSource.data = result;
       });
-  }
-
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.csvParser
-        .parseExcel(file)
-        .then((jsonData) => {
-          console.log('Parsed JSON Data:', jsonData);
-        })
-        .catch((error) => {
-          console.error('Error parsing file:', error);
-        });
-    }
-  }
-
-  fileInputClick() {
-    const fileInput = document.getElementById('file') as HTMLInputElement;
-    fileInput.click();
   }
 }

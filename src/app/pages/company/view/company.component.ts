@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { UserType } from 'src/app/core/enum/userType';
-import { UserService } from 'src/app/core/services/user.service';
-import { User } from '../../../core/model/user';
-import { Institution } from '../../../core/model/institution';
-import { FormBuilder, Validators } from '@angular/forms';
-import { AcademicProgram } from '../../../core/model/academicProgram';
-import { InstitutionService } from '../../../core/services/institution.service';
-import { AcademicProgramService } from '../../../core/services/academic-program.service';
-import { forkJoin } from 'rxjs';
-import { DialogService } from '../../../services/dialog.service';
-import { CompanyService } from '../../../core/services/company.service';
-import { CsvParserService } from 'src/app/services/csv-parser.service';
+import {Component, OnInit} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
+import {UserType} from 'src/app/core/enum/userType';
+import {UserService} from 'src/app/core/services/user.service';
+import {User} from '../../../core/model/user';
+import {Institution} from '../../../core/model/institution';
+import {FormBuilder, Validators} from '@angular/forms';
+import {AcademicProgram} from '../../../core/model/academicProgram';
+import {InstitutionService} from '../../../core/services/institution.service';
+import {AcademicProgramService} from '../../../core/services/academic-program.service';
+import {forkJoin} from 'rxjs';
+import {DialogService} from '../../../services/dialog.service';
+import {CompanyService} from '../../../core/services/company.service';
+import {CsvParserService} from 'src/app/services/csv-parser.service';
 
 @Component({
   selector: 'app-company',
@@ -42,7 +42,6 @@ export class CompanyComponent implements OnInit {
 
   isLoadingResults: boolean = true;
   userLoading = false;
-  csvData: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +51,8 @@ export class CompanyComponent implements OnInit {
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService,
     private csvParser: CsvParserService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.loadNeededData();
@@ -85,6 +85,20 @@ export class CompanyComponent implements OnInit {
         }
         this.userService.sendCredentials(user, result.password)
       });
+  }
+
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.csvParser
+        .parseExcel(file)
+        .then((jsonData) => {
+          console.log('Parsed JSON Data:', jsonData);
+        })
+        .catch((error) => {
+          console.error('Error parsing file:', error);
+        });
+    }
   }
 
   private loadNeededData() {
@@ -121,24 +135,5 @@ export class CompanyComponent implements OnInit {
         }
         this.dataSource.data = result;
       });
-  }
-
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.csvParser
-        .parseExcel(file)
-        .then((jsonData) => {
-          console.log('Parsed JSON Data:', jsonData);
-        })
-        .catch((error) => {
-          console.error('Error parsing file:', error);
-        });
-    }
-  }
-
-  fileInputClick() {
-    const fileInput = document.getElementById('file') as HTMLInputElement;
-    fileInput.click();
   }
 }

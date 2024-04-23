@@ -1,5 +1,5 @@
 <div class="header row">
-  <h1 mat-dialog-title>{{ 'studentDialog.title' | translate }}</h1>
+  <h1 mat-dialog-title>{{ 'companyDialog.title' | translate }}</h1>
   @if (userId) {
     <button (click)="delete()" color="warn" mat-icon-button>
       <mat-icon>delete</mat-icon>
@@ -22,7 +22,7 @@
       <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
       <!-- TODO Show correct formError -->
     </mat-form-field>
-    
+
     <ng-select
       [items]="academicPrograms"
       appendTo="body"

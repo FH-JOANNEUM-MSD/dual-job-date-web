@@ -7,7 +7,9 @@
     "registerStudent": "Registriere Studenten",
     "table": {
       "userType": "User Typ",
-      "email": "Email"
+      "email": "Email",
+      "academicProgram": "Akademisches Programm",
+      "institution": "Einrichtung"
     },
     "button": {
       "import": "Import Studenten"
@@ -25,7 +27,7 @@
       "statusOpen": "Aktiv",
       "statusTaken": "Inaktiv",
       "website": "Webseite",
-      "industry": "Industrie",
+      "industry": "Einrichtung",
       "actions": "Aktionen"
     },
     "button": {
@@ -38,8 +40,15 @@
   "studentDialog": {
     "title": "Registriere neuen User"
   },
+  "companyDialog": {
+    "title": "Registriere neues Unternehmen"
+  },
   "enum": {
     "userType": {
+      "1": "Admin",
+      "2": "Institution",
+      "3": "Unternehmen",
+      "4": "Student"
     }
   },
   "404": {

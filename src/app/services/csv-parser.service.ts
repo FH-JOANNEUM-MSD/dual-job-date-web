@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class CsvParserService {
       reader.onload = (e: any) => {
         try {
           const data = e.target.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
+          const workbook = XLSX.read(data, {type: 'binary'});
           const rows: any[] = this.extractDataFromWorkbook(workbook);
           if (this.validateHeaders(rows)) {
             const formattedData: DataRow[] = this.formatDataWithHeaders(rows);
@@ -31,10 +31,11 @@ export class CsvParserService {
   private extractDataFromWorkbook(workbook: XLSX.WorkBook): any[] {
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    return XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    return XLSX.utils.sheet_to_json(worksheet, {header: 1});
   }
 
   private validateHeaders(rows: any[]): boolean {
+    //TODO Better validation!
     if (rows.length === 0) return false;
     const headers = rows[0];
     return headers.includes('email'); // Only checking for 'email' as required
