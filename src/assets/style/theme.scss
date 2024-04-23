@@ -3,16 +3,16 @@
 @include mat.core();
 
 $primary-palette: (
-  50: #e1ebf7,
-  100: #b3d1ef,
-  200: #80b3e6,
-  300: #4d95dd,
-  400: #267dd6,
-  500: #00529F,
-  600: #004c8c,
-  700: #004378,
-  800: #003b65,
-  900: #002d48,
+  50: #e9f7e6,
+  100: #c5e3bd,
+  200: #9fd899,
+  300: #79c475,
+  400: #5fb85e,
+  500: #53851E,
+  600: #4a7b1a,
+  700: #426f16,
+  800: #396512,
+  900: #295c0b,
   contrast: (
     50: #000,
     100: #000,
@@ -27,29 +27,28 @@ $primary-palette: (
   ),
 );
 
-// Akzentfarbe Palette
-$accent-palette: (
-  50: #fffde7,
-  100: #fff9c4,
-  200: #fff59d,
-  300: #fff176,
-  400: #ffee58,
-  500: #FFD200,
-  600: #fdd835,
-  700: #fbc02d,
-  800: #f9a825,
-  900: #f57f17,
+$secondary-palette: (
+  50: #f2faf0,
+  100: #d4f4d4,
+  200: #b3eed8,
+  300: #92e9bc,
+  400: #7de5ac,
+  500: #73B72A,
+  600: #67a024,
+  700: #598b1e,
+  800: #4b7518,
+  900: #365c0f,
   contrast: (
     50: #000,
     100: #000,
     200: #000,
     300: #000,
     400: #000,
-    500: #000,
-    600: #000,
-    700: #000,
-    800: #000,
-    900: #000,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
   ),
 );
 
@@ -57,7 +56,7 @@ $theme: mat.define-light-theme(
     (
       color: (
         primary: mat.define-palette($primary-palette),
-        accent: mat.define-palette($accent-palette),
+        accent: mat.define-palette($secondary-palette),
       ),
       typography: mat.define-typography-config(),
       density: 0,
