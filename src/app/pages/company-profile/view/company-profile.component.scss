@@ -22,17 +22,32 @@
         display: flex;
         justify-content: center;
     }
+    
     .activities-list{
         max-width: 80%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        .exclude-width{
-            width: 59px;
+       
+        .activity-item{
+            display: flex;
+            align-items: baseline;
+            gap: 100px;
+            label{
+                min-width: 275px;
+            }
+            .exclude-width{
+                width: 59px;
+            }
         }
     }
     .trainer-details{
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        h3{
+            align-self: flex-start;
+        }
     }
        
 }

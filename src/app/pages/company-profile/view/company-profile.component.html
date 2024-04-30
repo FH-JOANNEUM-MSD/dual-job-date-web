@@ -52,11 +52,11 @@
        </mat-form-field>
     </div>
  
-    <div class="activities-list">
-       <label>Tätigkeitsbereiche:</label>
+    <div class="form-group test" >
+       <h3>Tätigkeitsbereiche:</h3>
        <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
     
-       <div class="activities-list">
+       <div class=" activities-list">
         @for (activity of activities; track $index) {
           <div class="activity-item">
              <label>{{ activity.name }}</label>
@@ -83,7 +83,7 @@
     </div>
  
     <div class="form-group trainer-details">
-       <label>Ausbildungsperson im Unternehmen</label>
+       <h3>Ausbildungsperson im Unternehmen</h3>
  
        <mat-form-field>
           <mat-label>Name:</mat-label>
