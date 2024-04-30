@@ -1,22 +1,22 @@
 <!-- company-profile.component.html -->
+<app-headernavigation></app-headernavigation>
 <form [formGroup]="form" class="company-form">
-    <div class="form-group">
+    <div class="form-group company-logo">
+        @if(logoSrc){
+             <img [src]="logoSrc" alt="Company Logo">
+         }
+         @else {
+             <p>No logo available.</p>
+         }
+     </div>
+    <div class="form-group company-name">
        <mat-form-field>
           <mat-label>Name des Unternehmens</mat-label>
           <input matInput id="name" type="text" formControlName="name">
        </mat-form-field>
+       
     </div>
- 
-    <div class="company-logo">
-       <mat-label>Logo</mat-label>
-       @if(logoSrc){
-            <img [src]="logoSrc" alt="Company Logo">
-        }
-        @else {
-            <p>No logo available.</p>
-        }
-    </div>
- 
+    
     <div class="form-group">
        <mat-form-field>
           <mat-label>Kurze Beschreibung des Unternehmens:</mat-label>
@@ -52,7 +52,7 @@
        </mat-form-field>
     </div>
  
-    <div class="form-group activities-list">
+    <div class="activities-list">
        <label>Tätigkeitsbereiche:</label>
        <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
     
@@ -60,7 +60,7 @@
         @for (activity of activities; track $index) {
           <div class="activity-item">
              <label>{{ activity.name }}</label>
-             <mat-form-field>
+             <mat-form-field class="exclude-width">
                 <input matInput type="number" placeholder="{{ activity.value }}" min="1" max="5">
              </mat-form-field>
           </div>
