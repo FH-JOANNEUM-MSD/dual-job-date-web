@@ -1,12 +1,12 @@
-﻿import {Injectable} from '@angular/core';
-import {catchError, Observable, of, throwError} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../environments/environment';
-import {Company} from '../model/company';
-import {Activity} from '../model/activity';
-import {ActivityInput} from '../model/activityInput';
-import {CompanyDetails} from '../model/companyDetails';
-import {RegisterCompany} from "../model/registerCompany";
+﻿import { Injectable } from '@angular/core';
+import { catchError, Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { Company } from '../model/company';
+import { Activity } from '../model/activity';
+import { ActivityInput } from '../model/activityInput';
+import { CompanyDetails } from '../model/companyDetails';
+import { RegisterCompany } from '../model/registerCompany';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +14,7 @@ import {RegisterCompany} from "../model/registerCompany";
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   // ****** GET ****** \\
 
@@ -36,7 +35,7 @@ export class CompanyService {
       );
   }
 
-  getCompanyById(id: string): Observable<Company | null> {
+  getCompanyById(id: number): Observable<Company | null> {
     return this.http
       .get<Company>(
         `${environment.apiBasePath}${this.urlPath}/GetCompany?id=${id}`
@@ -45,12 +44,13 @@ export class CompanyService {
         catchError((error) => {
           // TODO implement Error Handling
           console.error(error);
+          console.log('test1');
           return of(null);
         })
       );
   }
 
-  getCompanyDetails(id: string): Observable<CompanyDetails | null> {
+  getCompanyDetails(id: number): Observable<CompanyDetails | null> {
     return this.http
       .get<CompanyDetails>(
         `${environment.apiBasePath}${this.urlPath}/Details?id=${id}`
@@ -59,6 +59,7 @@ export class CompanyService {
         catchError((error) => {
           // TODO implement Error Handling
           console.error(error);
+          console.log('test2');
           return of(null);
         })
       );
@@ -81,11 +82,12 @@ export class CompanyService {
 
   // ****** POST ****** \\
 
-  register(
-    input: RegisterCompany
-  ): Observable<Company | null> {
+  register(input: RegisterCompany): Observable<Company | null> {
     return this.http
-      .post<Company>(`${environment.apiBasePath}${this.urlPath}/Register`, input)
+      .post<Company>(
+        `${environment.apiBasePath}${this.urlPath}/Register`,
+        input
+      )
       .pipe(
         catchError((error) => {
           // TODO implement Error Handling

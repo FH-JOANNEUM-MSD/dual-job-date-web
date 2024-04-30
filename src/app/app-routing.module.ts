@@ -6,7 +6,7 @@ import { HomeComponent } from './pages/home/view/home.component';
 import { CompanyComponent } from './pages/company/view/company.component';
 import { StudentComponent } from './pages/student/view/student.component';
 import { CompanyProfileComponent } from './pages/company-profile/view/company-profile.component';
-import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -29,7 +29,7 @@ const routes: Routes = [
     title: 'Studenten',
     canActivate: [AuthGuard],
   },
-  { path: 'company-details/:id', component: CompanyProfileComponent },
+  { path: 'company-profile', component: CompanyProfileComponent },
 
   // TODO: Add the routes here for components
   { path: '**', component: PageNotFoundComponent },
