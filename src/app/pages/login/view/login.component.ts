@@ -42,6 +42,8 @@ export class LoginComponent {
         return;
       }
 
+      // TODO Check Role after backend implemented role in authResponse
+
       this.authService.setCredentials(result);
 
       this.router.navigate(['/home']);
