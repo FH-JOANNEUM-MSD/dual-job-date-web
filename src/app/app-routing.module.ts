@@ -8,6 +8,7 @@ import { StudentComponent } from './pages/student/view/student.component';
 import { CompanyProfileComponent } from './pages/company-profile/view/company-profile.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+// TODO Translate title
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, title: 'Login' },

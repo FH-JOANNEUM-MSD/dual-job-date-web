@@ -3,10 +3,9 @@ import { catchError, Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Company } from '../model/company';
-import { Activity } from '../model/activity';
-import { ActivityInput } from '../model/activityInput';
 import { CompanyDetails } from '../model/companyDetails';
 import { RegisterCompany } from '../model/registerCompany';
+import { Activity } from '../model/activity';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +36,11 @@ export class CompanyService {
 
   getCompanyById(id: number): Observable<Company | null> {
     return this.http
-      .get<Company>(
-        `${environment.apiBasePath}${this.urlPath}/GetCompany?id=${id}`
-      )
+      .get<Company>(`${environment.apiBasePath}${this.urlPath}?id=${id}`)
       .pipe(
         catchError((error) => {
           // TODO implement Error Handling
           console.error(error);
-          console.log('test1');
           return of(null);
         })
       );
@@ -99,7 +95,7 @@ export class CompanyService {
 
   // TODO: NEEDED ?
 
-  createCompanyActivities(activities: ActivityInput[]): Observable<any> {
+  createCompanyActivities(activities: Activity[]): Observable<any> {
     // TODO implement GlobalStorage / LocalStorage something
     return this.http
       .post<any>(

@@ -1,14 +1,14 @@
 import { AcademicProgram } from './academicProgram';
-import { Activity } from './activity';
 import { Address } from './address';
 import { CompanyDetails } from './companyDetails';
 import { Institution } from './institution';
 import { User } from './user';
 import { StudentCompany } from './studentCompany';
+import { Activity } from './activity';
 
 export interface Company {
   id: number;
-  name: string | null;
+  name: string;
   industry: string | null;
   logoBase64: string | null;
   website: string | null;

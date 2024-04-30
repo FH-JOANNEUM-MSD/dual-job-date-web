@@ -7,6 +7,7 @@ import {AuthenticationResponse} from "../model/authenticationResponse";
 import {UserType} from "../enum/userType";
 import {RegisterUserInput} from "../model/registerUserInput";
 import {Credentials} from "../model/credentials";
+import {AuthService} from "../../services/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class UserService {
 
   private urlPath: string = '/User';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   // ****** GET ****** \\
@@ -56,14 +57,11 @@ export class UserService {
   }
 
   refresh(): Observable<AuthenticationResponse | null> {
-    // TODO implement GlobalStorage / LocalStorage something
-    return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Refresh`, {refreshToken: ""}).pipe(
-      catchError(error => {
-        // TODO implement Error Handling
-        console.error(error);
-        return of(null);
-      }),
-    );
+    const refreshToken = this.authService.getRefreshToken();
+    if (!refreshToken) {
+      return of(null);
+    }
+    return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Refresh`, {refreshToken: refreshToken});
   }
 
   changePassword(oldPassword: string, newPassword: string): Observable<any | null> {
@@ -135,7 +133,7 @@ export class UserService {
     // TODO Translate
     let subject = '';
     let body = '';
- 
+
     switch (user.userType) {
       case UserType.Student:
         subject = 'Einladung zum Dual Job Dating';

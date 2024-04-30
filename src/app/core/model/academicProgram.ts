@@ -1,8 +1,8 @@
-import {Company} from './company';
-import {User} from './user';
-import {Activity} from './activity';
-import {Institution} from './institution';
-import {AcademicDegree} from '../enum/academicDegree';
+import { Company } from './company';
+import { User } from './user';
+import { Institution } from './institution';
+import { AcademicDegree } from '../enum/academicDegree';
+import { Activity } from './activity';
 
 export interface AcademicProgram {
   id: number;

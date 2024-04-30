@@ -43,6 +43,12 @@
   "companyDialog": {
     "title": "Registriere neues Unternehmen"
   },
+  "navigation": {
+    "logout": "Ausloggen"
+  },
+  "login": {
+    "sessionExpired": "Session abgelaufen. Bitte erneut anmelden."
+  },
   "enum": {
     "userType": {
       "1": "Admin",
