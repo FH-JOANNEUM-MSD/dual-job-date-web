@@ -62,7 +62,8 @@
     "continueWithoutChanging": "Weiter ohne Passwort ändern"
   },
   "navigation": {
-    "logout": "Ausloggen"
+    "logout": "Ausloggen",
+    "changePassword": "Passwort ändern"
   },
   "login": {
     "sessionExpired": "Session abgelaufen. Bitte erneut anmelden."

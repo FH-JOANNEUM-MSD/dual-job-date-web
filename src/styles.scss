@@ -85,7 +85,7 @@ body {
   right: 0;
 }
 
-.side-dialog-container .dialog-container {
+.side-dialog-container, .dialog-container {
 
   .header {
     display: flex;
@@ -104,6 +104,10 @@ body {
 
     form {
       mat-form-field {
+        width: 100%;
+      }
+
+      ng-select {
         width: 100%;
       }
     }

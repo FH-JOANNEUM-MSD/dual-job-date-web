@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthService} from "../../../services/auth.service";
 import {Router} from "@angular/router";
+import {DialogService} from "../../../services/dialog.service";
 
 @Component({
   selector: 'app-headernavigation',
@@ -14,11 +15,15 @@ export class HeadernavigationComponent {
     {path: '/student', label: 'Studenten'},
   ];
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private dialogService: DialogService) {
   }
 
   logOut(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  openChangePasswordDialog(): void {
+    this.dialogService.openChangePasswordDialog().subscribe();
   }
 }

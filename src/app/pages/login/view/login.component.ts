@@ -51,8 +51,8 @@ export class LoginComponent {
             this.authService.setCredentials(result);
             // TODO Check Role after backend implemented role in authResponse
 
-            if (!result.isNew) {
-              return this.dialogService.openChangePasswordDialog();
+            if (result.isNew) {
+              return this.dialogService.openChangePasswordDialog(true);
             }
 
             return of(true);

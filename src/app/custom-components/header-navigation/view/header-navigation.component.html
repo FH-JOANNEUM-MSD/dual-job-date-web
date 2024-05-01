@@ -8,7 +8,7 @@
 
   </div>
   <div class="navigationContainer">
-    @for (link of navLinks;track $index) {
+    @for (link of navLinks; track $index) {
       <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         {{ link.label }}
       </a>
@@ -20,6 +20,10 @@
       <button (click)="logOut()" mat-menu-item>
         <mat-icon>logout</mat-icon>
         <span>{{ 'navigation.logout' | translate }}</span>
+      </button>
+      <button (click)="openChangePasswordDialog()" mat-menu-item>
+        <mat-icon>password</mat-icon>
+        <span>{{ 'navigation.changePassword' | translate }}</span>
       </button>
     </mat-menu>
   </div>

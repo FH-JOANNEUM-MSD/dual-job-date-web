@@ -20,9 +20,9 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  openChangePasswordDialog(): Observable<any> {
+  openChangePasswordDialog(isNew: boolean = false): Observable<any> {
     // TODO Change from Side Dialog to normal middle dialog
-    const dialogRef = this.openDialog({}, ChangePasswordDialogComponent)
+    const dialogRef = this.openDialog(isNew, ChangePasswordDialogComponent)
 
     return dialogRef.afterClosed().pipe(
       map(_ => true)

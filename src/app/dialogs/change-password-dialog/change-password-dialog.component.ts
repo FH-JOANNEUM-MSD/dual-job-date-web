@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {UserService} from "../../core/services/user.service";
 
 @Component({
@@ -10,6 +10,8 @@ import {UserService} from "../../core/services/user.service";
 })
 export class ChangePasswordDialogComponent {
 
+  isNewDialog: boolean = this.data;
+  isLoading = false;
 
   form = this.fb.group({
     currentPassword: this.fb.control<string | null>(
@@ -24,8 +26,10 @@ export class ChangePasswordDialogComponent {
     ),
   }, {validators: this.passwordMatchValidator()});
 
-  constructor(private fb: FormBuilder, private dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
-              private userService: UserService,
+  constructor(
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
+    private userService: UserService, @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
 
@@ -50,14 +54,15 @@ export class ChangePasswordDialogComponent {
       this.form.markAllAsTouched();
       return;
     }
+    this.isLoading = true;
 
     const oldPassword = this.form.controls.currentPassword.value!;
     const newPassword = this.form.controls.newPassword.value!;
     this.userService.changePassword(oldPassword, newPassword).subscribe(result => {
       if (!result) {
+        this.isLoading = false;
         return;
       }
-
       this.dialogRef.close();
     })
   }
