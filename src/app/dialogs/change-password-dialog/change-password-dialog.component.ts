@@ -2,6 +2,9 @@ import {Component, Inject} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {UserService} from "../../core/services/user.service";
+import {switchMap} from "rxjs/operators";
+import {of} from "rxjs";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-change-password-dialog',
@@ -29,6 +32,7 @@ export class ChangePasswordDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ChangePasswordDialogComponent>,
+    private dialogService: DialogService,
     private userService: UserService, @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -58,12 +62,38 @@ export class ChangePasswordDialogComponent {
 
     const oldPassword = this.form.controls.currentPassword.value!;
     const newPassword = this.form.controls.newPassword.value!;
-    this.userService.changePassword(oldPassword, newPassword).subscribe(result => {
-      if (!result) {
-        this.isLoading = false;
-        return;
-      }
-      this.dialogRef.close();
-    })
+
+    if (this.isNewDialog) {
+      this.userService.changePassword(oldPassword, newPassword).subscribe(result => {
+        if (!result) {
+          this.isLoading = false;
+          return;
+        }
+        this.dialogRef.close();
+      })
+    } else {
+      this.dialogService.openConfirmDialog({
+        titleTranslationKey: "changePasswordDialog.confirmChangeTitle",
+        messageTranslationKey: "changePasswordDialog.confirmChangeMessage"
+      }).pipe(
+        switchMap(result => {
+          if (!result) {
+            return of(null);
+          }
+
+          return this.userService.changePassword(oldPassword, newPassword);
+        })
+      ).subscribe(
+        result => {
+          if (!result) {
+            this.isLoading = false;
+            return;
+          }
+          this.dialogRef.close(result);
+        }
+      );
+    }
+
+
   }
 }

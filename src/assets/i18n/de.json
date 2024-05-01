@@ -1,7 +1,8 @@
 ﻿{
   "generic": {
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
   },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
@@ -41,6 +42,8 @@
     "title": "Registriere neuen Studenten",
     "email": "Email",
     "multipleTitle": "Registriere Studenten",
+    "confirmDeleteTitle": "Löschung bestätigen",
+    "confirmDeleteMessage": "Sind Sie sicher, dass Sie diesen Studenten löschen möchten?",
     "button": {
       "import": "Wähle File"
     }
@@ -50,6 +53,8 @@
     "email": "Email",
     "name": "Name",
     "multipleTitle": "Registriere Unternehmen",
+    "confirmDeleteTitle": "Löschung bestätigen",
+    "confirmDeleteMessage": "Sind Sie sicher, dass Sie dieses Unternehmen löschen möchten?",
     "button": {
       "import": "Wähle File"
     }
@@ -59,7 +64,9 @@
     "currentPassword": "Aktuelles Passwort",
     "newPassword": "Neues Passwort",
     "repeatNewPassword": "Neues Passwort bestätigen",
-    "continueWithoutChanging": "Weiter ohne Passwort ändern"
+    "continueWithoutChanging": "Weiter ohne Passwort ändern",
+    "confirmChangeTitle": "Änderung bestätigen",
+    "confirmChangeMessage": "Sind Sie sicher, dass Sie das Passwort ändern wollen?"
   },
   "navigation": {
     "logout": "Ausloggen",

@@ -12,6 +12,7 @@ import {forkJoin, of} from "rxjs";
 import {UserType} from "../../core/enum/userType";
 import {switchMap} from "rxjs/operators";
 import {CsvParserService} from "../../services/csv-parser.service";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-student-dialog',
@@ -50,6 +51,7 @@ export class StudentDialogComponent implements OnInit {
     private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -121,19 +123,30 @@ export class StudentDialogComponent implements OnInit {
   }
 
   delete(): void {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       return;
     }
 
-    this.userService.deleteUser(this.userId)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-          this.dialogRef.close(result);
+    this.dialogService.openConfirmDialog({
+      titleTranslationKey: "studentDialog.confirmDeleteTitle",
+      messageTranslationKey: "studentDialog.confirmDeleteMessage"
+    }).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
         }
-      );
+
+        return this.userService.deleteUser(userId);
+      })
+    ).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.dialogRef.close(result);
+      }
+    );
   }
 
   private loadNeededData() {

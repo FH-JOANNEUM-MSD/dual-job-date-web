@@ -92,6 +92,7 @@ export class StudentComponent implements OnInit {
         this.institutions = result.institutions;
       }
       this.isLoading = false;
+      this.changeDetector.detectChanges();
       this.configureDataSource();
     });
   }
@@ -109,14 +110,13 @@ export class StudentComponent implements OnInit {
         if (!result) {
           return;
         }
-
+        this.changeDetector.detectChanges();
         this.dataSource.data = result;
         this.configureDataSource();
       });
   }
 
   private configureDataSource(): void {
-    this.changeDetector.detectChanges();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }

@@ -5,6 +5,7 @@ import {ComponentType} from "@angular/cdk/overlay";
 import {StudentDialogComponent} from "../dialogs/student-dialog/student-dialog.component";
 import {CompanyDialogComponent} from "../dialogs/company-dialog/company-dialog.component";
 import {ChangePasswordDialogComponent} from "../dialogs/change-password-dialog/change-password-dialog.component";
+import {ConfirmDialogComponent} from "../dialogs/confirm-dialog/confirm-dialog.component";
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,19 @@ export class DialogService {
   constructor(private dialog: MatDialog) {
   }
 
-  openStudentDialog(data: { id?: string, multiple: boolean }): Observable<any> {
+  openConfirmDialog(data: { titleTranslationKey: string; messageTranslationKey: string }): Observable<boolean> {
+    const dialogRef = this.openDialog(data, ConfirmDialogComponent)
+
+    return dialogRef.afterClosed();
+  }
+
+  openStudentDialog(data: { id?: string, multiple: boolean }): Observable<boolean> {
     const dialogRef = this.openSideDialog(data, StudentDialogComponent)
 
     return dialogRef.afterClosed();
   }
 
-  openChangePasswordDialog(isNew: boolean = false): Observable<any> {
+  openChangePasswordDialog(isNew: boolean = false): Observable<boolean> {
     // TODO Change from Side Dialog to normal middle dialog
     const dialogRef = this.openDialog(isNew, ChangePasswordDialogComponent)
 
@@ -30,7 +37,7 @@ export class DialogService {
   }
 
 
-  openCompanyDialog(data: { id?: string, multiple: boolean }): Observable<any> {
+  openCompanyDialog(data: { id?: string, multiple: boolean }): Observable<boolean> {
     const dialogRef = this.openSideDialog(data, CompanyDialogComponent)
 
     return dialogRef.afterClosed();

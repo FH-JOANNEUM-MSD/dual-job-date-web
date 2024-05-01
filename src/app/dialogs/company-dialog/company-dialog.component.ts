@@ -10,6 +10,7 @@ import {RegisterCompany} from "../../core/model/registerCompany";
 import {UserService} from "../../core/services/user.service";
 import {CsvParserService} from "../../services/csv-parser.service";
 import {switchMap} from "rxjs/operators";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-company-dialog',
@@ -49,6 +50,7 @@ export class CompanyDialogComponent implements OnInit {
     private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<CompanyDialogComponent>,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -123,19 +125,29 @@ export class CompanyDialogComponent implements OnInit {
   }
 
   delete(): void {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       return;
     }
 
-    this.userService.deleteUser(this.userId)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-          this.dialogRef.close(result);
+    this.dialogService.openConfirmDialog({
+      titleTranslationKey: "companyDialog.confirmDeleteTitle",
+      messageTranslationKey: "companyDialog.confirmDeleteMessage"
+    }).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
         }
-      );
+        return this.userService.deleteUser(userId);
+      })
+    ).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.dialogRef.close(result);
+      }
+    );
   }
 
   private loadNeededData() {
