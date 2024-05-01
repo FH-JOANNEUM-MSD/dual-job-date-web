@@ -43,22 +43,6 @@ html, body {
   --card-shadow: #CDECAC;
 }
 
-/*
-h1 {
-  font-size: 1.5em;
-  font-weight: 700;
-}
-
-h2 {
-  font-size: 1.3333333333333333em;
-  font-weight: 500;
-}
-
-h3 {
-  font-size: 1.1666666666666667em;
-  font-weight: 500;
-} */
-
 .success-snackbar {
   background-color: #4caf50;
 }
@@ -92,13 +76,16 @@ body {
   align-items: center;
 }
 
-.dialog-container {
+.side-dialog-container {
   max-width: 33vw;
   width: 33vw;
   height: 100vh;
   position: fixed !important;
   top: 0;
   right: 0;
+}
+
+.side-dialog-container .dialog-container {
 
   .header {
     display: flex;

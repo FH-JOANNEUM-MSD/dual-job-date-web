@@ -64,16 +64,18 @@ export class UserService {
     return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Refresh`, {refreshToken: refreshToken});
   }
 
-  changePassword(oldPassword: string, newPassword: string): Observable<any | null> {
-    // TODO implement GlobalStorage / LocalStorage something
+  changePassword(oldPassword: string, newPassword: string): Observable<boolean | null> {
     return this.http.post(`${environment.apiBasePath}${this.urlPath}/ChangePassword`, {
       oldPassword: oldPassword,
       newPassword: newPassword,
     }).pipe(
+      map(_ => {
+        return true;
+      }),
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
-        return of(null);
+        return of(false);
       }),
     );
   }

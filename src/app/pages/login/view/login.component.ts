@@ -3,6 +3,9 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from "../../../services/auth.service";
 import {UserService} from "../../../core/services/user.service";
+import {switchMap} from "rxjs/operators";
+import {of} from "rxjs";
+import {DialogService} from "../../../services/dialog.service";
 
 
 @Component({
@@ -25,6 +28,7 @@ export class LoginComponent {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
+    private dialogService: DialogService,
     private fb: FormBuilder
   ) {
   }
@@ -37,17 +41,31 @@ export class LoginComponent {
 
     const email = this.loginForm.controls.email.value;
     const password = this.loginForm.controls.password.value;
-    this.userService.login(email, password).subscribe((result) => {
-      if (!result) {
-        return;
-      }
+    this.userService.login(email, password)
+      .pipe(
+        switchMap(
+          result => {
+            if (!result) {
+              return of(null);
+            }
+            this.authService.setCredentials(result);
+            // TODO Check Role after backend implemented role in authResponse
 
-      // TODO Check Role after backend implemented role in authResponse
+            if (!result.isNew) {
+              return this.dialogService.openChangePasswordDialog();
+            }
 
-      this.authService.setCredentials(result);
+            return of(true);
+          }
+        )
+      )
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
 
-      this.router.navigate(['/home']);
-    });
+        this.router.navigate(['/home']);
+      });
 
   }
 }

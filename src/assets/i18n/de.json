@@ -54,6 +54,13 @@
       "import": "Wähle File"
     }
   },
+  "changePasswordDialog": {
+    "title": "Passwort ändern",
+    "currentPassword": "Aktuelles Passwort",
+    "newPassword": "Neues Passwort",
+    "repeatNewPassword": "Neues Passwort bestätigen",
+    "continueWithoutChanging": "Weiter ohne Passwort ändern"
+  },
   "navigation": {
     "logout": "Ausloggen"
   },

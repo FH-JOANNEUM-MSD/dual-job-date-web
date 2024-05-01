@@ -28,6 +28,7 @@ import {CompanyDialogComponent} from "./dialogs/company-dialog/company-dialog.co
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {CompanyProfileComponent} from "./pages/company-profile/view/company-profile.component";
 import {MatPaginatorModule} from "@angular/material/paginator";
+import {ChangePasswordDialogComponent} from "./dialogs/change-password-dialog/change-password-dialog.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -44,7 +45,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     StudentDialogComponent,
     CompanyDialogComponent,
     PageNotFoundComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    ChangePasswordDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -3,4 +3,5 @@
   accessToken: string;
   expiresIn: number;
   refreshToken: string;
+  isNew: boolean;
 }
