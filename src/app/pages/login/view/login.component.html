@@ -29,18 +29,24 @@
   </div>
   <div class="form-circle">
     <div class="form-wrapper">
-      <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
-
-        <input formControlName="email" id="email" placeholder="Email..." type="email">
-        <!-- TODO implement correct form errors -->
-        <mat-error *ngIf="loginForm.controls.email.invalid">Verpflichtend und gültige Email benötigt</mat-error>
-        <input formControlName="password" id="password" placeholder="Password..." type="password">
-        <mat-error *ngIf="loginForm.controls.password.invalid">Verpflichtend</mat-error>
-        <button type="submit">LOGIN</button>
+      <form [formGroup]="loginForm">
+        <mat-form-field>
+          <mat-label>{{ 'loginPage.email' | translate }}</mat-label>
+          <input formControlName="email" matInput type="email">
+          <mat-error *ngIf="loginForm.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <!-- TODO Show correct formError -->
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ 'loginPage.password' | translate }}</mat-label>
+          <input formControlName="password" matInput type="password">
+          <mat-error *ngIf="loginForm.controls.password.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <!-- TODO Show correct formError -->
+        </mat-form-field>
+        <button (click)="save()" class="primary-button"
+                mat-button
+                type="submit">{{ 'loginPage.login' | translate }}
+        </button>
       </form>
-      <div class="forgot">
-        <!-- TODO implement forgot password <a href="#">Forgot Password?</a>-->
-      </div>
     </div>
   </div>
 </div>

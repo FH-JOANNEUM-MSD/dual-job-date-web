@@ -49,7 +49,7 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button [disabled]="isLoading" color="warn" mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
-  <button (click)="save()" [disabled]="this.userId!! || form.invalid || this.isLoading" class="primary-button"
+  <button (click)="save()" [disabled]="userId!! || form.invalid || isLoading" class="primary-button"
           mat-button
           type="submit">{{ 'generic.save' | translate }}
   </button>
