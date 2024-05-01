@@ -1,5 +1,5 @@
 <div class="header row">
-  <h1 mat-dialog-title>{{ 'companyDialog.title' | translate }}</h1>
+  <h1 mat-dialog-title>{{ (multiple ? 'companyDialog.multipleTitle' : 'companyDialog.title') | translate }}</h1>
   @if (userId) {
     <button (click)="delete()" color="warn" mat-icon-button>
       <mat-icon>delete</mat-icon>
@@ -9,19 +9,28 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" class="col">
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input formControlName="email" matInput>
-      <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-      <!-- TODO Show correct formError -->
-    </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input formControlName="name" matInput>
-      <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-      <!-- TODO Show correct formError -->
-    </mat-form-field>
+    @if (multiple) {
+      <input type="file" #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;">
+      <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+        <mat-icon>file_upload</mat-icon>
+        {{ 'companyPage.button.import' | translate }}
+      </button>
+    } @else {
+      <mat-form-field>
+        <mat-label>{{ 'companyDialog.email' | translate }}</mat-label>
+        <input formControlName="email" matInput>
+        <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+        <!-- TODO Show correct formError -->
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'companyDialog.name' | translate }}</mat-label>
+        <input formControlName="name" matInput>
+        <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+        <!-- TODO Show correct formError -->
+      </mat-form-field>
+    }
 
     <ng-select
       [items]="academicPrograms"

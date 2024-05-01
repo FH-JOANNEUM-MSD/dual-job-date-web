@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AcademicProgram} from "../../core/model/academicProgram";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
@@ -8,6 +8,7 @@ import {User} from "../../core/model/user";
 import {CompanyService} from "../../core/services/company.service";
 import {RegisterCompany} from "../../core/model/registerCompany";
 import {UserService} from "../../core/services/user.service";
+import {CsvParserService} from "../../services/csv-parser.service";
 
 @Component({
   selector: 'app-company-dialog',
@@ -15,6 +16,9 @@ import {UserService} from "../../core/services/user.service";
   styleUrl: './company-dialog.component.scss'
 })
 export class CompanyDialogComponent implements OnInit {
+
+  @Input() multiple: boolean = false;
+
   isLoading = true;
   form = this.fb.group({
     email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
@@ -36,6 +40,7 @@ export class CompanyDialogComponent implements OnInit {
     private fb: FormBuilder,
     private companyService: CompanyService,
     private userService: UserService,
+    private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<CompanyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any
@@ -54,7 +59,6 @@ export class CompanyDialogComponent implements OnInit {
 
     const input = this.getInputFromForm();
 
-
     this.companyService.register(input)
       .subscribe(
         result => {
@@ -64,6 +68,25 @@ export class CompanyDialogComponent implements OnInit {
           this.dialogRef.close(result);
         }
       );
+  }
+
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+
+    this.form.patchValue({
+      excelFile: file
+    });
+
+    if (file) {
+      this.csvParser
+        .parseExcel(file)
+        .then((jsonData) => {
+          console.log('Parsed JSON Data:', jsonData);
+        })
+        .catch((error) => {
+          console.error('Error parsing file:', error);
+        });
+    }
   }
 
   delete(): void {

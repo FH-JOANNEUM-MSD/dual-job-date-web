@@ -1,20 +1,13 @@
-﻿import { Injectable } from '@angular/core';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { SnackbarService } from '../services/snackbar.service';
-import { UserService } from '../core/services/user.service';
-import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { TranslateService } from '@ngx-translate/core';
-import { CompanyService } from '../core/services/company.service';
+﻿import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,} from '@angular/common/http';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {catchError, filter, switchMap, take} from 'rxjs/operators';
+import {SnackbarService} from '../services/snackbar.service';
+import {UserService} from '../core/services/user.service';
+import {AuthService} from '../services/auth.service';
+import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -26,11 +19,11 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     private snackBarService: SnackbarService,
     private userService: UserService,
-    private companyService: CompanyService,
     private authService: AuthService,
     private translateService: TranslateService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   //TODO Translate Error Messages with backend error codes
 
@@ -50,7 +43,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private addAuthenticationToken(request: HttpRequest<any>): HttpRequest<any> {
     const token = this.authService.getAccessToken();
     return token
-      ? request.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      ? request.clone({setHeaders: {Authorization: `Bearer ${token}`}})
       : request;
   }
 
@@ -63,7 +56,7 @@ export class TokenInterceptor implements HttpInterceptor {
       return this.handleClientError(error);
     } else {
       return error.status === 401
-        ? this.handle401Error(request, next, error)
+        ? this.handle401Error(request, next)
         : this.handleServerError(error);
     }
   }
@@ -85,7 +78,6 @@ export class TokenInterceptor implements HttpInterceptor {
   private handle401Error(
     request: HttpRequest<any>,
     next: HttpHandler,
-    error: HttpErrorResponse
   ): Observable<HttpEvent<any>> {
     const refreshUrl = `${environment.apiBasePath}/User/Refresh`;
     if (request.url.includes(refreshUrl)) {
