@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserType} from 'src/app/core/enum/userType';
 import {UserService} from 'src/app/core/services/user.service';
@@ -11,6 +11,8 @@ import {AcademicProgramService} from '../../../core/services/academic-program.se
 import {forkJoin} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from '../../../core/services/company.service';
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-company',
@@ -18,6 +20,9 @@ import {CompanyService} from '../../../core/services/company.service';
   styleUrl: './company.component.scss',
 })
 export class CompanyComponent implements OnInit {
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+
   form = this.fb.group({
     institution: this.fb.nonNullable.control<Institution | null>(null, {
       validators: [Validators.required],
@@ -31,9 +36,10 @@ export class CompanyComponent implements OnInit {
   displayedColumns: string[] = [
     'name',
     'email',
-    'status',
+    'academicProgram',
     'industry',
     'companyWebsite',
+    'status',
     'actions',
   ];
   institutions: Institution[] = [];
@@ -48,7 +54,8 @@ export class CompanyComponent implements OnInit {
     private companyService: CompanyService,
     private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 
@@ -106,6 +113,7 @@ export class CompanyComponent implements OnInit {
         this.institutions = result.institutions;
       }
       this.isLoadingResults = false;
+      this.configureDataSource();
     });
   }
 
@@ -123,6 +131,26 @@ export class CompanyComponent implements OnInit {
           return;
         }
         this.dataSource.data = result;
+        this.configureDataSource();
       });
+  }
+
+  private configureDataSource(): void {
+    this.changeDetector.detectChanges();
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'industry':
+          return item.company.industry;
+        case 'companyWebsite':
+          return item.company.website;
+        case 'status':
+          return item.company.isActive ? 1 : 0;
+        default:
+          // @ts-ignore
+          return item[property];
+      }
+    };
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 }

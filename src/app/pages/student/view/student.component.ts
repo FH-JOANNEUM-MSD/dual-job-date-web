@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {UserService} from '../../../core/services/user.service';
 import {UserType} from '../../../core/enum/userType';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,7 +10,8 @@ import {AcademicProgramService} from '../../../core/services/academic-program.se
 import {Institution} from '../../../core/model/institution';
 import {AcademicProgram} from '../../../core/model/academicProgram';
 import {FormBuilder, Validators} from '@angular/forms';
-import {CsvParserService} from 'src/app/services/csv-parser.service';
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
 
 @Component({
   selector: 'app-student',
@@ -18,6 +19,9 @@ import {CsvParserService} from 'src/app/services/csv-parser.service';
   styleUrl: './student.component.scss',
 })
 export class StudentComponent implements OnInit {
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+
   form = this.fb.group({
     institution: this.fb.nonNullable.control<Institution | null>(null, {
       validators: [Validators.required],
@@ -41,7 +45,7 @@ export class StudentComponent implements OnInit {
     private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService,
-    private csvParser: CsvParserService
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 
@@ -72,33 +76,6 @@ export class StudentComponent implements OnInit {
       });
   }
 
-  onFileSelect(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-
-    if (!inputElement.files || inputElement.files.length === 0) {
-      return;
-    }
-
-    const file = inputElement.files[0];
-    this.isLoading = true;
-
-    this.csvParser.parseExcel(file).subscribe(
-      {
-        next: (result) => {
-          console.log('Parsed JSON Data:', result);
-          inputElement.value = '';
-          this.isLoading = false;
-        },
-        error: (error) => {
-          inputElement.value = '';
-          this.isLoading = false;
-          // TODO show error somehow
-          console.error('Error parsing file:', error);
-        }
-      }
-    )
-  }
-
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Student, 2, 2),
@@ -115,6 +92,7 @@ export class StudentComponent implements OnInit {
         this.institutions = result.institutions;
       }
       this.isLoading = false;
+      this.configureDataSource();
     });
   }
 
@@ -131,7 +109,15 @@ export class StudentComponent implements OnInit {
         if (!result) {
           return;
         }
+
         this.dataSource.data = result;
+        this.configureDataSource();
       });
+  }
+
+  private configureDataSource(): void {
+    this.changeDetector.detectChanges();
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 }

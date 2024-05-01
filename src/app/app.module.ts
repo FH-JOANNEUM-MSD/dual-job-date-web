@@ -27,6 +27,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {CompanyDialogComponent} from "./dialogs/company-dialog/company-dialog.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {CompanyProfileComponent} from "./pages/company-profile/view/company-profile.component";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     MatTableModule,
     MatSortModule,
+    MatPaginatorModule,
     MatButtonModule,
     NgSelectModule,
     MatFormFieldModule,
