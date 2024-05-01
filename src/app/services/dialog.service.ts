@@ -13,14 +13,14 @@ export class DialogService {
   constructor(private dialog: MatDialog) {
   }
 
-  openStudentDialog(id?: string): Observable<any> {
-    const dialogRef = this.openGenericDialog(id, StudentDialogComponent)
+  openStudentDialog(data: { id?: string, multiple: boolean }): Observable<any> {
+    const dialogRef = this.openGenericDialog(data, StudentDialogComponent)
 
     return dialogRef.afterClosed();
   }
 
-  openCompanyDialog(id?: string): Observable<any> {
-    const dialogRef = this.openGenericDialog(id, CompanyDialogComponent)
+  openCompanyDialog(data: { id?: string, multiple: boolean }): Observable<any> {
+    const dialogRef = this.openGenericDialog(data, CompanyDialogComponent)
 
     return dialogRef.afterClosed();
   }

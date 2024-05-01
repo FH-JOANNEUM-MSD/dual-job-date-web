@@ -20,8 +20,8 @@
     <button mat-flat-button class="primary-button"
             (click)="openStudentDialog()">{{ 'studentPage.registerStudent' | translate }}
     </button>
-    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".csv, .xlsx" style="display: none;">
-    <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+
+    <button mat-flat-button class="primary-button" (click)="openStudentDialog(undefined, true)">
       <mat-icon>file_upload</mat-icon>
       {{ 'studentPage.button.import' | translate }}
     </button>

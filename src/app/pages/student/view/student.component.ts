@@ -51,8 +51,8 @@ export class StudentComponent implements OnInit {
     this.form.valueChanges.subscribe((_) => this.reloadUser());
   }
 
-  openStudentDialog(id?: string): void {
-    this.dialogService.openStudentDialog(id).subscribe((result) => {
+  openStudentDialog(id?: string, multiple: boolean = false): void {
+    this.dialogService.openStudentDialog({id: id, multiple: multiple}).subscribe((result) => {
       if (!result) {
         return;
       }

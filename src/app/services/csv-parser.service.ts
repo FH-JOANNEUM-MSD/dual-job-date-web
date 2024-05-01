@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
-import {catchError, map, Observable} from "rxjs";
+import {catchError, map, Observable, of} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
 })
 export class CsvParserService {
-  parseExcel(file: File): Observable<DataRow[]> {
+  parseExcel(file: File): Observable<DataRow[] | null> {
     return this.readFileAsBinaryString(file).pipe(
       map(e => XLSX.read(e, {type: 'binary'})),
       map(workbook => this.extractDataFromWorkbook(workbook)),
@@ -14,11 +14,11 @@ export class CsvParserService {
         if (this.validateHeaders(rows)) {
           return this.formatDataWithHeaders(rows);
         } else {
-          throw new Error('Missing required headers');
+          return null;
         }
       }),
-      catchError(error => {
-        throw new Error('Failed to parse the Excel file: ' + error.message);
+      catchError(_ => {
+        return of(null);
       })
     );
   }
@@ -69,5 +69,5 @@ export class CsvParserService {
 
 interface DataRow {
   email?: string;
-  company?: string;
+  companyName?: string;
 }

@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AcademicProgram} from "../../core/model/academicProgram";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
@@ -9,6 +9,7 @@ import {CompanyService} from "../../core/services/company.service";
 import {RegisterCompany} from "../../core/model/registerCompany";
 import {UserService} from "../../core/services/user.service";
 import {CsvParserService} from "../../services/csv-parser.service";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-company-dialog',
@@ -17,24 +18,29 @@ import {CsvParserService} from "../../services/csv-parser.service";
 })
 export class CompanyDialogComponent implements OnInit {
 
-  @Input() multiple: boolean = false;
-
   isLoading = true;
+  userId: string | null = this.data.id ?? null;
+  multiple: boolean = this.data.multiple;
+  fileName: string | null = null;
+
   form = this.fb.group({
-    email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
-      validators: [Validators.required]
-    }),
-    name: this.fb.nonNullable.control<string>(
-      {value: '', disabled: !!this.data},
-      {validators: [Validators.required]}
+    excel: this.fb.control<File | null>(
+      null, {validators: this.multiple ? [Validators.required] : []}
     ),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
-      {value: null, disabled: !!this.data},
+    email: this.fb.control<string | null>({
+      value: null,
+      disabled: !!this.data.id,
+    }, {validators: this.multiple ? [] : [Validators.required]}),
+    name: this.fb.control<string | null>(
+      {value: null, disabled: !!this.data.id},
+      {validators: this.multiple ? [] : [Validators.required]}
+    ),
+    academicProgram: this.fb.control<AcademicProgram | null>(
+      {value: null, disabled: !!this.data.id},
       {validators: [Validators.required]}
     ),
   });
   academicPrograms: AcademicProgram[] = [];
-  userId: string | null = this.data;
 
   constructor(
     private fb: FormBuilder,
@@ -57,36 +63,63 @@ export class CompanyDialogComponent implements OnInit {
       return;
     }
 
-    const input = this.getInputFromForm();
+    this.isLoading = true;
 
-    this.companyService.register(input)
-      .subscribe(
+    if (this.multiple) {
+      const file = this.form.controls.excel.value!;
+      // TODO institutionId
+      const academicProgramId = this.form.controls.academicProgram.value!.id;
+
+      this.csvParser.parseExcel(file).pipe(
+        switchMap(result => {
+
+          if (!result) {
+            // TODO Show Parsing Error somewhere
+            return of(null);
+          }
+
+          return this.userService.registerCompaniesFromJson(result.map(row => {
+            return {email: row.email!, companyName: row.companyName!};
+          }), 2, academicProgramId)
+        })
+      ).subscribe(
         result => {
+          this.isLoading = false;
           if (!result) {
             return;
           }
           this.dialogRef.close(result);
         }
       );
+
+    } else {
+      const input = this.getInputFromForm();
+
+      this.companyService.register(input)
+        .subscribe(
+          result => {
+            this.isLoading = false;
+            if (!result) {
+              return;
+            }
+            this.dialogRef.close(result);
+          }
+        );
+    }
+
+
   }
 
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
+  onFileSelect(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
 
-    this.form.patchValue({
-      excelFile: file
-    });
-
-    if (file) {
-      this.csvParser
-        .parseExcel(file)
-        .then((jsonData) => {
-          console.log('Parsed JSON Data:', jsonData);
-        })
-        .catch((error) => {
-          console.error('Error parsing file:', error);
-        });
+    if (!inputElement.files || inputElement.files.length === 0) {
+      return;
     }
+
+    const file = inputElement.files[0];
+    this.form.patchValue({excel: file});
+    this.fileName = file.name;
   }
 
   delete(): void {
@@ -124,8 +157,8 @@ export class CompanyDialogComponent implements OnInit {
 
   private getInputFromForm(): RegisterCompany {
     return {
-      companyName: this.form.controls.name.value,
-      userEmail: this.form.controls.email.value,
+      companyName: this.form.controls.name.value!,
+      userEmail: this.form.controls.email.value!,
       academicProgramId: this.form.controls.academicProgram.value!.id,
     }
   }

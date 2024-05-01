@@ -8,42 +8,50 @@
 </div>
 
 <mat-dialog-content>
-  <form [formGroup]="form" class="col">
+  @if (isLoading) {
+    <mat-spinner></mat-spinner>
+  } @else {
+    <form [formGroup]="form" class="col">
 
-    @if (multiple) {
-      <input type="file" #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;">
-      <button mat-flat-button class="primary-button" (click)="fileInput.click()">
-        <mat-icon>file_upload</mat-icon>
-        {{ 'companyPage.button.import' | translate }}
-      </button>
-    } @else {
-      <mat-form-field>
-        <mat-label>{{ 'companyDialog.email' | translate }}</mat-label>
-        <input formControlName="email" matInput>
-        <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-        <!-- TODO Show correct formError -->
-      </mat-form-field>
+      @if (multiple) {
+        <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
+        <button (click)="fileInput.click()" class="primary-button" mat-flat-button>
+          <mat-icon>file_upload</mat-icon>
+          <!-- TODO If filename to long fix design-->
+          {{ fileName ? fileName : ('companyDialog.button.import' | translate) }}
+        </button>
+      } @else {
+        <mat-form-field>
+          <mat-label>{{ 'companyDialog.email' | translate }}</mat-label>
+          <input formControlName="email" matInput>
+          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <!-- TODO Show correct formError -->
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>{{ 'companyDialog.name' | translate }}</mat-label>
-        <input formControlName="name" matInput>
-        <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-        <!-- TODO Show correct formError -->
-      </mat-form-field>
-    }
+        <mat-form-field>
+          <mat-label>{{ 'companyDialog.name' | translate }}</mat-label>
+          <input formControlName="name" matInput>
+          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <!-- TODO Show correct formError -->
+        </mat-form-field>
+      }
 
-    <ng-select
-      [items]="academicPrograms"
-      appendTo="body"
-      bindLabel="keyName"
-      formControlName="academicProgram"
-    ></ng-select>
+      <!-- TODO Maybe set inital value because it is required-->
+      <ng-select
+        [clearable]="false"
+        [items]="academicPrograms"
+        appendTo="body"
+        bindLabel="keyName"
+        formControlName="academicProgram"
+      ></ng-select>
 
-  </form>
+    </form>
+  }
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
-  <button (click)="save()" [disabled]="this.userId!! || form.invalid" class="primary-button" mat-button
+  <button [disabled]="isLoading" mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
+  <button (click)="save()" [disabled]="this.userId!! || form.invalid || this.isLoading" class="primary-button"
+          mat-button
           type="submit">{{ 'generic.save' | translate }}
   </button>
 </mat-dialog-actions>

@@ -1,11 +1,11 @@
-﻿import { Injectable } from '@angular/core';
-import { catchError, Observable, of, throwError } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Company } from '../model/company';
-import { CompanyDetails } from '../model/companyDetails';
-import { RegisterCompany } from '../model/registerCompany';
-import { Activity } from '../model/activity';
+﻿import {Injectable} from '@angular/core';
+import {catchError, Observable, of, throwError} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {Company} from '../model/company';
+import {CompanyDetails} from '../model/companyDetails';
+import {RegisterCompany} from '../model/registerCompany';
+import {Activity} from '../model/activity';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,8 @@ import { Activity } from '../model/activity';
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   // ****** GET ****** \\
 

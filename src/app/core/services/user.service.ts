@@ -121,7 +121,36 @@ export class UserService {
     return this.http.put(`${environment.apiBasePath}${this.urlPath}/Register`, input, {responseType: 'text'}).pipe(
       catchError(error => {
         // TODO implement Error Handling
-        console.log('ERROR')
+        console.error(error);
+        return of(null);
+      }),
+      map(result => !!result)
+    );
+  }
+
+  registerCompaniesFromJson(input: {
+    email: string,
+    companyName: string
+  }[], institutionId: number, academicProgramId: number): Observable<boolean> {
+    return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterCompaniesFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
+      input, {responseType: 'text'}).pipe(
+      catchError(error => {
+        // TODO implement Error Handling
+        console.error(error);
+        return of(null);
+      }),
+      map(result => !!result)
+    );
+  }
+
+
+  registerStudentsFromJson(input: {
+    email: string
+  }[], institutionId: number, academicProgramId: number): Observable<boolean> {
+    return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterStudentsFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
+      input, {responseType: 'text'}).pipe(
+      catchError(error => {
+        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),

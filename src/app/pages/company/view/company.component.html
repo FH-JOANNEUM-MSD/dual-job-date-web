@@ -22,8 +22,7 @@
             class="primary-button">{{ 'companyPage.button.add' | translate }}
     </button>
 
-    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;">
-    <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+    <button mat-flat-button class="primary-button" (click)="openCompanyDialog(undefined, true)">
       <mat-icon>file_upload</mat-icon>
       {{ 'companyPage.button.import' | translate }}
     </button>

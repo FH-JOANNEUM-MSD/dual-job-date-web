@@ -38,10 +38,21 @@
     }
   },
   "studentDialog": {
-    "title": "Registriere neuen User"
+    "title": "Registriere neuen Studenten",
+    "email": "Email",
+    "multipleTitle": "Registriere Studenten",
+    "button": {
+      "import": "Wähle File"
+    }
   },
   "companyDialog": {
-    "title": "Registriere neues Unternehmen"
+    "title": "Registriere neues Unternehmen",
+    "email": "Email",
+    "name": "Name",
+    "multipleTitle": "Registriere Unternehmen",
+    "button": {
+      "import": "Wähle File"
+    }
   },
   "navigation": {
     "logout": "Ausloggen"

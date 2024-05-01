@@ -11,7 +11,6 @@ import {AcademicProgramService} from '../../../core/services/academic-program.se
 import {forkJoin} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from '../../../core/services/company.service';
-import {CsvParserService} from 'src/app/services/csv-parser.service';
 
 @Component({
   selector: 'app-company',
@@ -40,7 +39,7 @@ export class CompanyComponent implements OnInit {
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
 
-  isLoadingResults: boolean = true;
+  isLoadingResults = true;
   userLoading = false;
 
   constructor(
@@ -55,11 +54,16 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.loadNeededData();
-    this.form.valueChanges.subscribe((_) => this.reloadUser());
+    this.form.valueChanges.subscribe((_) => this.reloadCompanies());
   }
 
-  openCompanyDialog(id?: string): void {
-    this.dialogService.openCompanyDialog(id).subscribe();
+  openCompanyDialog(id?: string, multiple: boolean = false): void {
+    this.dialogService.openCompanyDialog({id: id, multiple: multiple}).subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.reloadCompanies();
+    });
   }
 
   updateStatus(user: User, event: MouseEvent): void {
@@ -86,33 +90,6 @@ export class CompanyComponent implements OnInit {
       });
   }
 
-  onFileSelect(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-
-    if (!inputElement.files || inputElement.files.length === 0) {
-      return;
-    }
-
-    const file = inputElement.files[0];
-    this.isLoadingResults = true;
-
-    this.csvParser.parseExcel(file).subscribe(
-      {
-        next: (result) => {
-          console.log('Parsed JSON Data:', result);
-          inputElement.value = '';
-          this.isLoadingResults = false;
-        },
-        error: (error) => {
-          inputElement.value = '';
-          this.isLoadingResults = false;
-          // TODO show error somehow
-          console.error('Error parsing file:', error);
-        }
-      }
-    )
-  }
-
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Company, 2, 2),
@@ -132,7 +109,7 @@ export class CompanyComponent implements OnInit {
     });
   }
 
-  private reloadUser() {
+  private reloadCompanies() {
     this.userLoading = true;
 
     const institutionId = this.form.controls.institution.value?.id ?? 1;
