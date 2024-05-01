@@ -102,6 +102,7 @@ export class TokenInterceptor implements HttpInterceptor {
           return this.logoutUser();
         }
         this.isRefreshing = false;
+        this.authService.setCredentials(response);
         this.refreshTokenSubject.next(response.accessToken);
         return next.handle(this.addAuthenticationToken(request));
       }),

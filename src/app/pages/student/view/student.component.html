@@ -3,6 +3,12 @@
   <mat-spinner></mat-spinner>
 } @else {
   <form [formGroup]="form" class="row">
+
+    <mat-form-field>
+      <mat-label>{{ 'generic.search' | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+
     <ng-select
       [items]="institutions"
       appendTo="body"
@@ -16,6 +22,8 @@
       bindLabel="keyName"
       formControlName="academicProgram"
     ></ng-select>
+
+    <div class="horizontal-spacer"></div>
 
     <button mat-flat-button class="primary-button"
             (click)="openStudentDialog()">{{ 'studentPage.registerStudent' | translate }}
@@ -65,7 +73,7 @@
       <tr (dblclick)="openStudentDialog(row.id)" *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
   }
 }
 

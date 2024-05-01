@@ -76,6 +76,15 @@ export class StudentComponent implements OnInit {
       });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Student, 2, 2),
@@ -92,7 +101,6 @@ export class StudentComponent implements OnInit {
         this.institutions = result.institutions;
       }
       this.isLoading = false;
-      this.changeDetector.detectChanges();
       this.configureDataSource();
     });
   }
@@ -100,24 +108,35 @@ export class StudentComponent implements OnInit {
   private reloadUser() {
     this.userLoading = true;
 
-    const institutionId = this.form.controls.institution.value?.id ?? 1;
-    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 1;
+    //TODO Fix after backend finished
+    const institutionId = this.form.controls.institution.value?.id ?? 2;
+    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 2;
     this.userService
       .getUser(UserType.Student, institutionId, academicProgramId)
       .subscribe((result) => {
         this.userLoading = false;
-
+        console.log(result);
         if (!result) {
           return;
         }
-        this.changeDetector.detectChanges();
         this.dataSource.data = result;
         this.configureDataSource();
       });
   }
 
   private configureDataSource(): void {
+    this.changeDetector.detectChanges();
+
+    const previousPageSize = this.paginator.pageSize || 10;
+
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator.pageSize = previousPageSize;
+
+    this.dataSource.filterPredicate = (user, filter: string): boolean => {
+      return user.email?.toLowerCase().includes(filter) ||
+        user.academicProgram.name.toLowerCase().includes(filter) ||
+        user.institution.name.toLowerCase().includes(filter);
+    };
   }
 }

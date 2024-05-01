@@ -2,7 +2,8 @@
   "generic": {
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "confirm": "Bestätigen"
+    "confirm": "Bestätigen",
+    "search": "Suche..."
   },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
@@ -31,7 +32,7 @@
       "statusOpen": "Aktiv",
       "statusTaken": "Inaktiv",
       "website": "Webseite",
-      "industry": "Einrichtung",
+      "industry": "Branche",
       "actions": "Aktionen"
     },
     "button": {
@@ -73,7 +74,10 @@
   },
   "navigation": {
     "logout": "Ausloggen",
-    "changePassword": "Passwort ändern"
+    "changePassword": "Passwort ändern",
+    "homePage": "Startseite",
+    "companies": "Unternehmen",
+    "students": "Studenten"
   },
   "login": {
     "sessionExpired": "Session abgelaufen. Bitte erneut anmelden."

@@ -3,6 +3,12 @@
   <mat-spinner></mat-spinner>
 } @else {
   <form [formGroup]="form" class="row">
+
+    <mat-form-field>
+      <mat-label>{{ 'generic.search' | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+
     <ng-select
       [items]="institutions"
       appendTo="body"
@@ -17,6 +23,7 @@
       formControlName="academicProgram"
     ></ng-select>
 
+    <div class="horizontal-spacer"></div>
 
     <button (click)="openCompanyDialog()" mat-flat-button
             class="primary-button">{{ 'companyPage.button.add' | translate }}
@@ -64,7 +71,7 @@
           }
         </td>
       </ng-container>
-      
+
       <ng-container matColumnDef="status">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
         <td *matCellDef="let user" mat-cell>
@@ -93,6 +100,11 @@
 
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row (dblclick)="openCompanyDialog(row.id)"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <!-- TODO Add no Data image or something-->
+        <td class="mat-cell" colspan="4">No data...</td>
+      </tr>
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>

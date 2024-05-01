@@ -3,8 +3,8 @@ import {Address} from './address';
 
 export interface Institution {
   id: number;
-  name: string | null;
-  keyName: string | null;
+  name: string;
+  keyName: string;
   website: string | null;
   addresses: Address[] | null;
   users: User[] | null;

@@ -119,6 +119,10 @@ body {
   }
 }
 
+.horizontal-spacer {
+  margin-left: auto;
+}
+
 .primary-button {
   margin: $margin-medium 0;
   background-color: mat.get-color-from-palette($primary-palette, 500) !important;

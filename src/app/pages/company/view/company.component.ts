@@ -97,6 +97,15 @@ export class CompanyComponent implements OnInit {
       });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Company, 2, 2),
@@ -120,13 +129,14 @@ export class CompanyComponent implements OnInit {
   private reloadCompanies() {
     this.userLoading = true;
 
-    const institutionId = this.form.controls.institution.value?.id ?? 1;
-    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 1;
+    //TODO Fix after backend finished
+    const institutionId = this.form.controls.institution.value?.id ?? 2;
+    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 2;
     this.userService
       .getUser(UserType.Company, institutionId, academicProgramId)
       .subscribe((result) => {
         this.userLoading = false;
-
+        console.log(result);
         if (!result) {
           return;
         }
@@ -137,6 +147,9 @@ export class CompanyComponent implements OnInit {
 
   private configureDataSource(): void {
     this.changeDetector.detectChanges();
+
+    const previousPageSize = this.dataSource.paginator ? this.dataSource.paginator.pageSize : 10;
+
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
         case 'industry':
@@ -152,5 +165,15 @@ export class CompanyComponent implements OnInit {
     };
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.pageSize = previousPageSize;
+    }
+
+    this.dataSource.filterPredicate = function (user, filter: string): boolean {
+      return user.company.name.toLowerCase().includes(filter) || user.email!.toLowerCase().includes(filter) ||
+        user.academicProgram.name.toLowerCase().includes(filter) || (user.company.industry?.toLowerCase().includes(filter) ?? false) ||
+        (user.company.website?.toLowerCase().includes(filter) ?? false);
+    };
   }
 }
