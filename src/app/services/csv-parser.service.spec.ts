@@ -1,14 +1,12 @@
-import {CsvParserService} from './csv-parser.service';
-
-describe('CsvParserService', () => {
+/*describe('CsvParserService', () => {
   let service: CsvParserService;
 
-  /*beforeEach(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(CsvParserService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });*/
-});
+  });
+});*/
