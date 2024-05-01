@@ -1,6 +1,6 @@
 ﻿import {Injectable} from '@angular/core';
 import {catchError, map, Observable, of} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {User} from "../model/user";
 import {environment} from "../../../environments/environment";
 import {AuthenticationResponse} from "../model/authenticationResponse";
@@ -21,8 +21,21 @@ export class UserService {
 
   // ****** GET ****** \\
 
-  getUser(userType: UserType, institutionId: number, academicProgramId: number): Observable<User[] | null> {
-    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers?userType=${userType}&institutionId=${institutionId}&academicProgramId=${academicProgramId}`).pipe(
+  getUser(userType: UserType, institutionId: number | null, academicProgramId: number | null): Observable<User[] | null> {
+    let params = new HttpParams();
+    params = params.set('userType', userType);
+
+    if (academicProgramId !== null) {
+      params = params.set('academicProgramId', academicProgramId);
+    }
+
+    if (institutionId !== null) {
+      params = params.set('institutionId', institutionId);
+    }
+
+    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers`, {
+      params: params,
+    }).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);

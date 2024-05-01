@@ -5,13 +5,14 @@ import {MatTableDataSource} from '@angular/material/table';
 import {User} from '../../../core/model/user';
 import {DialogService} from '../../../services/dialog.service';
 import {InstitutionService} from '../../../core/services/institution.service';
-import {forkJoin} from 'rxjs';
+import {forkJoin, of} from 'rxjs';
 import {AcademicProgramService} from '../../../core/services/academic-program.service';
 import {Institution} from '../../../core/model/institution';
 import {AcademicProgram} from '../../../core/model/academicProgram';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-student',
@@ -26,7 +27,7 @@ export class StudentComponent implements OnInit {
     institution: this.fb.nonNullable.control<Institution | null>(null, {
       validators: [Validators.required],
     }),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(null, {
+    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>({value: null, disabled: true}, {
       validators: [Validators.required],
     }),
   });
@@ -52,7 +53,28 @@ export class StudentComponent implements OnInit {
   ngOnInit() {
     this.loadNeededData();
 
-    this.form.valueChanges.subscribe((_) => this.reloadUser());
+    this.form.controls.academicProgram.valueChanges.subscribe((_) => this.reloadUser());
+
+    this.form.controls.institution.valueChanges.pipe(
+      switchMap(result => {
+        if (!result) {
+          this.academicPrograms = [];
+          this.form.controls.academicProgram.disable();
+          this.form.controls.academicProgram.patchValue(null);
+          return of(null);
+        }
+
+        return this.academicProgramService.getAcademicPrograms(result.id);
+      })
+    ).subscribe(result => {
+
+      if (!result) {
+        return;
+      }
+      this.academicPrograms = result;
+      this.form.controls.academicProgram.enable();
+      this.reloadUser();
+    });
   }
 
   openStudentDialog(id?: string, multiple: boolean = false): void {
@@ -87,15 +109,11 @@ export class StudentComponent implements OnInit {
 
   private loadNeededData() {
     forkJoin({
-      users: this.userService.getUser(UserType.Student, 2, 2),
+      users: this.userService.getUser(UserType.Student, null, null),
       institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
       if (result.users) {
         this.dataSource.data = result.users;
-      }
-      if (result.academicPrograms) {
-        this.academicPrograms = result.academicPrograms;
       }
       if (result.institutions) {
         this.institutions = result.institutions;
@@ -108,14 +126,12 @@ export class StudentComponent implements OnInit {
   private reloadUser() {
     this.userLoading = true;
 
-    //TODO Fix after backend finished
-    const institutionId = this.form.controls.institution.value?.id ?? 2;
-    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 2;
+    const institutionId = this.form.controls.institution.value?.id ?? null;
+    const academicProgramId = this.form.controls.academicProgram.value?.id ?? null;
     this.userService
       .getUser(UserType.Student, institutionId, academicProgramId)
       .subscribe((result) => {
         this.userLoading = false;
-        console.log(result);
         if (!result) {
           return;
         }

@@ -32,10 +32,6 @@ export class StudentDialogComponent implements OnInit {
     ),
     email: this.fb.control<string | null>({value: null, disabled: !!this.data.id},
       {validators: this.multiple ? [] : [Validators.required]}),
-    institution: this.fb.control<Institution | null>(
-      {value: null, disabled: !!this.data.id},
-      {validators: [Validators.required]}
-    ),
     academicProgram: this.fb.control<AcademicProgram | null>(
       {value: null, disabled: !!this.data.id},
       {validators: [Validators.required]}
@@ -71,8 +67,7 @@ export class StudentDialogComponent implements OnInit {
     if (this.multiple) {
       const file = this.form.controls.excel.value!;
       const academicProgramId = this.form.controls.academicProgram.value!.id;
-      const institutionId = this.form.controls.institution.value!.id;
-
+      const institutionId = this.form.controls.academicProgram.value!.institutionId;
       this.csvParser.parseExcel(file).pipe(
         switchMap(result => {
 
@@ -96,7 +91,6 @@ export class StudentDialogComponent implements OnInit {
       );
     } else {
       const input = this.getInputFromForm();
-
       this.userService.register(input)
         .subscribe(
           result => {
@@ -174,7 +168,7 @@ export class StudentDialogComponent implements OnInit {
 
     return {
       email: this.form.controls.email.value!,
-      institutionId: this.form.controls.institution.value!.id ?? null,
+      institutionId: this.form.controls.academicProgram.value!.institutionId ?? null,
       academicProgramId: this.form.controls.academicProgram.value!.id ?? null,
       role: UserType.Student,
       companyId: null
@@ -186,7 +180,6 @@ export class StudentDialogComponent implements OnInit {
     this.form.patchValue({
       email: user.email ?? '',
       academicProgram: user.academicProgram,
-      institution: user.institution
     })
   }
 }

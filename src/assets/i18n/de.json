@@ -23,6 +23,9 @@
     "email": "Email",
     "password": "Passwort"
   },
+  "homePage": {
+    "generateAppointments": "Generiere Termine"
+  },
   "companyPage": {
     "table": {
       "name": "Name",

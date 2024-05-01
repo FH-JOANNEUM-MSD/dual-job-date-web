@@ -8,11 +8,12 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AcademicProgram} from '../../../core/model/academicProgram';
 import {InstitutionService} from '../../../core/services/institution.service';
 import {AcademicProgramService} from '../../../core/services/academic-program.service';
-import {forkJoin} from 'rxjs';
+import {forkJoin, of} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from '../../../core/services/company.service';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-company',
@@ -61,7 +62,29 @@ export class CompanyComponent implements OnInit {
 
   ngOnInit() {
     this.loadNeededData();
-    this.form.valueChanges.subscribe((_) => this.reloadCompanies());
+
+    this.form.controls.academicProgram.valueChanges.subscribe((_) => this.reloadCompanies());
+
+    this.form.controls.institution.valueChanges.pipe(
+      switchMap(result => {
+        if (!result) {
+          this.academicPrograms = [];
+          this.form.controls.academicProgram.disable();
+          this.form.controls.academicProgram.patchValue(null);
+          return of(null);
+        }
+
+        return this.academicProgramService.getAcademicPrograms(result.id);
+      })
+    ).subscribe(result => {
+
+      if (!result) {
+        return;
+      }
+      this.academicPrograms = result;
+      this.form.controls.academicProgram.enable();
+      this.reloadCompanies();
+    });
   }
 
   openCompanyDialog(id?: string, multiple: boolean = false): void {
@@ -108,15 +131,11 @@ export class CompanyComponent implements OnInit {
 
   private loadNeededData() {
     forkJoin({
-      users: this.userService.getUser(UserType.Company, 2, 2),
+      users: this.userService.getUser(UserType.Company, null, null),
       institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
       if (result.users) {
         this.dataSource.data = result.users;
-      }
-      if (result.academicPrograms) {
-        this.academicPrograms = result.academicPrograms;
       }
       if (result.institutions) {
         this.institutions = result.institutions;
@@ -129,14 +148,12 @@ export class CompanyComponent implements OnInit {
   private reloadCompanies() {
     this.userLoading = true;
 
-    //TODO Fix after backend finished
-    const institutionId = this.form.controls.institution.value?.id ?? 2;
-    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 2;
+    const institutionId = this.form.controls.institution.value?.id ?? null;
+    const academicProgramId = this.form.controls.academicProgram.value?.id ?? null;
     this.userService
       .getUser(UserType.Company, institutionId, academicProgramId)
       .subscribe((result) => {
         this.userLoading = false;
-        console.log(result);
         if (!result) {
           return;
         }
