@@ -72,20 +72,33 @@ export class StudentComponent implements OnInit {
       });
   }
 
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.csvParser
-        .parseExcel(file)
-        .then((jsonData) => {
-          console.log('Parsed JSON Data:', jsonData);
-        })
-        .catch((error) => {
-          console.error('Error parsing file:', error);
-        });
+  onFileSelect(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (!inputElement.files || inputElement.files.length === 0) {
+      return;
     }
+
+    const file = inputElement.files[0];
+    this.isLoading = true;
+
+    this.csvParser.parseExcel(file).subscribe(
+      {
+        next: (result) => {
+          console.log('Parsed JSON Data:', result);
+          inputElement.value = '';
+          this.isLoading = false;
+        },
+        error: (error) => {
+          inputElement.value = '';
+          this.isLoading = false;
+          // TODO show error somehow
+          console.error('Error parsing file:', error);
+        }
+      }
+    )
   }
-  
+
   private loadNeededData() {
     forkJoin({
       users: this.userService.getUser(UserType.Student, 2, 2),

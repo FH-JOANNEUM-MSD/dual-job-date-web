@@ -11,6 +11,7 @@ import {AcademicProgramService} from '../../../core/services/academic-program.se
 import {forkJoin} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from '../../../core/services/company.service';
+import {CsvParserService} from 'src/app/services/csv-parser.service';
 
 @Component({
   selector: 'app-company',
@@ -83,6 +84,33 @@ export class CompanyComponent implements OnInit {
         }
         this.userService.sendCredentials(user, result.password)
       });
+  }
+
+  onFileSelect(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (!inputElement.files || inputElement.files.length === 0) {
+      return;
+    }
+
+    const file = inputElement.files[0];
+    this.isLoadingResults = true;
+
+    this.csvParser.parseExcel(file).subscribe(
+      {
+        next: (result) => {
+          console.log('Parsed JSON Data:', result);
+          inputElement.value = '';
+          this.isLoadingResults = false;
+        },
+        error: (error) => {
+          inputElement.value = '';
+          this.isLoadingResults = false;
+          // TODO show error somehow
+          console.error('Error parsing file:', error);
+        }
+      }
+    )
   }
 
   private loadNeededData() {
