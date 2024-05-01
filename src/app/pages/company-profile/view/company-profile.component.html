@@ -1,1 +1,109 @@
-<p>company-profile works!</p>
+<!-- company-profile.component.html -->
+<app-headernavigation></app-headernavigation>
+<form [formGroup]="form" class="company-form">
+    <div class="form-group company-logo">
+        @if(logoSrc){
+             <img [src]="logoSrc" alt="Company Logo">
+         }
+         @else {
+             <p>No logo available.</p>
+         }
+     </div>
+    <div class="form-group company-name">
+       <mat-form-field>
+          <mat-label>Name des Unternehmens</mat-label>
+          <input matInput id="name" type="text" formControlName="name">
+       </mat-form-field>
+       
+    </div>
+    
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Kurze Beschreibung des Unternehmens:</mat-label>
+          <textarea matInput id="shortDescription" formControlName="shortDescription"></textarea>
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Branche</mat-label>
+          <input matInput id="industry" formControlName="industry">
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Website</mat-label>
+          <input matInput id="website" type="url" formControlName="website">
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Standort(e)</mat-label>
+          <input matInput id="location" formControlName="location">
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Stellenbeschreibung (für die Studierenden):</mat-label>
+          <textarea matInput id="jobDescription" formControlName="jobDescription"></textarea>
+       </mat-form-field>
+    </div>
+ 
+    <div class="activities-list">
+       <label>Tätigkeitsbereiche:</label>
+       <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
+    
+       <div class="activities-list">
+        @for (activity of activities; track $index) {
+          <div class="activity-item">
+             <label>{{ activity.name }}</label>
+             <mat-form-field class="exclude-width">
+                <input matInput type="number" placeholder="{{ activity.value }}" min="1" max="5">
+             </mat-form-field>
+          </div>
+        }
+       </div>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Ansprechperson im Unternehmen</mat-label>
+          <input matInput id="contactPersonInCompany" formControlName="contactPersonInCompany">
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group">
+       <mat-form-field>
+          <mat-label>Ansprechperson aus dem HRM</mat-label>
+          <input matInput id="contactPersonHRM" formControlName="contactPersonHRM">
+       </mat-form-field>
+    </div>
+ 
+    <div class="form-group trainer-details">
+       <label>Ausbildungsperson im Unternehmen</label>
+ 
+       <mat-form-field>
+          <mat-label>Name:</mat-label>
+          <input matInput id="trainer" formControlName="trainer">
+       </mat-form-field>
+ 
+       <mat-form-field>
+          <mat-label>Ausbildung:</mat-label>
+          <input matInput id="trainerTraining" formControlName="trainerTraining">
+       </mat-form-field>
+ 
+       <mat-form-field>
+          <mat-label>Erfahrung:</mat-label>
+          <input matInput id="trainerProfessionalExperience" formControlName="trainerProfessionalExperience">
+       </mat-form-field>
+ 
+       <mat-form-field>
+          <mat-label>Derzeitige Position/Tätigkeit im Unternehmen:</mat-label>
+          <input matInput id="trainerPosition" formControlName="trainerPosition">
+       </mat-form-field>
+    </div>
+ </form>
+ 

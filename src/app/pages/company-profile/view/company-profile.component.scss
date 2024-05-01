@@ -1,0 +1,44 @@
+.company-form{
+    padding-top: 50px;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    mat-form-field {
+        width: 50%;
+    }
+    textarea{
+        height: 200px;
+    }
+    .company-logo img{
+        max-width: 300px;
+    }
+    .company-name{
+        display: flex;
+        gap: 20px;
+    }
+    .form-group{
+        display: flex;
+        justify-content: center;
+    }
+    .activities-list{
+        max-width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .exclude-width{
+            width: 59px;
+        }
+    }
+    .trainer-details{
+        flex-direction: column;
+    }
+       
+}
+
+
+ 
+p{
+    max-width: 1000px;
+}
