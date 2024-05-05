@@ -51,10 +51,10 @@
           <textarea matInput id="jobDescription" formControlName="jobDescription"></textarea>
        </mat-form-field>
     </div>
- 
+    <h3>Tätigkeitsbereiche:</h3>
+    <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
     <div class="form-group test" >
-       <h3>Tätigkeitsbereiche:</h3>
-       <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
+       
     
        <div class=" activities-list">
         @for (activity of activities; track $index) {
@@ -81,29 +81,33 @@
           <input matInput id="contactPersonHRM" formControlName="contactPersonHRM">
        </mat-form-field>
     </div>
- 
-    <div class="form-group trainer-details">
-       <h3>Ausbildungsperson im Unternehmen</h3>
+    <h3>Ausbildungsperson im Unternehmen</h3>
+
+    <div class="form-group">
  
        <mat-form-field>
           <mat-label>Name:</mat-label>
           <input matInput id="trainer" formControlName="trainer">
        </mat-form-field>
- 
-       <mat-form-field>
-          <mat-label>Ausbildung:</mat-label>
-          <input matInput id="trainerTraining" formControlName="trainerTraining">
-       </mat-form-field>
- 
+    </div>
+    <div class="form-group">
+        <mat-form-field>
+            <mat-label>Ausbildung:</mat-label>
+            <input matInput id="trainerTraining" formControlName="trainerTraining">
+         </mat-form-field>
+    </div>
+    <div class="form-group">
        <mat-form-field>
           <mat-label>Erfahrung:</mat-label>
           <input matInput id="trainerProfessionalExperience" formControlName="trainerProfessionalExperience">
        </mat-form-field>
- 
-       <mat-form-field>
-          <mat-label>Derzeitige Position/Tätigkeit im Unternehmen:</mat-label>
-          <input matInput id="trainerPosition" formControlName="trainerPosition">
-       </mat-form-field>
     </div>
+    <div class="form-group">
+        <mat-form-field>
+            <mat-label>Derzeitige Position/Tätigkeit im Unternehmen:</mat-label>
+            <input matInput id="trainerPosition" formControlName="trainerPosition">
+         </mat-form-field>
+    </div>
+       
  </form>
  
