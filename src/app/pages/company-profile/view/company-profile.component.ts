@@ -43,7 +43,6 @@ export class CompanyProfileComponent implements OnInit {
   logoBase64: string | null = null;
   cities: string[] = [];
 
-  // TODO:
   userId: string = '162ec6f8-cb9f-411d-a0ef-15c22ca68acb';
   companyId: number = 1;
 

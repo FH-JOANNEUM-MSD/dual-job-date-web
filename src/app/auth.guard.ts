@@ -33,9 +33,9 @@ export class AuthGuard implements CanActivate {
     console.log(UserType.Company);
     if (userType === UserType.Company && state.url !== '/company-profile') {
       this.router.navigate(['/company-profile']);
-      return true;
+      return false;
     }
 
-    return false;
+    return true;
   }
 }

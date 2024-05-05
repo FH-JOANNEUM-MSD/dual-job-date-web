@@ -9,6 +9,7 @@ export class AuthService {
   accessTokenKey: string = 'accessTokenKey';
   refreshTokenKey: string = 'refreshTokenKey';
   userType: string = 'userType';
+  userID: string = 'userID';
 
   constructor() {}
 
@@ -16,6 +17,7 @@ export class AuthService {
     localStorage.setItem(this.accessTokenKey, authResponse.accessToken);
     localStorage.setItem(this.refreshTokenKey, authResponse.refreshToken);
     localStorage.setItem(this.userType, `${authResponse.userType}`);
+    localStorage.setItem(this.userID, authResponse.userId);
   }
 
   isAuthenticated(): boolean {
@@ -48,5 +50,9 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem(this.userID);
   }
 }
