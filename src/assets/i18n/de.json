@@ -61,5 +61,12 @@
     "notFound": "This page could not be found!",
     "sorry": "We are sorry.But the page you are looking for is not available.",
     "button": "Back to Login"
+  },
+  "companyProfilePage":{
+    "button":{
+      "statusInaktiv": "Inaktiv setzen",
+      "statusAktiv": "Aktiv setzen",
+      "speichern": "Speichern"
+    }
   }
 }

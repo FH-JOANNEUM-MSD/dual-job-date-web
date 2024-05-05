@@ -10,6 +10,8 @@ import { forkJoin, of } from 'rxjs';
 import { Company } from 'src/app/core/model/company';
 import { Address } from 'src/app/core/model/address';
 import { Activity } from 'src/app/core/model/activity';
+import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-company-profile',
@@ -51,11 +53,50 @@ export class CompanyProfileComponent implements OnInit {
     private companyService: CompanyService,
     private userService: UserService,
     private academicProgramService: AcademicProgramService,
-    private institutionService: InstitutionService
+    private institutionService: InstitutionService,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('companyId');
+      if (id !== null) {
+        this.companyId = +id;
+      } else {
+        this.companyId = 0;
+        console.error('Company ID is missing in the route parameters');
+      }
+    });
     this.loadNeededData();
+  }
+
+  updateStatus(): void {
+    this.companyService
+      .activateOrDeactivateCompany(this.companyId, false)
+      .subscribe({
+        next: (_) => {
+          this.snackBar.open(
+            'Das Unternehmen wurde erfolgreich als inaktiv gesetzt.',
+            'Schließen',
+            {
+              duration: 3000,
+              verticalPosition: 'top',
+            }
+          );
+        },
+        error: (err) => {
+          this.snackBar.open(
+            'Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.',
+            'Schließen',
+            {
+              duration: 3000,
+              verticalPosition: 'top',
+            }
+          );
+          console.error('Fehler beim Aktualisieren des Status:', err);
+        },
+      });
   }
 
   save(): void {
@@ -75,22 +116,6 @@ export class CompanyProfileComponent implements OnInit {
         }
       );*/
   }
-
-  /* delete(): void {
-     if (!this.) {
-       return;
-     }
-
-     this.userService.deleteUser(this.userId)
-       .subscribe(
-         result => {
-           if (!result) {
-             return;
-           }
-           this.dialogRef.close(result);
-         }
-       );
-   }*/
 
   private loadNeededData() {
     forkJoin({

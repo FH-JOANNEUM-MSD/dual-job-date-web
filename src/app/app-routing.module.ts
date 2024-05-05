@@ -30,7 +30,7 @@ const routes: Routes = [
     title: 'Studenten',
     canActivate: [AuthGuard],
   },
-  { path: 'company-profile', component: CompanyProfileComponent },
+  { path: 'company-profile/:companyId', component: CompanyProfileComponent },
 
   // TODO: Add the routes here for components
   { path: '**', component: PageNotFoundComponent },

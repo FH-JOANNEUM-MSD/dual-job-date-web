@@ -110,8 +110,8 @@
     </div>
    
     <div class="form-group">
-      <button mat-raised-button color="primary">Inaktiv Setzen</button>
-      <button mat-raised-button color="primary">Speichern</button>
+      <button mat-raised-button color="primary" (click)="updateStatus()">{{ 'companyProfilePage.button.statusInaktiv' | translate}}</button>
+      <button mat-raised-button color="primary">{{ 'companyProfilePage.button.speichern' | translate}}</button>
 
    </div>
  </form>
