@@ -8,8 +8,8 @@
                   @if(showUploadButton){
                      <button mat-flat-button class="primary-button" (click)="fileInput.click()">
                         <mat-icon>file_upload</mat-icon>
-                        Bild aktualisieren
-                  </button>     
+                        {{ 'companyProfilePage.button.pictureReload' | translate}}
+                       </button>     
                   }
                          
          }
@@ -17,13 +17,13 @@
             <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
                   <button mat-flat-button class="primary-button" (click)="fileInput.click()">
                      <mat-icon>file_upload</mat-icon>
-                     Bild hochladen
+                     {{ 'companyProfilePage.button.pictureUpload' | translate}}
                </button>     
             }     
      </div>
     <div class="form-group company-name">
        <mat-form-field>
-          <mat-label>Name des Unternehmens</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.name' | translate}}</mat-label>
           <input matInput readonly id="name" type="text" formControlName="name" >
        </mat-form-field>
        
@@ -31,43 +31,41 @@
     
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Kurze Beschreibung des Unternehmens:</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.description' | translate}}</mat-label>
           <textarea matInput id="shortDescription" formControlName="shortDescription"></textarea>
        </mat-form-field>
     </div>
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Branche</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.branche' | translate}}</mat-label>
           <input matInput id="industry" formControlName="industry">
        </mat-form-field>
     </div>
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Website</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.website' | translate}}</mat-label>
           <input matInput id="website" type="url" formControlName="website">
        </mat-form-field>
     </div>
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Standort(e)</mat-label>
-          <input matInput id="location" formControlName="location">
+          <mat-label>{{ 'companyProfilePage.label.location' | translate}}</mat-label>
+          <input matInput id="location" formControlName="location" readonly="">
        </mat-form-field>
     </div>
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Stellenbeschreibung (für die Studierenden):</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.descriptionJob' | translate}}</mat-label>
           <textarea matInput id="jobDescription" formControlName="jobDescription"></textarea>
        </mat-form-field>
     </div>
-    <h3>Tätigkeitsbereiche:</h3>
-    <p>Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.</p>
+    <h3>{{ 'companyProfilePage.label.activities' | translate}}</h3>
+    <p>{{ 'companyProfilePage.label.activitesDescription' | translate}}</p>
     <div class="form-group test" >
-       
-    
        <div class=" activities-list">
         @for (activity of activities; track $index) {
           <div class="activity-item">
@@ -82,41 +80,39 @@
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Ansprechperson im Unternehmen</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.contactPersonCompany' | translate}}</mat-label>
           <input matInput id="contactPersonInCompany" formControlName="contactPersonInCompany">
        </mat-form-field>
     </div>
  
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Ansprechperson aus dem HRM</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.contactPersonHRM' | translate}}</mat-label>
           <input matInput id="contactPersonHRM" formControlName="contactPersonHRM">
        </mat-form-field>
     </div>
-    <h3>Ausbildungsperson im Unternehmen</h3>
-
+    <h3>{{ 'companyProfilePage.label.trainerHeadline' | translate}}</h3>
     <div class="form-group">
- 
        <mat-form-field>
-          <mat-label>Name:</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.trainerName' | translate}}</mat-label>
           <input matInput id="trainer" formControlName="trainer">
        </mat-form-field>
     </div>
     <div class="form-group">
         <mat-form-field>
-            <mat-label>Ausbildung:</mat-label>
+            <mat-label>{{ 'companyProfilePage.label.education' | translate}}</mat-label>
             <input matInput id="trainerTraining" formControlName="trainerTraining">
          </mat-form-field>
     </div>
     <div class="form-group">
        <mat-form-field>
-          <mat-label>Erfahrung:</mat-label>
+          <mat-label>{{ 'companyProfilePage.label.experience' | translate}}</mat-label>
           <input matInput id="trainerProfessionalExperience" formControlName="trainerProfessionalExperience">
        </mat-form-field>
     </div>
     <div class="form-group">
         <mat-form-field>
-            <mat-label>Derzeitige Position/Tätigkeit im Unternehmen:</mat-label>
+            <mat-label>{{ 'companyProfilePage.label.currentPosition' | translate}}</mat-label>
             <input matInput id="trainerPosition" formControlName="trainerPosition">
          </mat-form-field>
     </div>

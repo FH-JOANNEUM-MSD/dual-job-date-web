@@ -43,7 +43,7 @@ export class LoginComponent {
       this.authService.setCredentials(result);
 
       if (this.authService.getUserType() == UserType.Company) {
-        this.router.navigate(['/compan-profile']);
+        this.router.navigate(['/company-profile/:id']);
       } else {
         this.router.navigate(['/home']);
       }

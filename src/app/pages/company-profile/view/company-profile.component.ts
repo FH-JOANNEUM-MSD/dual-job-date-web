@@ -110,9 +110,24 @@ export class CompanyProfileComponent implements OnInit {
       };
       this.companyService.updateCompany(updatedCompany).subscribe({
         next: (_) => {
-          console.log('Company updated successfully');
+          this.snackBar.open(
+            'Das Unternehmen wurde erfolgreich als aktualisiert',
+            'Schließen',
+            {
+              duration: 3000,
+              verticalPosition: 'top',
+            }
+          );
         },
         error: (error) => {
+          this.snackBar.open(
+            'Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.',
+            'Schließen',
+            {
+              duration: 3000,
+              verticalPosition: 'top',
+            }
+          );
           console.error('Failed to update company', error);
         },
       });
@@ -144,10 +159,6 @@ export class CompanyProfileComponent implements OnInit {
       this.isLoading = false;
     });
   }
-
-  // private getInputFromForm(): Company {
-  //   return {};
-  // }
 
   private initForm(company: Company) {
     this.form.patchValue({
@@ -188,6 +199,8 @@ export class CompanyProfileComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.logoBase64 = e.target.result.split(',')[1];
+        this.showUploadButton = false;
+        this.imageOpacity = 1;
       };
       reader.onerror = (error) => {
         console.error('Error occurred while reading file:', error);

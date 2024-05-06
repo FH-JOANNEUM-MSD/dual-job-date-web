@@ -66,7 +66,26 @@
     "button":{
       "statusInaktiv": "Inaktiv setzen",
       "statusAktiv": "Aktiv setzen",
-      "speichern": "Speichern"
+      "speichern": "Speichern",
+      "pictureReload": "Bild aktualisieren",
+      "pictureUpload": "Bild hochladen"
+    },
+    "label":{
+      "name": "Name des Unternehmens",
+      "description": "Kurze Beschreibung des Unternehmens",
+      "branche": "Branche",
+      "website": "Webseite",
+      "location": "Standort(e)",
+      "descriptionJob": "Stellenbeschreibung (für die Studierenden)",
+      "activities": "Tätigkeitsbereiche:",
+      "activitesDescription": "Bitte kreuzen Sie in der nachstehenden Tabelle an, wie stark in Ihrem Unternehmen die folgenden Tätigkeitsbereiche verankert sind. 1 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen sehr relevant ist und intensiv bearbeitet wird. 5 bedeutet, dass der Tätigkeitsbereich in Ihrem Unternehmen nicht relevant ist.",
+      "contactPersonCompany": "Ansprechperson im Unternehmen",
+      "contactPersonHRM": "Ansprechperson aus dem HRM",
+      "trainerHeadline": "Ausbildungsperson im Unternehmen",
+      "trainerName": "Name",
+      "education": "Ausbildung",
+      "experience": "Erfahrung",
+      "currentPosition": "Derzeitige Position/Tätigkeit im Unternehmen:"
     }
   }
 }
