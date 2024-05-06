@@ -27,7 +27,7 @@ export class CompanyProfileComponent implements OnInit {
     industry: this.fb.control<string | null>(null),
     website: this.fb.control<string | null>(null),
     shortDescription: this.fb.control<string | null>(null),
-    location: this.fb.control<string | null>(null),
+    cities: this.fb.control<string | null>(null),
     jobDescription: this.fb.control<string | null>(null),
     contactPersonInCompany: this.fb.control<string | null>(null),
     contactPersonHRM: this.fb.control<string | null>(null),
@@ -44,6 +44,7 @@ export class CompanyProfileComponent implements OnInit {
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
   activities: Activity[] = [];
+  locations: Address[] = [];
 
   logoBase64: string | null = null;
   cities: string[] = [];
@@ -139,28 +140,22 @@ export class CompanyProfileComponent implements OnInit {
 
   private loadNeededData() {
     forkJoin({
-      user: this.userId ? this.userService.getUserById(this.userId) : of(null),
       company: this.companyId
         ? this.companyService.getCompanyById(this.companyId)
         : of(null),
-      institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
       if (result.company && result.company.addresses) {
         this.initForm(result.company);
         this.extractCities(result.company.addresses);
-      }
-      if (result.academicPrograms) {
-        this.academicPrograms = result.academicPrograms;
-      }
-      if (result.institutions) {
-        this.institutions = result.institutions;
       }
       this.isLoading = false;
     });
   }
 
   private initForm(company: Company) {
+    this.logoBase64 = company.logoBase64;
+    this.activities = company.activities ?? [];
+    this.locations = company.addresses ?? [];
     this.form.patchValue({
       name: company.name,
       shortDescription: company.companyDetails?.shortDescription,
@@ -174,20 +169,15 @@ export class CompanyProfileComponent implements OnInit {
       trainerProfessionalExperience:
         company.companyDetails?.trainerProfessionalExperience,
       website: company.website,
+      cities: this.convertLocationsString(),
     });
-    this.logoBase64 = company.logoBase64;
-    this.activities = company.activities ?? [];
   }
 
   protected get logoSrc(): string | null {
     return this.logoBase64 ? `data:image/png;base64,${this.logoBase64}` : null;
   }
 
-  private extractCities(addresses: Address[]): void {
-    this.cities = addresses.map((address) => address.city ?? '');
-    const citiesString = this.cities.join(', ');
-    this.form.patchValue({ location: citiesString });
-  }
+  private extractCities(addresses: Address[]): void {}
 
   protected toggleImage() {
     this.showUploadButton = !this.showUploadButton;
@@ -207,5 +197,8 @@ export class CompanyProfileComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
+  }
+  private convertLocationsString(): string {
+    return this.locations.map((location) => location.city).join(', ');
   }
 }

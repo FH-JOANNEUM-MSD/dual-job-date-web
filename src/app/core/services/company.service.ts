@@ -6,6 +6,7 @@ import { Company } from '../model/company';
 import { CompanyDetails } from '../model/companyDetails';
 import { RegisterCompany } from '../model/registerCompany';
 import { Activity } from '../model/activity';
+import { Address } from '../model/address';
 
 @Injectable({
   providedIn: 'root',
@@ -93,8 +94,6 @@ export class CompanyService {
       );
   }
 
-  // TODO: NEEDED ?
-
   createCompanyActivities(activities: Activity[]): Observable<any> {
     // TODO implement GlobalStorage / LocalStorage something
     return this.http
@@ -111,6 +110,20 @@ export class CompanyService {
       );
   }
 
+  createCompanyLocation(addresses: Address[]): Observable<any> {
+    return this.http
+      .post<Location[]>(
+        `${environment.apiBasePath}${this.urlPath}/Locations`,
+        addresses
+      )
+      .pipe(
+        catchError((error) => {
+          // TODO implement Error Handling
+          console.error(error);
+          return of(null);
+        })
+      );
+  }
   // ****** PUT ****** \\
 
   updateCompany(company: Company): Observable<Company | null> {
