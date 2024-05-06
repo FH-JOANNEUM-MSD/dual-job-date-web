@@ -3,7 +3,15 @@
 <form [formGroup]="form" class="company-form">
     <div class="form-group company-logo">
         @if(logoSrc){
-             <img [src]="logoSrc" alt="Company Logo">
+             <img [src]="logoSrc" alt="Company Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
+               <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
+                  @if(showUploadButton){
+                     <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+                        <mat-icon>file_upload</mat-icon>
+                        Bild aktualisieren
+                  </button>     
+                  }
+                         
          }
          @else {
              <p>No logo available.</p>

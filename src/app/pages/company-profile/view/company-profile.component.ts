@@ -38,6 +38,9 @@ export class CompanyProfileComponent implements OnInit {
     activities: this.fb.array([]),
   });
 
+  imageOpacity: number = 1;
+  showUploadButton: boolean = false;
+
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
   activities: Activity[] = [];
@@ -171,5 +174,23 @@ export class CompanyProfileComponent implements OnInit {
     this.cities = addresses.map((address) => address.city ?? '');
     const citiesString = this.cities.join(', ');
     this.form.patchValue({ location: citiesString });
+  }
+
+  protected toggleImage() {
+    this.showUploadButton = !this.showUploadButton;
+    this.imageOpacity = this.imageOpacity === 1 ? 0.5 : 1;
+  }
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.logoBase64 = e.target.result.split(',')[1];
+      };
+      reader.onerror = (error) => {
+        console.error('Error occurred while reading file:', error);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }

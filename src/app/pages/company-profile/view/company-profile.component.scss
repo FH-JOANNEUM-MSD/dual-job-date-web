@@ -11,8 +11,15 @@
     textarea{
         height: 200px;
     }
-    .company-logo img{
-        max-width: 300px;
+    .company-logo{
+        img{
+            cursor: pointer;
+            max-width: 300px;
+        }
+        input, button{
+            align-self: center;
+        }
+        
     }
     .company-name{
         display: flex;
