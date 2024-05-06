@@ -115,7 +115,10 @@ export class CompanyService {
 
   updateCompany(company: Company): Observable<Company | null> {
     return this.http
-      .put<Company>(`${environment.apiBasePath}${this.urlPath}`, company)
+      .put<Company>(
+        `${environment.apiBasePath}${this.urlPath}/UpdateCompany`,
+        company
+      )
       .pipe(
         catchError((error) => {
           // TODO implement Error Handling

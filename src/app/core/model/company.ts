@@ -17,7 +17,7 @@ export interface Company {
   institution: Institution | null;
   user: User | null;
   companyDetails: CompanyDetails | null;
-  activities: Activity[];
-  addresses: Address[];
-  studentCompanies: StudentCompany[];
+  activities: Activity[] | null;
+  addresses: Address[] | null;
+  studentCompanies: StudentCompany[] | null;
 }

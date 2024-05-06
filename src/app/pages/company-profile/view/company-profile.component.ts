@@ -102,22 +102,24 @@ export class CompanyProfileComponent implements OnInit {
       });
   }
 
-  save(): void {
-    if (this.form.invalid) {
+  updateCompany(): void {
+    if (this.form.valid) {
+      const updatedCompany: Company = {
+        ...(this.form.value as Company),
+        logoBase64: this.logoBase64,
+      };
+      this.companyService.updateCompany(updatedCompany).subscribe({
+        next: (_) => {
+          console.log('Company updated successfully');
+        },
+        error: (error) => {
+          console.error('Failed to update company', error);
+        },
+      });
+    } else {
+      console.log('Form is not valid');
       this.form.markAllAsTouched();
-      return;
     }
-
-    //const input = this.getInputFromForm();
-
-    /*this.companyService.updateCompany(input)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-        }
-      );*/
   }
 
   private loadNeededData() {
@@ -129,7 +131,7 @@ export class CompanyProfileComponent implements OnInit {
       institutions: this.institutionService.getInstitutions(),
       academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
-      if (result.company) {
+      if (result.company && result.company.addresses) {
         this.initForm(result.company);
         this.extractCities(result.company.addresses);
       }
@@ -163,7 +165,7 @@ export class CompanyProfileComponent implements OnInit {
       website: company.website,
     });
     this.logoBase64 = company.logoBase64;
-    this.activities = company.activities;
+    this.activities = company.activities ?? [];
   }
 
   protected get logoSrc(): string | null {
