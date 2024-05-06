@@ -8,13 +8,15 @@ import { RegisterCompany } from '../model/registerCompany';
 import { Activity } from '../model/activity';
 import { Address } from '../model/address';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   // ****** GET ****** \\
 

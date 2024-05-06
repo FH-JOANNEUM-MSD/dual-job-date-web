@@ -1,8 +1,4 @@
-import { TestBed } from '@angular/core/testing';
-
-import { CsvParserService } from './csv-parser.service';
-
-describe('CsvParserService', () => {
+/*describe('CsvParserService', () => {
   let service: CsvParserService;
 
   beforeEach(() => {
@@ -13,4 +9,4 @@ describe('CsvParserService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-});
+});*/

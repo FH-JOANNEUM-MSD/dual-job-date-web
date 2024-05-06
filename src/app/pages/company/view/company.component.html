@@ -3,6 +3,12 @@
   <mat-spinner></mat-spinner>
 } @else {
   <form [formGroup]="form" class="row">
+
+    <mat-form-field>
+      <mat-label>{{ 'generic.search' | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
+    </mat-form-field>
+
     <ng-select
       [items]="institutions"
       appendTo="body"
@@ -17,13 +23,13 @@
       formControlName="academicProgram"
     ></ng-select>
 
+    <div class="horizontal-spacer"></div>
 
     <button (click)="openCompanyDialog()" mat-flat-button
             class="primary-button">{{ 'companyPage.button.add' | translate }}
     </button>
 
-    <input type="file" #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;">
-    <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+    <button mat-flat-button class="primary-button" (click)="openCompanyDialog(undefined, true)">
       <mat-icon>file_upload</mat-icon>
       {{ 'companyPage.button.import' | translate }}
     </button>
@@ -44,6 +50,28 @@
         <td *matCellDef="let user" mat-cell>{{ user.email }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="academicProgram">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'studentPage.table.academicProgram' | translate }}</th>
+        <td *matCellDef="let user" mat-cell>{{ user.academicProgram.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="industry">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.industry' | translate }}</th>
+        <td *matCellDef="let user" mat-cell>{{ user.company.industry ?? '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="companyWebsite">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.website' | translate }}</th>
+        <td *matCellDef="let user" mat-cell>
+          @if (user.company.website) {
+            <a target="_blank"
+               href="{{ user.company.website }}">{{ user.company.website }}</a>
+          } @else {
+            -
+          }
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="status">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.status' | translate }}</th>
         <td *matCellDef="let user" mat-cell>
@@ -53,19 +81,8 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="industry">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.industry' | translate }}</th>
-        <td *matCellDef="let user" mat-cell>{{ user.company.industry }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="companyWebsite">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.website' | translate }}</th>
-        <td *matCellDef="let user" mat-cell><a target="_blank"
-                                               href="{{ user.company.website }}">{{ user.company.website }}</a></td>
-      </ng-container>
-
       <ng-container matColumnDef="actions">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'companyPage.table.actions' | translate }}</th>
+        <th *matHeaderCellDef mat-header-cell>{{ 'companyPage.table.actions' | translate }}</th>
         <td mat-cell *matCellDef="let user">
           <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
             <mat-icon>more_vert</mat-icon>
@@ -83,6 +100,13 @@
 
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row (dblclick)="openCompanyDialog(row.id)"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <!-- TODO Add no Data image or something-->
+        <td class="mat-cell" colspan="4">No data...</td>
+      </tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10"></mat-paginator>
   }
 }

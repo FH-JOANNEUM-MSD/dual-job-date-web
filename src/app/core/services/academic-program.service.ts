@@ -1,6 +1,6 @@
 ﻿import {Injectable} from '@angular/core';
 import {catchError, Observable, of} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {AcademicProgram} from "../model/academicProgram";
 
@@ -15,13 +15,18 @@ export class AcademicProgramService {
 
   // ****** GET ****** \\
 
-  getAcademicPrograms(): Observable<AcademicProgram[] | null> {
-    // TODO institutionId and academicProgramId ???
+  getAcademicPrograms(id?: number): Observable<AcademicProgram[] | null> {
+
+    let params = new HttpParams()
+    if (id !== undefined) {
+      params = params.set('institutionId', id.toString());
+    }
+
     return this.http
       .get<AcademicProgram[]>(
         `${environment.apiBasePath}${
           this.urlPath
-        }/AcademicPrograms`
+        }/AcademicPrograms`, {params}
       )
       .pipe(
         catchError((error) => {

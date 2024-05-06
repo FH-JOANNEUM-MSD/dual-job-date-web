@@ -8,6 +8,9 @@ import {User} from "../../core/model/user";
 import {CompanyService} from "../../core/services/company.service";
 import {RegisterCompany} from "../../core/model/registerCompany";
 import {UserService} from "../../core/services/user.service";
+import {CsvParserService} from "../../services/csv-parser.service";
+import {switchMap} from "rxjs/operators";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-company-dialog',
@@ -15,29 +18,39 @@ import {UserService} from "../../core/services/user.service";
   styleUrl: './company-dialog.component.scss'
 })
 export class CompanyDialogComponent implements OnInit {
+
   isLoading = true;
+  userId: string | null = this.data.id ?? null;
+  multiple: boolean = this.data.multiple;
+  fileName: string | null = null;
+
   form = this.fb.group({
-    email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
-      validators: [Validators.required]
-    }),
-    name: this.fb.nonNullable.control<string>(
-      {value: '', disabled: !!this.data},
-      {validators: [Validators.required]}
+    excel: this.fb.control<File | null>(
+      null, {validators: this.multiple ? [Validators.required] : []}
     ),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
-      {value: null, disabled: !!this.data},
+    email: this.fb.control<string | null>({
+      value: null,
+      disabled: !!this.data.id,
+    }, {validators: this.multiple ? [] : [Validators.required]}),
+    name: this.fb.control<string | null>(
+      {value: null, disabled: !!this.data.id},
+      {validators: this.multiple ? [] : [Validators.required]}
+    ),
+    academicProgram: this.fb.control<AcademicProgram | null>(
+      {value: null, disabled: !!this.data.id},
       {validators: [Validators.required]}
     ),
   });
   academicPrograms: AcademicProgram[] = [];
-  userId: string | null = this.data;
 
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
     private userService: UserService,
+    private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<CompanyDialogComponent>,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -52,34 +65,89 @@ export class CompanyDialogComponent implements OnInit {
       return;
     }
 
-    const input = this.getInputFromForm();
+    this.isLoading = true;
 
+    if (this.multiple) {
+      const file = this.form.controls.excel.value!;
+      // TODO institutionId
+      const academicProgramId = this.form.controls.academicProgram.value!.id;
 
-    this.companyService.register(input)
-      .subscribe(
+      this.csvParser.parseExcel(file).pipe(
+        switchMap(result => {
+
+          if (!result) {
+            // TODO Show Parsing Error somewhere
+            return of(null);
+          }
+
+          return this.userService.registerCompaniesFromJson(result.map(row => {
+            return {email: row.email!, companyName: row.companyName!};
+          }), 2, academicProgramId)
+        })
+      ).subscribe(
         result => {
+          this.isLoading = false;
           if (!result) {
             return;
           }
           this.dialogRef.close(result);
         }
       );
+
+    } else {
+      const input = this.getInputFromForm();
+
+      this.companyService.register(input)
+        .subscribe(
+          result => {
+            this.isLoading = false;
+            if (!result) {
+              return;
+            }
+            this.dialogRef.close(result);
+          }
+        );
+    }
+
+
   }
 
-  delete(): void {
-    if (!this.userId) {
+  onFileSelect(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (!inputElement.files || inputElement.files.length === 0) {
       return;
     }
 
-    this.userService.deleteUser(this.userId)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-          this.dialogRef.close(result);
+    const file = inputElement.files[0];
+    this.form.patchValue({excel: file});
+    this.fileName = file.name;
+  }
+
+  delete(): void {
+    const userId = this.userId;
+    if (!userId) {
+      return;
+    }
+
+    this.dialogService.openConfirmDialog({
+      titleTranslationKey: "companyDialog.confirmDeleteTitle",
+      messageTranslationKey: "companyDialog.confirmDeleteMessage"
+    }).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
         }
-      );
+        return this.userService.deleteUser(userId);
+      })
+    ).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.dialogRef.close(result);
+      }
+    );
   }
 
   private loadNeededData() {
@@ -101,8 +169,8 @@ export class CompanyDialogComponent implements OnInit {
 
   private getInputFromForm(): RegisterCompany {
     return {
-      companyName: this.form.controls.name.value,
-      userEmail: this.form.controls.email.value,
+      companyName: this.form.controls.name.value!,
+      userEmail: this.form.controls.email.value!,
       academicProgramId: this.form.controls.academicProgram.value!.id,
     }
   }

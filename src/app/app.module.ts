@@ -27,6 +27,9 @@ import {MatMenuModule} from '@angular/material/menu';
 import {CompanyDialogComponent} from "./dialogs/company-dialog/company-dialog.component";
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {CompanyProfileComponent} from "./pages/company-profile/view/company-profile.component";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {ChangePasswordDialogComponent} from "./dialogs/change-password-dialog/change-password-dialog.component";
+import {ConfirmDialogComponent} from "./dialogs/confirm-dialog/confirm-dialog.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -43,7 +46,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     StudentDialogComponent,
     CompanyDialogComponent,
     PageNotFoundComponent,
-    CompanyProfileComponent
+    CompanyProfileComponent,
+    ChangePasswordDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +59,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     MatTableModule,
     MatSortModule,
+    MatPaginatorModule,
     MatButtonModule,
     NgSelectModule,
     MatFormFieldModule,

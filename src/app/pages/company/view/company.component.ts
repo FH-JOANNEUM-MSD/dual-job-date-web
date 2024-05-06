@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {UserType} from 'src/app/core/enum/userType';
 import {UserService} from 'src/app/core/services/user.service';
@@ -8,10 +8,12 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AcademicProgram} from '../../../core/model/academicProgram';
 import {InstitutionService} from '../../../core/services/institution.service';
 import {AcademicProgramService} from '../../../core/services/academic-program.service';
-import {forkJoin} from 'rxjs';
+import {forkJoin, of} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from '../../../core/services/company.service';
-import {CsvParserService} from 'src/app/services/csv-parser.service';
+import {MatSort} from "@angular/material/sort";
+import {MatPaginator} from "@angular/material/paginator";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-company',
@@ -19,6 +21,9 @@ import {CsvParserService} from 'src/app/services/csv-parser.service';
   styleUrl: './company.component.scss',
 })
 export class CompanyComponent implements OnInit {
+  @ViewChild(MatSort, {static: false}) sort!: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator!: MatPaginator;
+
   form = this.fb.group({
     institution: this.fb.nonNullable.control<Institution | null>(null, {
       validators: [Validators.required],
@@ -32,15 +37,16 @@ export class CompanyComponent implements OnInit {
   displayedColumns: string[] = [
     'name',
     'email',
-    'status',
+    'academicProgram',
     'industry',
     'companyWebsite',
+    'status',
     'actions',
   ];
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
 
-  isLoadingResults: boolean = true;
+  isLoadingResults = true;
   userLoading = false;
 
   constructor(
@@ -50,17 +56,44 @@ export class CompanyComponent implements OnInit {
     private institutionService: InstitutionService,
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService,
-    private csvParser: CsvParserService
+    private changeDetector: ChangeDetectorRef,
   ) {
   }
 
   ngOnInit() {
     this.loadNeededData();
-    this.form.valueChanges.subscribe((_) => this.reloadUser());
+
+    this.form.controls.academicProgram.valueChanges.subscribe((_) => this.reloadCompanies());
+
+    this.form.controls.institution.valueChanges.pipe(
+      switchMap(result => {
+        if (!result) {
+          this.academicPrograms = [];
+          this.form.controls.academicProgram.disable();
+          this.form.controls.academicProgram.patchValue(null);
+          return of(null);
+        }
+
+        return this.academicProgramService.getAcademicPrograms(result.id);
+      })
+    ).subscribe(result => {
+
+      if (!result) {
+        return;
+      }
+      this.academicPrograms = result;
+      this.form.controls.academicProgram.enable();
+      this.reloadCompanies();
+    });
   }
 
-  openCompanyDialog(id?: string): void {
-    this.dialogService.openCompanyDialog(id).subscribe();
+  openCompanyDialog(id?: string, multiple: boolean = false): void {
+    this.dialogService.openCompanyDialog({id: id, multiple: multiple}).subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.reloadCompanies();
+    });
   }
 
   updateStatus(user: User, event: MouseEvent): void {
@@ -87,53 +120,77 @@ export class CompanyComponent implements OnInit {
       });
   }
 
-  onFileSelect(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.csvParser
-        .parseExcel(file)
-        .then((jsonData) => {
-          console.log('Parsed JSON Data:', jsonData);
-        })
-        .catch((error) => {
-          console.error('Error parsing file:', error);
-        });
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 
   private loadNeededData() {
     forkJoin({
-      users: this.userService.getUser(UserType.Company, 2, 2),
+      users: this.userService.getUser(UserType.Company, null, null),
       institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
       if (result.users) {
         this.dataSource.data = result.users;
-      }
-      if (result.academicPrograms) {
-        this.academicPrograms = result.academicPrograms;
       }
       if (result.institutions) {
         this.institutions = result.institutions;
       }
       this.isLoadingResults = false;
+      this.configureDataSource();
     });
   }
 
-  private reloadUser() {
+  private reloadCompanies() {
     this.userLoading = true;
 
-    const institutionId = this.form.controls.institution.value?.id ?? 1;
-    const academicProgramId = this.form.controls.academicProgram.value?.id ?? 1;
+    const institutionId = this.form.controls.institution.value?.id ?? null;
+    const academicProgramId = this.form.controls.academicProgram.value?.id ?? null;
     this.userService
       .getUser(UserType.Company, institutionId, academicProgramId)
       .subscribe((result) => {
         this.userLoading = false;
-
         if (!result) {
           return;
         }
         this.dataSource.data = result;
+        this.configureDataSource();
       });
+  }
+
+  private configureDataSource(): void {
+    this.changeDetector.detectChanges();
+
+    const previousPageSize = this.dataSource.paginator ? this.dataSource.paginator.pageSize : 10;
+
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'industry':
+          return item.company.industry;
+        case 'companyWebsite':
+          return item.company.website;
+        case 'status':
+          return item.company.isActive ? 1 : 0;
+        default:
+          // @ts-ignore
+          return item[property];
+      }
+    };
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.pageSize = previousPageSize;
+    }
+
+    this.dataSource.filterPredicate = function (user, filter: string): boolean {
+      return user.company.name.toLowerCase().includes(filter) || user.email!.toLowerCase().includes(filter) ||
+        user.academicProgram.name.toLowerCase().includes(filter) || (user.company.industry?.toLowerCase().includes(filter) ?? false) ||
+        (user.company.website?.toLowerCase().includes(filter) ?? false);
+    };
   }
 }

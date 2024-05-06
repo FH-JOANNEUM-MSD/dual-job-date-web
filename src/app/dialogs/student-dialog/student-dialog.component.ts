@@ -10,6 +10,9 @@ import {InstitutionService} from "../../core/services/institution.service";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
 import {forkJoin, of} from "rxjs";
 import {UserType} from "../../core/enum/userType";
+import {switchMap} from "rxjs/operators";
+import {CsvParserService} from "../../services/csv-parser.service";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-student-dialog',
@@ -19,29 +22,32 @@ import {UserType} from "../../core/enum/userType";
 export class StudentDialogComponent implements OnInit {
 
   isLoading = true;
+  userId: string | null = this.data.id ?? null;
+  multiple: boolean = this.data.multiple;
+  fileName: string | null = null;
+
   form = this.fb.group({
-    email: this.fb.nonNullable.control({value: '', disabled: !!this.data}, {
-      validators: [Validators.required]
-    }),
-    institution: this.fb.nonNullable.control<Institution | null>(
-      {value: null, disabled: !!this.data},
-      {validators: [Validators.required]}
+    excel: this.fb.control<File | null>(
+      null, {validators: this.multiple ? [Validators.required] : []}
     ),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(
-      {value: null, disabled: !!this.data},
+    email: this.fb.control<string | null>({value: null, disabled: !!this.data.id},
+      {validators: this.multiple ? [] : [Validators.required]}),
+    academicProgram: this.fb.control<AcademicProgram | null>(
+      {value: null, disabled: !!this.data.id},
       {validators: [Validators.required]}
     ),
   });
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
-  userId: string | null = this.data;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private institutionService: InstitutionService,
+    private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
+    private dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) private data: any
   ) {
   }
@@ -56,34 +62,85 @@ export class StudentDialogComponent implements OnInit {
       return;
     }
 
-    const input = this.getInputFromForm();
+    this.isLoading = true;
 
+    if (this.multiple) {
+      const file = this.form.controls.excel.value!;
+      const academicProgramId = this.form.controls.academicProgram.value!.id;
+      const institutionId = this.form.controls.academicProgram.value!.institutionId;
+      this.csvParser.parseExcel(file).pipe(
+        switchMap(result => {
 
-    this.userService.register(input)
-      .subscribe(
+          if (!result) {
+            // TODO Show Parsing Error somewhere
+            return of(null);
+          }
+
+          return this.userService.registerStudentsFromJson(result.map(row => {
+            return {email: row.email!};
+          }), institutionId, academicProgramId)
+        })
+      ).subscribe(
         result => {
+          this.isLoading = false;
           if (!result) {
             return;
           }
           this.dialogRef.close(result);
         }
       );
+    } else {
+      const input = this.getInputFromForm();
+      this.userService.register(input)
+        .subscribe(
+          result => {
+            this.isLoading = false;
+            if (!result) {
+              return;
+            }
+            this.dialogRef.close(result);
+          }
+        );
+    }
   }
 
-  delete(): void {
-    if (!this.userId) {
+  onFileSelect(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (!inputElement.files || inputElement.files.length === 0) {
       return;
     }
 
-    this.userService.deleteUser(this.userId)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-          this.dialogRef.close(result);
+    const file = inputElement.files[0];
+    this.form.patchValue({excel: file});
+    this.fileName = file.name;
+  }
+
+  delete(): void {
+    const userId = this.userId;
+    if (!userId) {
+      return;
+    }
+
+    this.dialogService.openConfirmDialog({
+      titleTranslationKey: "studentDialog.confirmDeleteTitle",
+      messageTranslationKey: "studentDialog.confirmDeleteMessage"
+    }).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
         }
-      );
+
+        return this.userService.deleteUser(userId);
+      })
+    ).subscribe(
+      result => {
+        if (!result) {
+          return;
+        }
+        this.dialogRef.close(result);
+      }
+    );
   }
 
   private loadNeededData() {
@@ -110,8 +167,8 @@ export class StudentDialogComponent implements OnInit {
   private getInputFromForm(): RegisterUserInput {
 
     return {
-      email: this.form.controls.email.value,
-      institutionId: this.form.controls.institution.value!.id ?? null,
+      email: this.form.controls.email.value!,
+      institutionId: this.form.controls.academicProgram.value!.institutionId ?? null,
       academicProgramId: this.form.controls.academicProgram.value!.id ?? null,
       role: UserType.Student,
       companyId: null
@@ -123,7 +180,6 @@ export class StudentDialogComponent implements OnInit {
     this.form.patchValue({
       email: user.email ?? '',
       academicProgram: user.academicProgram,
-      institution: user.institution
     })
   }
 }

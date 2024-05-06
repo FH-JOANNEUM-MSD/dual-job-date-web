@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { UserType } from 'src/app/core/enum/userType';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {switchMap} from "rxjs/operators";
+import {of} from "rxjs";
+import {DialogService} from "../../../services/dialog.service";
 
 @Component({
   selector: 'app-login',
@@ -24,10 +28,11 @@ export class LoginComponent {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
+    private dialogService: DialogService,
     private fb: FormBuilder
   ) {}
 
-  onSubmit() {
+  save() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -35,10 +40,14 @@ export class LoginComponent {
 
     const email = this.loginForm.controls.email.value;
     const password = this.loginForm.controls.password.value;
-    this.userService.login(email, password).subscribe((result) => {
-      if (!result) {
-        return;
-      }
+    this.userService.login(email, password)
+      .pipe(
+        switchMap(
+          result => {
+            if (!result) {
+              return of(null);
+            }
+            this.authService.setCredentials(result);
 
       this.authService.setCredentials(result);
 
@@ -48,5 +57,21 @@ export class LoginComponent {
         this.router.navigate(['/home']);
       }
     });
+            if (result.isNew) {
+              return this.dialogService.openChangePasswordDialog(true);
+            }
+
+            return of(true);
+          }
+        )
+      )
+      .subscribe((result) => {
+        if (!result) {
+          return;
+        }
+
+        this.router.navigate(['/home']);
+      });
+
   }
 }

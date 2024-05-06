@@ -1,6 +1,6 @@
 ﻿import {Injectable} from '@angular/core';
 import {catchError, map, Observable, of} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {User} from "../model/user";
 import {environment} from "../../../environments/environment";
 import {AuthenticationResponse} from "../model/authenticationResponse";
@@ -21,8 +21,21 @@ export class UserService {
 
   // ****** GET ****** \\
 
-  getUser(userType: UserType, institutionId: number, academicProgramId: number): Observable<User[] | null> {
-    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers?userType=${userType}&institutionId=${institutionId}&academicProgramId=${academicProgramId}`).pipe(
+  getUser(userType: UserType, institutionId: number | null, academicProgramId: number | null): Observable<User[] | null> {
+    let params = new HttpParams();
+    params = params.set('userType', userType);
+
+    if (academicProgramId !== null) {
+      params = params.set('academicProgramId', academicProgramId);
+    }
+
+    if (institutionId !== null) {
+      params = params.set('institutionId', institutionId);
+    }
+
+    return this.http.get<User[]>(`${environment.apiBasePath}${this.urlPath}/GetAllUsers`, {
+      params: params,
+    }).pipe(
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
@@ -64,16 +77,18 @@ export class UserService {
     return this.http.post<AuthenticationResponse>(`${environment.apiBasePath}${this.urlPath}/Refresh`, {refreshToken: refreshToken});
   }
 
-  changePassword(oldPassword: string, newPassword: string): Observable<any | null> {
-    // TODO implement GlobalStorage / LocalStorage something
+  changePassword(oldPassword: string, newPassword: string): Observable<boolean | null> {
     return this.http.post(`${environment.apiBasePath}${this.urlPath}/ChangePassword`, {
       oldPassword: oldPassword,
       newPassword: newPassword,
     }).pipe(
+      map(_ => {
+        return true;
+      }),
       catchError(error => {
         // TODO implement Error Handling
         console.error(error);
-        return of(null);
+        return of(false);
       }),
     );
   }
@@ -121,7 +136,36 @@ export class UserService {
     return this.http.put(`${environment.apiBasePath}${this.urlPath}/Register`, input, {responseType: 'text'}).pipe(
       catchError(error => {
         // TODO implement Error Handling
-        console.log('ERROR')
+        console.error(error);
+        return of(null);
+      }),
+      map(result => !!result)
+    );
+  }
+
+  registerCompaniesFromJson(input: {
+    email: string,
+    companyName: string
+  }[], institutionId: number, academicProgramId: number): Observable<boolean> {
+    return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterCompaniesFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
+      input, {responseType: 'text'}).pipe(
+      catchError(error => {
+        // TODO implement Error Handling
+        console.error(error);
+        return of(null);
+      }),
+      map(result => !!result)
+    );
+  }
+
+
+  registerStudentsFromJson(input: {
+    email: string
+  }[], institutionId: number, academicProgramId: number): Observable<boolean> {
+    return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterStudentsFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
+      input, {responseType: 'text'}).pipe(
+      catchError(error => {
+        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),

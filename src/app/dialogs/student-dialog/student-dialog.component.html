@@ -1,5 +1,5 @@
 <div class="header row">
-  <h1 mat-dialog-title>{{ 'studentDialog.title' | translate }}</h1>
+  <h1 mat-dialog-title>{{ (multiple ? 'studentDialog.multipleTitle' : 'studentDialog.title') | translate }}</h1>
   @if (userId) {
     <button (click)="delete()" color="warn" mat-icon-button>
       <mat-icon>delete</mat-icon>
@@ -8,33 +8,41 @@
 </div>
 
 <mat-dialog-content>
-  <form [formGroup]="form" class="col">
-    <mat-form-field>
-      <mat-label>Email</mat-label>
-      <input formControlName="email" matInput>
-      <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-      <!-- TODO Show correct formError -->
-    </mat-form-field>
+  @if (isLoading) {
+    <mat-spinner></mat-spinner>
+  } @else {
+    <form [formGroup]="form" class="col">
 
-    <ng-select
-      [items]="institutions"
-      appendTo="body"
-      bindLabel="keyName"
-      formControlName="institution"
-    ></ng-select>
+      @if (multiple) {
+        <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
+        <button (click)="fileInput.click()" class="primary-button" mat-flat-button>
+          <mat-icon>file_upload</mat-icon>
+          <!-- TODO If filename to long fix design-->
+          {{ fileName ? fileName : ('studentDialog.button.import' | translate) }}
+        </button>
+      } @else {
+        <mat-form-field>
+          <mat-label>{{ 'studentDialog.email' | translate }}</mat-label>
+          <input formControlName="email" matInput>
+          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <!-- TODO Show correct formError -->
+        </mat-form-field>
+      }
+      <ng-select
+        [clearable]="false"
+        [items]="academicPrograms"
+        appendTo="body"
+        bindLabel="keyName"
+        formControlName="academicProgram"
+      ></ng-select>
 
-    <ng-select
-      [items]="academicPrograms"
-      appendTo="body"
-      bindLabel="keyName"
-      formControlName="academicProgram"
-    ></ng-select>
-
-  </form>
+    </form>
+  }
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
-  <button (click)="save()" [disabled]="this.userId!! || form.invalid" class="primary-button" mat-button
+  <button [disabled]="isLoading" color="warn" mat-button mat-dialog-close>{{ 'generic.cancel' | translate }}</button>
+  <button (click)="save()" [disabled]="userId!! || form.invalid || isLoading" class="primary-button"
+          mat-button
           type="submit">{{ 'generic.save' | translate }}
   </button>
 </mat-dialog-actions>

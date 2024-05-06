@@ -86,43 +86,17 @@
         height: 75%;
         justify-content: end;
 
-        input {
-          background-color: transparent;
-          color: black;
+        mat-form-field {
           width: 75%;
           align-self: center;
-          height: 45px;
-          border-radius: 10px;
-          border-color: black;
-          border: 1px solid;
-          box-sizing: border-box;
-          padding-left: 60px;
-
-          &#password {
-            margin-top: 25px;
-            background: url(/../assets/images/sperren.png) no-repeat scroll 7px 7px;
-          }
-
-          &#email {
-            background: url(/../assets/images/profil.png) no-repeat scroll 7px 7px;
-          }
-
-          &::placeholder {
-            color: black;
-            //padding-left: 10px;
-          }
         }
 
         button {
           margin-top: 60px;
           width: 75%;
-          border: unset;
           align-self: center;
           height: 45px;
           box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.5);
-          border-radius: 20px;
-          color: var(--primary-color-buttons);
-          cursor: pointer;
         }
       }
 
