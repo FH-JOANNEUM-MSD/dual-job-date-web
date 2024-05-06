@@ -21,8 +21,8 @@ nav {
     .headerHeadlineContainer {
       margin-left: 12.5px;
 
-      h2 {
-        font-size: 1.0416666666666667em;
+      h1 {
+        font-size: 2em;
         margin: 0;
       }
 
@@ -44,7 +44,7 @@ nav {
     justify-content: flex-end;
     margin-right: 204px;
 
-    a {
+    a, button{
       text-decoration: none;
       color: var(--primary-color-text-white);
       font-size: var(--font-size-19px);
