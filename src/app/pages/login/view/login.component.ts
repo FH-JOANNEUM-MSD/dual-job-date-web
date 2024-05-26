@@ -23,6 +23,8 @@ export class LoginComponent {
     }),
   });
 
+  formError: string | null = null;
+
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -51,8 +53,10 @@ export class LoginComponent {
           if (this.authService.getUserType() == UserType.Company) {
             const companyId = this.authService.getCompanyId();
             this.router.navigate([`/company-profile/${companyId}`]);
-          } else {
+          } else if (this.authService.getUserType() == UserType.Admin) {
             this.router.navigate(['/home']);
+          } else {
+            this.formError = 'Nicht gültiger Benutzertyp';
           }
 
           if (result.isNew) {
@@ -66,8 +70,6 @@ export class LoginComponent {
         if (!result) {
           return;
         }
-
-        this.router.navigate(['/home']);
       });
   }
 }
