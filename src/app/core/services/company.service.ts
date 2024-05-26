@@ -1,5 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Company } from '../model/company';
@@ -8,15 +8,13 @@ import { RegisterCompany } from '../model/registerCompany';
 import { Activity } from '../model/activity';
 import { Address } from '../model/address';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   // ****** GET ****** \\
 
@@ -37,16 +35,23 @@ export class CompanyService {
       );
   }
 
-  getCompanyById(id: number): Observable<Company | null> {
-    return this.http
-      .get<Company>(`${environment.apiBasePath}${this.urlPath}?id=${id}`)
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
-        })
-      );
+  getCompanyById(id?: number): Observable<Company | null> {
+    const url = id
+      ? `${environment.apiBasePath}${this.urlPath}?id=${id}`
+      : `${environment.apiBasePath}${this.urlPath}`;
+
+    return this.http.get<Company>(url).pipe(
+      tap((company) => {
+        if (company && company.id) {
+          localStorage.setItem('companyId', company.id.toString());
+        }
+      }),
+      catchError((error) => {
+        // TODO implement Error Handling
+        console.error(error);
+        return of(null);
+      })
+    );
   }
 
   getCompanyDetails(id: number): Observable<CompanyDetails | null> {

@@ -48,10 +48,9 @@ export class LoginComponent {
           }
           this.authService.setCredentials(result);
 
-          this.authService.setCredentials(result);
-
           if (this.authService.getUserType() == UserType.Company) {
-            this.router.navigate(['/company-profile/:id']);
+            const companyId = this.authService.getCompanyId();
+            this.router.navigate([`/company-profile/${companyId}`]);
           } else {
             this.router.navigate(['/home']);
           }
