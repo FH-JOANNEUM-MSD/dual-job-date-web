@@ -50,7 +50,7 @@ export class CompanyProfileComponent implements OnInit {
   cities: string[] = [];
 
   userId: string = '162ec6f8-cb9f-411d-a0ef-15c22ca68acb';
-  companyId: number = 1;
+  companyId: number = 0;
 
   constructor(
     private fb: FormBuilder,
