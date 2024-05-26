@@ -60,7 +60,7 @@ To generate a new component or other Angular elements, use the Angular CLI comma
 ```bash
 ng generate component <component-name>
 ```
-
+node ./generate-api
 You can also generate directives, pipes, services, classes, guards, interfaces, enums, or modules using this command.
 
 ## Build

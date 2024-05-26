@@ -2,14 +2,19 @@
 @if (isLoadingResults) {
   <mat-spinner></mat-spinner>
 } @else {
+  <style>
+
+
+  </style>
   <form [formGroup]="form" class="row">
 
-    <mat-form-field>
-      <mat-label>{{ 'generic.search' | translate }}</mat-label>
-      <input matInput (keyup)="applyFilter($event)">
+    <mat-form-field class="search_bar">
+        <mat-label>{{ 'generic.search' | translate }}</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
     </mat-form-field>
 
     <ng-select
+      class="no-cursor-input"
       [items]="institutions"
       appendTo="body"
       bindLabel="keyName"
@@ -17,6 +22,7 @@
     ></ng-select>
 
     <ng-select
+      class="no-cursor-input"
       [items]="academicPrograms"
       appendTo="body"
       bindLabel="keyName"
