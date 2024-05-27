@@ -63,7 +63,8 @@
     "confirmDeleteTitle": "Löschung bestätigen",
     "confirmDeleteMessage": "Sind Sie sicher, dass Sie dieses Unternehmen löschen möchten?",
     "button": {
-      "import": "Wähle File"
+      "import": "Wähle File",
+      "companyProfile": "Zum Unternehmens Profil"
     }
   },
   "changePasswordDialog": {
