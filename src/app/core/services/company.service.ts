@@ -43,7 +43,8 @@ export class CompanyService {
     return this.http.get<Company>(url).pipe(
       tap((company) => {
         if (company && company.id) {
-          localStorage.setItem('companyId', company.id.toString());
+          console.log('test');
+          localStorage.setItem('companyIdKey', company.id.toString());
         }
       }),
       catchError((error) => {

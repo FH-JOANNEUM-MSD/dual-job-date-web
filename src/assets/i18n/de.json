@@ -123,6 +123,16 @@
       "education": "Ausbildung",
       "experience": "Erfahrung",
       "currentPosition": "Derzeitige Position/Tätigkeit im Unternehmen:"
+    },
+    "snackBar":{
+      "success":{
+        "setInactive": "Das Unternehmen wurde erfolgreich als inaktiv gesetzt.",
+        "updateCompany": "Das Unternehmen wurde erfolgreich als aktualisiert"
+      },
+      "error":{
+        "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
+        "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut."
+      }
     }
   }
 }

@@ -12,6 +12,8 @@ import { Address } from 'src/app/core/model/address';
 import { Activity } from 'src/app/core/model/activity';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company-profile',
@@ -49,29 +51,17 @@ export class CompanyProfileComponent implements OnInit {
   logoBase64: string | null = null;
   cities: string[] = [];
 
-  userId: string = '162ec6f8-cb9f-411d-a0ef-15c22ca68acb';
   companyId: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
-    private userService: UserService,
-    private academicProgramService: AcademicProgramService,
-    private institutionService: InstitutionService,
+    private translateService: TranslateService,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('companyId');
-      if (id !== null) {
-        this.companyId = +id;
-      } else {
-        this.companyId = 0;
-        console.error('Company ID is missing in the route parameters');
-      }
-    });
     this.loadNeededData();
   }
 
@@ -80,23 +70,17 @@ export class CompanyProfileComponent implements OnInit {
       .activateOrDeactivateCompany(this.companyId, false)
       .subscribe({
         next: (_) => {
-          this.snackBar.open(
-            'Das Unternehmen wurde erfolgreich als inaktiv gesetzt.',
-            'Schließen',
-            {
-              duration: 3000,
-              verticalPosition: 'top',
-            }
+          this.openSnackBarSuccess(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.setInactive'
+            )
           );
         },
         error: (err) => {
-          this.snackBar.open(
-            'Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.',
-            'Schließen',
-            {
-              duration: 3000,
-              verticalPosition: 'top',
-            }
+          this.openSnackBarError(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.setInactive'
+            )
           );
           console.error('Fehler beim Aktualisieren des Status:', err);
         },
@@ -111,23 +95,17 @@ export class CompanyProfileComponent implements OnInit {
       };
       this.companyService.updateCompany(updatedCompany).subscribe({
         next: (_) => {
-          this.snackBar.open(
-            'Das Unternehmen wurde erfolgreich als aktualisiert',
-            'Schließen',
-            {
-              duration: 3000,
-              verticalPosition: 'top',
-            }
+          this.openSnackBarSuccess(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.updateCompany'
+            )
           );
         },
         error: (error) => {
-          this.snackBar.open(
-            'Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.',
-            'Schließen',
-            {
-              duration: 3000,
-              verticalPosition: 'top',
-            }
+          this.openSnackBarError(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.updateCompany'
+            )
           );
           console.error('Failed to update company', error);
         },
@@ -138,10 +116,20 @@ export class CompanyProfileComponent implements OnInit {
     }
   }
 
+  private openSnackBarError(message: string) {
+    this.snackBarService.error(message);
+  }
+  private openSnackBarSuccess(message: string) {
+    this.snackBarService.success(message);
+  }
+
   private loadNeededData() {
+    const idParam = this.route.snapshot.paramMap.get('companyId');
+    const companyId = idParam ? +idParam : undefined;
+
     forkJoin({
-      company: this.companyId
-        ? this.companyService.getCompanyById(this.companyId)
+      company: companyId
+        ? this.companyService.getCompanyById(companyId)
         : of(null),
     }).subscribe((result) => {
       if (result.company && result.company.addresses) {

@@ -8,15 +8,15 @@ import { UserType } from '../core/enum/userType';
 export class AuthService {
   accessTokenKey: string = 'accessTokenKey';
   refreshTokenKey: string = 'refreshTokenKey';
-  userType: string = 'userType';
-  companyId: string = 'companyId';
+  userTypeKey: string = 'userTypeKey';
+  companyIdKey: string = 'companyIdKey';
 
   constructor() {}
 
   setCredentials(authResponse: AuthenticationResponse): void {
     localStorage.setItem(this.accessTokenKey, authResponse.accessToken);
     localStorage.setItem(this.refreshTokenKey, authResponse.refreshToken);
-    localStorage.setItem(this.userType, `${authResponse.userType}`);
+    localStorage.setItem(this.userTypeKey, `${authResponse.userType}`);
   }
 
   isAuthenticated(): boolean {
@@ -29,7 +29,8 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.accessTokenKey);
     localStorage.removeItem(this.refreshTokenKey);
-    localStorage.removeItem(this.userType);
+    localStorage.removeItem(this.userTypeKey);
+    localStorage.removeItem(this.companyIdKey);
   }
 
   getRefreshToken(): string | null {
@@ -41,7 +42,7 @@ export class AuthService {
   }
 
   getUserType(): UserType | null {
-    const userTypeString = localStorage.getItem(this.userType);
+    const userTypeString = localStorage.getItem(this.userTypeKey);
     if (userTypeString !== null) {
       const userTypeNumber = parseInt(userTypeString, 10);
       if (!isNaN(userTypeNumber) && userTypeNumber in UserType) {
@@ -52,6 +53,6 @@ export class AuthService {
   }
 
   getCompanyId(): string | null {
-    return localStorage.getItem(this.companyId);
+    return localStorage.getItem(this.companyIdKey);
   }
 }
