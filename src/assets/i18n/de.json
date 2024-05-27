@@ -5,6 +5,9 @@
     "confirm": "Bestätigen",
     "search": "Suche..."
   },
+  "formErrors": {
+    "required": "Bitte vollständig befüllen"
+  },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
     "table": {
@@ -84,7 +87,8 @@
     "students": "Studenten"
   },
   "login": {
-    "sessionExpired": "Session abgelaufen. Bitte erneut anmelden."
+    "sessionExpired": "Session abgelaufen. Bitte erneut anmelden.",
+    "wrongLogin": "Falsches Passwort oder Benutzer."
   },
   "enum": {
     "userType": {
@@ -127,6 +131,7 @@
     "snackBar":{
       "success":{
         "setInactive": "Das Unternehmen wurde erfolgreich als inaktiv gesetzt.",
+        "setActive": "Das Unternehmen wurde erfolgreich als aktiv gesetzt.",
         "updateCompany": "Das Unternehmen wurde erfolgreich als aktualisiert"
       },
       "error":{

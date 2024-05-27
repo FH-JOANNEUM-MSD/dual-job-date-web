@@ -106,7 +106,7 @@ export class TokenInterceptor implements HttpInterceptor {
         this.refreshTokenSubject.next(response.accessToken);
         return next.handle(this.addAuthenticationToken(request));
       }),
-      catchError((_) => this.logoutUser())
+      catchError((_) => this.logoutUser("wrongLogin"))
     );
   }
 
@@ -121,11 +121,15 @@ export class TokenInterceptor implements HttpInterceptor {
     );
   }
 
-  private logoutUser(): Observable<never> {
+  private logoutUser(type : string = ""): Observable<never> {
     this.isRefreshing = false;
     this.authService.logout();
     this.router.navigateByUrl('/login');
-    this.openSnackBar(this.translateService.instant('login.sessionExpired'));
+    if(type == "wrongLogin"){
+      this.openSnackBar(this.translateService.instant('Wrong Password or Username'));
+    }else{
+      this.openSnackBar(this.translateService.instant('login.sessionExpired'));
+    }
     return throwError(() => new Error('Authentication required.'));
   }
 

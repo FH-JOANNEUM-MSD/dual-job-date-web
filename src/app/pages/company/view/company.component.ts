@@ -14,6 +14,8 @@ import {CompanyService} from '../../../core/services/company.service';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {switchMap} from "rxjs/operators";
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company',
@@ -57,6 +59,8 @@ export class CompanyComponent implements OnInit {
     private academicProgramService: AcademicProgramService,
     private dialogService: DialogService,
     private changeDetector: ChangeDetectorRef,
+    private translateService: TranslateService,
+    private snackbarService: SnackbarService,
   ) {
   }
 
@@ -106,6 +110,16 @@ export class CompanyComponent implements OnInit {
           user.company.isActive = !user.company.isActive;
         },
       });
+    if(user.company.isActive){
+      this.snackbarService.success(this.translateService.instant(
+        'companyProfilePage.snackBar.success.setInactive'
+      ))
+    }else{
+      this.snackbarService.success(this.translateService.instant(
+        'companyProfilePage.snackBar.success.setActive'
+      ))
+    }
+
   }
 
   sendMail(user: User, event: MouseEvent) {
