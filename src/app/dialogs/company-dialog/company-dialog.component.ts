@@ -1,44 +1,48 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {AcademicProgram} from "../../core/model/academicProgram";
-import {AcademicProgramService} from "../../core/services/academic-program.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {forkJoin, of} from "rxjs";
-import {User} from "../../core/model/user";
-import {CompanyService} from "../../core/services/company.service";
-import {RegisterCompany} from "../../core/model/registerCompany";
-import {UserService} from "../../core/services/user.service";
-import {CsvParserService} from "../../services/csv-parser.service";
-import {switchMap} from "rxjs/operators";
-import {DialogService} from "../../services/dialog.service";
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AcademicProgram } from '../../core/model/academicProgram';
+import { AcademicProgramService } from '../../core/services/academic-program.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { forkJoin, of } from 'rxjs';
+import { User } from '../../core/model/user';
+import { CompanyService } from '../../core/services/company.service';
+import { RegisterCompany } from '../../core/model/registerCompany';
+import { UserService } from '../../core/services/user.service';
+import { CsvParserService } from '../../services/csv-parser.service';
+import { switchMap } from 'rxjs/operators';
+import { DialogService } from '../../services/dialog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-dialog',
   templateUrl: './company-dialog.component.html',
-  styleUrl: './company-dialog.component.scss'
+  styleUrl: './company-dialog.component.scss',
 })
 export class CompanyDialogComponent implements OnInit {
-
   isLoading = true;
   userId: string | null = this.data.id ?? null;
   multiple: boolean = this.data.multiple;
   fileName: string | null = null;
+  user: User | null = null;
 
   form = this.fb.group({
-    excel: this.fb.control<File | null>(
-      null, {validators: this.multiple ? [Validators.required] : []}
+    excel: this.fb.control<File | null>(null, {
+      validators: this.multiple ? [Validators.required] : [],
+    }),
+    email: this.fb.control<string | null>(
+      {
+        value: null,
+        disabled: !!this.data.id,
+      },
+      { validators: this.multiple ? [] : [Validators.required] }
     ),
-    email: this.fb.control<string | null>({
-      value: null,
-      disabled: !!this.data.id,
-    }, {validators: this.multiple ? [] : [Validators.required]}),
     name: this.fb.control<string | null>(
-      {value: null, disabled: !!this.data.id},
-      {validators: this.multiple ? [] : [Validators.required]}
+      { value: null, disabled: !!this.data.id },
+      { validators: this.multiple ? [] : [Validators.required] }
     ),
     academicProgram: this.fb.control<AcademicProgram | null>(
-      {value: null, disabled: !!this.data.id},
-      {validators: [Validators.required]}
+      { value: null, disabled: !!this.data.id },
+      { validators: [Validators.required] }
     ),
   });
   academicPrograms: AcademicProgram[] = [];
@@ -51,9 +55,9 @@ export class CompanyDialogComponent implements OnInit {
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<CompanyDialogComponent>,
     private dialogService: DialogService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA) private data: any
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadNeededData();
@@ -72,44 +76,42 @@ export class CompanyDialogComponent implements OnInit {
       // TODO institutionId
       const academicProgramId = this.form.controls.academicProgram.value!.id;
 
-      this.csvParser.parseExcel(file).pipe(
-        switchMap(result => {
+      this.csvParser
+        .parseExcel(file)
+        .pipe(
+          switchMap((result) => {
+            if (!result) {
+              // TODO Show Parsing Error somewhere
+              return of(null);
+            }
 
-          if (!result) {
-            // TODO Show Parsing Error somewhere
-            return of(null);
-          }
-
-          return this.userService.registerCompaniesFromJson(result.map(row => {
-            return {email: row.email!, companyName: row.companyName!};
-          }), 2, academicProgramId)
-        })
-      ).subscribe(
-        result => {
+            return this.userService.registerCompaniesFromJson(
+              result.map((row) => {
+                return { email: row.email!, companyName: row.companyName! };
+              }),
+              2,
+              academicProgramId
+            );
+          })
+        )
+        .subscribe((result) => {
           this.isLoading = false;
           if (!result) {
             return;
           }
           this.dialogRef.close(result);
-        }
-      );
-
+        });
     } else {
       const input = this.getInputFromForm();
 
-      this.companyService.register(input)
-        .subscribe(
-          result => {
-            this.isLoading = false;
-            if (!result) {
-              return;
-            }
-            this.dialogRef.close(result);
-          }
-        );
+      this.companyService.register(input).subscribe((result) => {
+        this.isLoading = false;
+        if (!result) {
+          return;
+        }
+        this.dialogRef.close(result);
+      });
     }
-
-
   }
 
   onFileSelect(event: Event): void {
@@ -120,7 +122,7 @@ export class CompanyDialogComponent implements OnInit {
     }
 
     const file = inputElement.files[0];
-    this.form.patchValue({excel: file});
+    this.form.patchValue({ excel: file });
     this.fileName = file.name;
   }
 
@@ -130,41 +132,41 @@ export class CompanyDialogComponent implements OnInit {
       return;
     }
 
-    this.dialogService.openConfirmDialog({
-      titleTranslationKey: "companyDialog.confirmDeleteTitle",
-      messageTranslationKey: "companyDialog.confirmDeleteMessage"
-    }).pipe(
-      switchMap(result => {
-        if (!result) {
-          return of(null);
-        }
-        return this.userService.deleteUser(userId);
+    this.dialogService
+      .openConfirmDialog({
+        titleTranslationKey: 'companyDialog.confirmDeleteTitle',
+        messageTranslationKey: 'companyDialog.confirmDeleteMessage',
       })
-    ).subscribe(
-      result => {
+      .pipe(
+        switchMap((result) => {
+          if (!result) {
+            return of(null);
+          }
+          return this.userService.deleteUser(userId);
+        })
+      )
+      .subscribe((result) => {
         if (!result) {
           return;
         }
         this.dialogRef.close(result);
-      }
-    );
+      });
   }
 
   private loadNeededData() {
-
     forkJoin({
       user: this.userId ? this.userService.getUserById(this.userId) : of(null),
-      academicPrograms: this.academicProgramService.getAcademicPrograms()
-    }).subscribe(result => {
+      academicPrograms: this.academicProgramService.getAcademicPrograms(),
+    }).subscribe((result) => {
       if (result.user) {
         this.initForm(result.user);
+        this.user = result.user;
       }
       if (result.academicPrograms) {
         this.academicPrograms = result.academicPrograms;
       }
       this.isLoading = false;
-    })
-
+    });
   }
 
   private getInputFromForm(): RegisterCompany {
@@ -172,14 +174,21 @@ export class CompanyDialogComponent implements OnInit {
       companyName: this.form.controls.name.value!,
       userEmail: this.form.controls.email.value!,
       academicProgramId: this.form.controls.academicProgram.value!.id,
-    }
+    };
   }
 
   private initForm(user: User) {
     this.form.patchValue({
       email: user.email ?? '',
       academicProgram: user.academicProgram,
-      name: user.company.name ?? ''
-    })
+      name: user.company.name ?? '',
+    });
+  }
+
+  redirectToCompanyProfile() {
+    console.log(this.user);
+    if (this.user && this.user.company && this.user.company.id) {
+      this.router.navigate([`/company-profile/${this.user.company.id}`]);
+    }
   }
 }

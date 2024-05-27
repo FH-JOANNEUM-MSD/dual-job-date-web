@@ -41,6 +41,7 @@
                 mat-button
                 type="submit">{{ 'loginPage.login' | translate }}
         </button>
+        <mat-error *ngIf="formError">{{ formError }}</mat-error>
       </form>
     </div>
   </div>

@@ -11,8 +11,15 @@
     textarea{
         height: 200px;
     }
-    .company-logo img{
-        max-width: 300px;
+    .company-logo{
+        img{
+            cursor: pointer;
+            max-width: 300px;
+        }
+        input, button{
+            align-self: center;
+        }
+        
     }
     .company-name{
         display: flex;
@@ -22,17 +29,33 @@
         display: flex;
         justify-content: center;
     }
+    h3, p{
+        align-self: center;
+    }
+    p{
+        margin-bottom: 40px;
+    }
+    
     .activities-list{
         max-width: 80%;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        .exclude-width{
-            width: 59px;
+       
+        .activity-item{
+            display: flex;
+            align-items: baseline;
+            gap: 100px;
+            label{
+                min-width: 275px;
+            }
+            .exclude-width{
+                width: 59px;
+            }
         }
     }
-    .trainer-details{
-        flex-direction: column;
+    button:last-child{
+        margin-left: 30px;
     }
        
 }

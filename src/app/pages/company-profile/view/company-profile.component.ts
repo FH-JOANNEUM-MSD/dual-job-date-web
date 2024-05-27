@@ -10,6 +10,10 @@ import { forkJoin, of } from 'rxjs';
 import { Company } from 'src/app/core/model/company';
 import { Address } from 'src/app/core/model/address';
 import { Activity } from 'src/app/core/model/activity';
+import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company-profile',
@@ -25,7 +29,7 @@ export class CompanyProfileComponent implements OnInit {
     industry: this.fb.control<string | null>(null),
     website: this.fb.control<string | null>(null),
     shortDescription: this.fb.control<string | null>(null),
-    location: this.fb.control<string | null>(null),
+    cities: this.fb.control<string | null>(null),
     jobDescription: this.fb.control<string | null>(null),
     contactPersonInCompany: this.fb.control<string | null>(null),
     contactPersonHRM: this.fb.control<string | null>(null),
@@ -36,91 +40,110 @@ export class CompanyProfileComponent implements OnInit {
     activities: this.fb.array([]),
   });
 
+  imageOpacity: number = 1;
+  showUploadButton: boolean = false;
+
   institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
   activities: Activity[] = [];
+  locations: Address[] = [];
 
   logoBase64: string | null = null;
   cities: string[] = [];
 
-  // TODO:
-  userId: string = '162ec6f8-cb9f-411d-a0ef-15c22ca68acb';
-  companyId: number = 1;
+  companyId: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private companyService: CompanyService,
-    private userService: UserService,
-    private academicProgramService: AcademicProgramService,
-    private institutionService: InstitutionService
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private snackBarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
     this.loadNeededData();
   }
 
-  save(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    //const input = this.getInputFromForm();
-
-    /*this.companyService.updateCompany(input)
-      .subscribe(
-        result => {
-          if (!result) {
-            return;
-          }
-        }
-      );*/
+  updateStatus(): void {
+    this.companyService
+      .activateOrDeactivateCompany(this.companyId, false)
+      .subscribe({
+        next: (_) => {
+          this.openSnackBarSuccess(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.setInactive'
+            )
+          );
+        },
+        error: (err) => {
+          this.openSnackBarError(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.setInactive'
+            )
+          );
+          console.error('Fehler beim Aktualisieren des Status:', err);
+        },
+      });
   }
 
-  /* delete(): void {
-     if (!this.) {
-       return;
-     }
+  updateCompany(): void {
+    if (this.form.valid) {
+      const updatedCompany: Company = {
+        ...(this.form.value as Company),
+        logoBase64: this.logoBase64,
+      };
+      this.companyService.updateCompany(updatedCompany).subscribe({
+        next: (_) => {
+          this.openSnackBarSuccess(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.updateCompany'
+            )
+          );
+        },
+        error: (error) => {
+          this.openSnackBarError(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.updateCompany'
+            )
+          );
+          console.error('Failed to update company', error);
+        },
+      });
+    } else {
+      console.log('Form is not valid');
+      this.form.markAllAsTouched();
+    }
+  }
 
-     this.userService.deleteUser(this.userId)
-       .subscribe(
-         result => {
-           if (!result) {
-             return;
-           }
-           this.dialogRef.close(result);
-         }
-       );
-   }*/
+  private openSnackBarError(message: string) {
+    this.snackBarService.error(message);
+  }
+  private openSnackBarSuccess(message: string) {
+    this.snackBarService.success(message);
+  }
 
   private loadNeededData() {
+    const idParam = this.route.snapshot.paramMap.get('companyId');
+    const companyId = Number(idParam);
+
     forkJoin({
-      user: this.userId ? this.userService.getUserById(this.userId) : of(null),
-      company: this.companyId
-        ? this.companyService.getCompanyById(this.companyId)
+      company: companyId
+        ? this.companyService.getCompanyById(companyId)
         : of(null),
-      institutions: this.institutionService.getInstitutions(),
-      academicPrograms: this.academicProgramService.getAcademicPrograms(),
     }).subscribe((result) => {
-      if (result.company) {
+      if (result.company && result.company.addresses) {
         this.initForm(result.company);
         this.extractCities(result.company.addresses);
-      }
-      if (result.academicPrograms) {
-        this.academicPrograms = result.academicPrograms;
-      }
-      if (result.institutions) {
-        this.institutions = result.institutions;
       }
       this.isLoading = false;
     });
   }
 
-  // private getInputFromForm(): Company {
-  //   return {};
-  // }
-
   private initForm(company: Company) {
+    this.logoBase64 = company.logoBase64;
+    this.activities = company.activities ?? [];
+    this.locations = company.addresses ?? [];
     this.form.patchValue({
       name: company.name,
       shortDescription: company.companyDetails?.shortDescription,
@@ -134,18 +157,36 @@ export class CompanyProfileComponent implements OnInit {
       trainerProfessionalExperience:
         company.companyDetails?.trainerProfessionalExperience,
       website: company.website,
+      cities: this.convertLocationsString(),
     });
-    this.logoBase64 = company.logoBase64;
-    this.activities = company.activities;
   }
 
   protected get logoSrc(): string | null {
     return this.logoBase64 ? `data:image/png;base64,${this.logoBase64}` : null;
   }
 
-  private extractCities(addresses: Address[]): void {
-    this.cities = addresses.map((address) => address.city ?? '');
-    const citiesString = this.cities.join(', ');
-    this.form.patchValue({ location: citiesString });
+  private extractCities(addresses: Address[]): void {}
+
+  protected toggleImage() {
+    this.showUploadButton = !this.showUploadButton;
+    this.imageOpacity = this.imageOpacity === 1 ? 0.5 : 1;
+  }
+  onFileSelect(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.logoBase64 = e.target.result.split(',')[1];
+        this.showUploadButton = false;
+        this.imageOpacity = 1;
+      };
+      reader.onerror = (error) => {
+        console.error('Error occurred while reading file:', error);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  private convertLocationsString(): string {
+    return this.locations.map((location) => location.city).join(', ');
   }
 }
