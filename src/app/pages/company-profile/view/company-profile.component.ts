@@ -125,7 +125,7 @@ export class CompanyProfileComponent implements OnInit {
 
   private loadNeededData() {
     const idParam = this.route.snapshot.paramMap.get('companyId');
-    const companyId = idParam ? +idParam : undefined;
+    const companyId = Number(idParam);
 
     forkJoin({
       company: companyId

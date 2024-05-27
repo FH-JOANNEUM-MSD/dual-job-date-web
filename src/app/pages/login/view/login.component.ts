@@ -4,9 +4,10 @@ import { AuthService } from '../../../services/auth.service';
 import { UserService } from '../../../core/services/user.service';
 import { UserType } from 'src/app/core/enum/userType';
 import { Component } from '@angular/core';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DialogService } from '../../../services/dialog.service';
+import { CompanyService } from 'src/app/core/services/company.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent {
 
   constructor(
     private userService: UserService,
+    private companyService: CompanyService,
     private authService: AuthService,
     private router: Router,
     private dialogService: DialogService,
@@ -50,9 +52,13 @@ export class LoginComponent {
           }
           this.authService.setCredentials(result);
 
-          if (this.authService.getUserType() == UserType.Company) {
-            const companyId = this.authService.getCompanyId();
-            this.router.navigate([`/company-profile/${companyId}`]);
+          if (this.authService.getUserType() === UserType.Company) {
+            return this.authService.setCompanyId().pipe(
+              tap(() => {
+                const companyId = this.authService.getCompanyId();
+                this.router.navigate([`/company-profile/${companyId}`]);
+              })
+            );
           } else if (this.authService.getUserType() == UserType.Admin) {
             this.router.navigate(['/home']);
           } else {
