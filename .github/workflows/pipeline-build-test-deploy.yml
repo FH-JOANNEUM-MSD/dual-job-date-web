@@ -3,10 +3,10 @@ name: Dual Job Date Build Deploy
 on:
   push:
     branches:
-      - cicd/notification # main
+      - main
   pull_request:
     branches:
-      - cicd/notification # main
+      - main
   release:
     types: [ created ]
 
