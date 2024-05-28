@@ -125,11 +125,11 @@ export class CompanyProfileComponent implements OnInit {
 
   private loadNeededData() {
     const idParam = this.route.snapshot.paramMap.get('companyId');
-    const companyId = Number(idParam);
+    this.companyId = Number(idParam);
 
     forkJoin({
-      company: companyId
-        ? this.companyService.getCompanyById(companyId)
+      company: this.companyId
+        ? this.companyService.getCompanyById(this.companyId)
         : of(null),
     }).subscribe((result) => {
       if (result.company && result.company.addresses) {
