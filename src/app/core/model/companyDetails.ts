@@ -1,4 +1,8 @@
 export interface CompanyDetails {
+  name: string;
+  industry: string | null;
+  logoBase64: string | null;
+  website: string | null;
   shortDescription: string | null;
   teamPictureBase64: string | null;
   jobDescription: string | null;
@@ -8,4 +12,5 @@ export interface CompanyDetails {
   trainerTraining: string | null;
   trainerProfessionalExperience: string | null;
   trainerPosition: string | null;
+  addresses: string | null;
 }

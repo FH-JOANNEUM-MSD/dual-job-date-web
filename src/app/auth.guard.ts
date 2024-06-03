@@ -1,23 +1,17 @@
-import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
-import { AuthService } from './services/auth.service'; // Your authentication service
-import { Observable } from 'rxjs';
-import { UserType } from './core/enum/userType';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot,} from '@angular/router';
+import {AuthService} from './services/auth.service'; // Your authentication service
+import {UserType} from './core/enum/userType';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   canActivate(
-    next: ActivatedRouteSnapshot,
+    _: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
     if (!this.authService.isAuthenticated()) {
@@ -26,13 +20,20 @@ export class AuthGuard implements CanActivate {
     }
     const userType = this.authService.getUserType();
     const companyId = this.authService.getCompanyId();
-    const companyProfileRegex = new RegExp(`^/company-profile/${companyId}$`);
 
-    if (userType === UserType.Company && !companyProfileRegex.test(state.url)) {
-      this.router.navigate([`/company-profile/${companyId}`]);
-      return false;
+    if (userType === UserType.Admin) {
+      return true;
+    } else if (userType === UserType.Company) {
+      const allowedRoutes = [`/appointments/${companyId}`, `/company-profile/${companyId}`];
+      if (allowedRoutes.includes(state.url)) {
+        return true;
+      } else {
+        this.router.navigate(['/not-authorized']);
+        return false;
+      }
     }
 
-    return true;
+    this.router.navigate(['/login']);
+    return false;
   }
 }

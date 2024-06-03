@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
-import { UserType } from 'src/app/core/enum/userType';
-import { DialogService } from '../../../services/dialog.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../../services/auth.service';
+import {Router} from '@angular/router';
+import {UserType} from 'src/app/core/enum/userType';
+import {DialogService} from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-headernavigation',
@@ -12,24 +12,30 @@ import { DialogService } from '../../../services/dialog.service';
 export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
 
-  ngOnInit(): void {
-    const userType = this.authService.getUserType();
-
-    if (userType === UserType.Company) {
-      this.navLinks = [];
-    } else {
-      this.navLinks = [
-        { path: '/home', label: 'Startseite' },
-        { path: '/company', label: 'Unternehmen' },
-        { path: '/student', label: 'Studenten' },
-      ];
-    }
-  }
   constructor(
     private authService: AuthService,
     private router: Router,
     private dialogService: DialogService
-  ) {}
+  ) {
+  }
+
+  ngOnInit(): void {
+    const userType = this.authService.getUserType();
+    const companyId = this.authService.getCompanyId();
+
+    if (userType === UserType.Company) {
+      this.navLinks = [
+        {path: `/appointments/${companyId}`, label: 'Termine'},
+        {path: `/company-profile/${companyId}`, label: 'Profil'},
+      ];
+    } else {
+      this.navLinks = [
+        {path: '/home', label: 'Startseite'},
+        {path: '/company', label: 'Unternehmen'},
+        {path: '/student', label: 'Studenten'},
+      ];
+    }
+  }
 
   logOut(): void {
     this.authService.logout();

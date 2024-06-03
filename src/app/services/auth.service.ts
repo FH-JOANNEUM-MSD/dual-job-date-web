@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
-import { AuthenticationResponse } from '../core/model/authenticationResponse';
-import { UserType } from '../core/enum/userType';
-import { CompanyService } from '../core/services/company.service';
-import { tap } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {AuthenticationResponse} from '../core/model/authenticationResponse';
+import {UserType} from '../core/enum/userType';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +11,8 @@ export class AuthService {
   userTypeKey: string = 'userTypeKey';
   companyIdKey: string = 'companyIdKey';
 
-  constructor(private companyService: CompanyService) {}
+  constructor() {
+  }
 
   setCredentials(authResponse: AuthenticationResponse): void {
     localStorage.setItem(this.accessTokenKey, authResponse.accessToken);
@@ -21,14 +20,8 @@ export class AuthService {
     localStorage.setItem(this.userTypeKey, `${authResponse.userType}`);
   }
 
-  setCompanyId() {
-    return this.companyService.getCompanyById().pipe(
-      tap((company) => {
-        if (company && company.id) {
-          localStorage.setItem('companyIdKey', company.id.toString());
-        }
-      })
-    );
+  setCompanyId(id: string): void {
+    localStorage.setItem('companyIdKey', id);
   }
 
   isAuthenticated(): boolean {

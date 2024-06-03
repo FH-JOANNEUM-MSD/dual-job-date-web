@@ -1,4 +1,6 @@
 @use '@angular/material' as mat;
+@import "@ng-select/ng-select/themes/default.theme.css";
+@import "node_modules/angular-calendar/css/angular-calendar.css";
 @import "assets/style/theme";
 @import "assets/style/const";
 
@@ -70,26 +72,28 @@ body {
 }
 
 .no-cursor-input {
-  .ng-select-container.ng-has-value{
+  .ng-select-container.ng-has-value {
     height: auto;
-    .ng-value-container{
+
+    .ng-value-container {
       padding-left: 0px !important;
     }
   }
 
-  &.ng-select-disabled{
-    .ng-select-container{
+  &.ng-select-disabled {
+    .ng-select-container {
       box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
     }
   }
+
   input {
     caret-color: transparent;
     user-select: none;
   }
 }
 
-.search_bar{
-  .mat-mdc-form-field-subscript-wrapper{
+.search_bar {
+  .mat-mdc-form-field-subscript-wrapper {
     height: 0;
   }
 }
@@ -219,5 +223,4 @@ ng-select {
     cursor: pointer;
   }
 }
-@import "~@ng-select/ng-select/themes/default.theme.css";
 

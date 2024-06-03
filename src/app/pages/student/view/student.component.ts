@@ -145,6 +145,18 @@ export class StudentComponent implements OnInit {
 
     const previousPageSize = this.paginator.pageSize || 10;
 
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'institution':
+          return item.institution.name;
+        case 'academicProgram':
+          return item.academicProgram.name;
+        default:
+          // @ts-ignore
+          return item[property];
+      }
+    };
+
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.paginator.pageSize = previousPageSize;
