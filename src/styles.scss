@@ -68,6 +68,8 @@ body {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  margin-left: 16px;
+  margin-right: 16px;
   align-items: center;
 }
 
@@ -93,8 +95,49 @@ body {
 }
 
 .search_bar {
+  max-height: 44px;
+  min-width: 125px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+
+  .mat-form-field-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-flex {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-form-field-infix {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  input.mat-input-element {
+    height: 100%;
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+
+  .mat-form-field-underline,
+  .mat-form-field-ripple {
+    display: none;
+  }
   .mat-mdc-form-field-subscript-wrapper {
     height: 0;
+  }
+  .mdc-line-ripple{
+    display: none;
+  }
+  .mat-mdc-form-field-focus-overlay {
+    background-color: transparent;
   }
 }
 
@@ -223,4 +266,3 @@ ng-select {
     cursor: pointer;
   }
 }
-
