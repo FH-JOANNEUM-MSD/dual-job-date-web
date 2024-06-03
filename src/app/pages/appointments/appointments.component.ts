@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {CalendarEvent} from "angular-calendar";
-import {AppointmentService} from "../../core/services/appointment.service";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { CalendarEvent } from 'angular-calendar';
+import { AppointmentService } from '../../core/services/appointment.service';
+import { ActivatedRoute } from '@angular/router';
 
 const colors = {
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
+  primary: {
+    primary: '#53851E',
+    secondary: '#CDECAC',
   },
   yellow: {
     primary: '#e3bc08',
@@ -17,7 +17,7 @@ const colors = {
 @Component({
   selector: 'app-appointments',
   templateUrl: './appointments.component.html',
-  styleUrl: './appointments.component.scss'
+  styleUrl: './appointments.component.scss',
 })
 export class AppointmentsComponent implements OnInit {
   viewDate: Date = new Date();
@@ -26,9 +26,10 @@ export class AppointmentsComponent implements OnInit {
   companyId: number | null = null;
 
   // TODO DATUM ANZEIGEN
-  constructor(private appointmentService: AppointmentService, private route: ActivatedRoute,
-  ) {
-  }
+  constructor(
+    private appointmentService: AppointmentService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.loadNeededData();
@@ -36,21 +37,19 @@ export class AppointmentsComponent implements OnInit {
 
   private loadNeededData() {
     this.companyId = Number(this.route.snapshot.paramMap.get('companyId'));
-    this.appointmentService.getAppointments().subscribe(
-      result => {
-        if (!result) {
-          return;
-        }
-        this.viewDate = result[0].startTime;
-        this.events = result.map(appointment => {
-          return {
-            start: new Date(appointment.startTime),
-            end: new Date(appointment.endTime),
-            title: appointment.student,
-            color: {...colors.blue},
-          }
-        });
+    this.appointmentService.getAppointments().subscribe((result) => {
+      if (!result) {
+        return;
       }
-    )
+      this.viewDate = result[0].startTime;
+      this.events = result.map((appointment) => {
+        return {
+          start: new Date(appointment.startTime),
+          end: new Date(appointment.endTime),
+          title: appointment.student,
+          color: { ...colors.primary },
+        };
+      });
+    });
   }
 }
