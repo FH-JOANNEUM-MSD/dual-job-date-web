@@ -65,7 +65,7 @@
     "multipleTitle": "Registriere Unternehmen",
     "confirmDeleteTitle": "Löschung bestätigen",
     "confirmDeleteMessage": "Sind Sie sicher, dass Sie dieses Unternehmen löschen möchten?",
-    "confirmCompanyInactiveMessage": "Sind Sie sicher, dass Sie ihr Unternehmen inaktiv setzen möchten?",
+    "confirmCompanyInactiveMessage": "Sind Sie sicher, dass Sie ihr Unternehmen inaktiv setzen möchten? Eine Aktivierung kann nur durch die FH Joanneum vollzogen werden.",
     "confirmAdminActiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen Aktiv setzen möchten?",
     "confirmAdminInactiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen inaktiv setzen möchten?",
     "confirmChangeTitle": "Änderung bestätigen",
