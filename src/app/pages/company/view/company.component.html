@@ -19,6 +19,7 @@
       appendTo="body"
       bindLabel="keyName"
       formControlName="institution"
+      placeholder="{{ 'filter.institution' | translate }}"
     ></ng-select>
 
     <ng-select
@@ -27,6 +28,7 @@
       appendTo="body"
       bindLabel="keyName"
       formControlName="academicProgram"
+      placeholder="{{ 'filter.academicPrograms' | translate }}"
     ></ng-select>
 
     <div class="horizontal-spacer"></div>
@@ -94,7 +96,7 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="updateStatus(user, $event)">
+            <button mat-menu-item (click)="openConfirmationDialog(user, $event, user.company.isActive)">
               <span>{{ 'companyPage.button.status' | translate }} {{ (user.company.isActive ? 'companyPage.table.statusTaken' : 'companyPage.table.statusOpen') | translate }} </span>
             </button>
             <button mat-menu-item (click)="sendMail(user, $event)">

@@ -6,8 +6,11 @@ import {ActivatedRoute} from '@angular/router';
 import {SnackbarService} from 'src/app/services/snackbar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CompanyDetails} from "../../../core/model/companyDetails";
-import {of, switchMap} from "rxjs";
+import {catchError, of, switchMap} from "rxjs";
 import {Activity} from "../../../core/model/activity";
+import {DialogService} from "../../../services/dialog.service";
+import {AuthService} from '../../../services/auth.service';
+import {UserType} from "../../../core/enum/userType";
 
 @Component({
   selector: 'app-company-profile',
@@ -16,11 +19,16 @@ import {Activity} from "../../../core/model/activity";
 })
 export class CompanyProfileComponent implements OnInit {
   isLoading = true;
+  status = true;
+
   form = this.fb.group({
     name: this.fb.nonNullable.control<string>('', {
       validators: [Validators.required],
     }),
     logoBase64: this.fb.control<string | null>(null, {
+      validators: [],
+    }),
+    teamPictureBase64: this.fb.control<string | null>(null, {
       validators: [],
     }),
     industry: this.fb.control<string | null>(null, {
@@ -69,7 +77,9 @@ export class CompanyProfileComponent implements OnInit {
     private companyService: CompanyService,
     private translateService: TranslateService,
     private route: ActivatedRoute,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private dialogService: DialogService,
+    private authService: AuthService,
   ) {
   }
 
@@ -78,38 +88,63 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   protected get logoSrc(): string | null {
-    return this.form.controls.logoBase64.value ? `data:image/png;base64,${this.form.controls.logoBase64.value}` : null;
+    return this.form.controls.logoBase64.value
+      ? `data:image/png;base64,${this.form.controls.logoBase64.value}`
+      : null;
+  }
+
+  protected get teamPictureSrc(): string | null {
+    return this.form.controls.teamPictureBase64.value
+      ? `data:image/png;base64,${this.form.controls.teamPictureBase64.value}`
+      : null;
   }
 
   ngOnInit(): void {
     this.loadNeededData();
   }
 
-  updateStatus(): void {
-
-    if (!this.companyId) {
+  openConfirmationDialog(): void {
+    const userType = this.authService.getUserType();
+    const data = {
+      titleTranslationKey: "companyDialog.confirmChangeTitle",
+      messageTranslationKey: "companyDialog.confirmCompanyInactiveMessage"
+    };
+    if (userType === UserType.Admin) {
+      data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
+    }
+    const companyId = this.companyId;
+    if (!companyId) {
       return;
     }
 
-    this.companyService
-      .activateOrDeactivateCompany(this.companyId, false)
-      .subscribe({
-        next: (_) => {
-          this.snackBarService.success(
-            this.translateService.instant(
-              'companyProfilePage.snackBar.success.setInactive'
-            )
-          );
-        },
-        error: (err) => {
-          this.snackBarService.error(
-            this.translateService.instant(
-              'companyProfilePage.snackBar.error.setInactive'
-            )
-          );
-          console.error('Fehler beim Aktualisieren des Status:', err);
-        },
-      });
+    this.dialogService.openConfirmDialog(data).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
+        }
+        return this.companyService
+          .activateOrDeactivateCompany(companyId, false)
+      }),
+      catchError(error => {
+        this.snackBarService.error(
+          this.translateService.instant(
+            'companyProfilePage.snackBar.error.setInactive'
+          )
+        );
+        console.error('Fehler beim Aktualisieren des Status:', error);
+        return of(null);
+      })
+    ).subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.status = false;
+      this.snackBarService.success(
+        this.translateService.instant(
+          'companyProfilePage.snackBar.success.setInactive'
+        )
+      );
+    });
   }
 
   updateCompany(): void {
@@ -120,40 +155,57 @@ export class CompanyProfileComponent implements OnInit {
     }
     const input = this.getInputFromForm();
 
-    this.companyService.updateCompany(input).pipe(
-      switchMap(result => {
-        const activities = this.form.controls.activities.value;
-        if (!result || !activities) {
-          return of(null);
-        }
+    this.companyService
+      .updateCompany(input)
+      .pipe(
+        switchMap((result) => {
+          const activities = this.form.controls.activities.value;
+          if (!result || !activities) {
+            return of(null);
+          }
 
-        return this.companyService.createCompanyActivities(this.activities.value);
-      })
-    ).subscribe({
-      next: (_) => {
-        this.snackBarService.success(
-          this.translateService.instant(
-            'companyProfilePage.snackBar.success.updateCompany'
-          )
-        );
-      },
-      error: (error) => {
-        this.snackBarService.error(
-          this.translateService.instant(
-            'companyProfilePage.snackBar.error.updateCompany'
-          )
-        );
-        console.error('Failed to update company', error);
-      },
-    });
+          return this.companyService.createCompanyActivities(
+            this.activities.value
+          );
+        })
+      )
+      .subscribe({
+        next: (_) => {
+          this.snackBarService.success(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.updateCompany'
+            )
+          );
+        },
+        error: (error) => {
+          this.snackBarService.error(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.updateCompany'
+            )
+          );
+          console.error('Failed to update company', error);
+        },
+      });
   }
 
-  onFileSelect(event: any): void {
+  onFileSelect(event: any, flag: boolean): void {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.form.controls.logoBase64.patchValue(e.target.result.split(',')[1]);
+        const base64Data = e.target.result.split(',')[1];
+
+        if (!this.validateBase64Data(base64Data)) {
+          console.error(
+            'Error: Base64 data exceeds the allowed size or is invalid.'
+          );
+          this.handleOversizeFile();
+          return;
+        }
+
+        this.form.controls[
+          flag ? 'logoBase64' : 'teamPictureBase64'
+          ].patchValue(base64Data);
         this.showUploadButton = false;
         this.imageOpacity = 1;
       };
@@ -161,12 +213,35 @@ export class CompanyProfileComponent implements OnInit {
         console.error('Error occurred while reading file:', error);
       };
       reader.readAsDataURL(file);
+    } else {
+      console.log('test');
+    }
+  }
+
+  handleOversizeFile() {
+    this.snackBarService.error(
+      this.translateService.instant(
+        'companyProfilePage.snackBar.error.fileSize'
+      )
+    );
+  }
+
+  deleteImage(flag: boolean) {
+    if (flag) {
+      this.form.controls.logoBase64.patchValue('');
+    } else {
+      this.form.controls.teamPictureBase64.patchValue('');
     }
   }
 
   protected toggleImage() {
     this.showUploadButton = !this.showUploadButton;
     this.imageOpacity = this.imageOpacity === 1 ? 0.5 : 1;
+  }
+
+  private validateBase64Data(base64Data: string): boolean {
+    return base64Data.length <= 65535;
+
   }
 
   private loadNeededData() {
@@ -178,6 +253,7 @@ export class CompanyProfileComponent implements OnInit {
       if (!result) {
         return;
       }
+      this.status = result.isActive;
       this.initForm(result);
     });
   }
@@ -197,14 +273,14 @@ export class CompanyProfileComponent implements OnInit {
       company.companyDetails?.trainerProfessionalExperience,
       website: company.website,
       addresses: company.companyDetails?.addresses,
-      logoBase64: company.logoBase64
+      logoBase64: company.logoBase64,
+      teamPictureBase64: company.companyDetails?.teamPictureBase64,
     });
 
     this.activities.clear();
 
-    company.activities?.forEach(activity => {
-      const answerGroup =
-        this.createActivity(activity);
+    company.activities?.forEach((activity) => {
+      const answerGroup = this.createActivity(activity);
       this.activities.push(answerGroup);
     });
   }
@@ -213,12 +289,11 @@ export class CompanyProfileComponent implements OnInit {
     return this.fb.group({
       name: this.fb.nonNullable.control(activity.name),
       id: this.fb.nonNullable.control(activity.id),
-      value: this.fb.nonNullable.control(activity.value, Validators.required)
+      value: this.fb.nonNullable.control(activity.value, Validators.required),
     });
   }
 
   private getInputFromForm(): CompanyDetails {
-
     return {
       name: this.form.controls.name.value,
       website: this.form.controls.website.value,
@@ -230,11 +305,11 @@ export class CompanyProfileComponent implements OnInit {
       contactPersonHRM: this.form.controls.contactPersonHRM.value,
       trainer: this.form.controls.trainer.value,
       trainerTraining: this.form.controls.trainerTraining.value,
-      trainerProfessionalExperience: this.form.controls.trainerProfessionalExperience.value,
+      trainerProfessionalExperience:
+      this.form.controls.trainerProfessionalExperience.value,
       trainerPosition: this.form.controls.trainerPosition.value,
-      //teamPictureBase64: this.form.controls.name.value,
-      teamPictureBase64: null,
+      teamPictureBase64: this.form.controls.teamPictureBase64.value,
       addresses: this.form.controls.addresses.value,
-    }
+    };
   }
 }

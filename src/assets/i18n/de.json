@@ -63,6 +63,9 @@
     "confirmDeleteMessage": "Sind Sie sicher, dass Sie diesen Studenten löschen möchten?",
     "button": {
       "import": "Wähle File"
+    },
+    "import": {
+      "info": "Um eine Excel Datei erfolgreich hochzuladen, wird in der ersten Spalte die Email des Studenten benötigt."
     }
   },
   "companyDialog": {
@@ -72,9 +75,17 @@
     "multipleTitle": "Registriere Unternehmen",
     "confirmDeleteTitle": "Löschung bestätigen",
     "confirmDeleteMessage": "Sind Sie sicher, dass Sie dieses Unternehmen löschen möchten?",
+    "confirmCompanyInactiveMessage": "Sind Sie sicher, dass Sie ihr Unternehmen inaktiv setzen möchten? Eine Aktivierung kann nur durch die FH Joanneum vollzogen werden.",
+    "confirmAdminActiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen Aktiv setzen möchten?",
+    "confirmAdminInactiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen inaktiv setzen möchten?",
+    "confirmChangeTitle": "Änderung bestätigen",
+    "import": {
+      "info": "Um eine Excel Datei erfolgreich hochzuladen, wird in der ersten Spalte die Email des Unternehmens benötigt. In der zweiten Zeile muss der Name des Unternehmens angegeben werden."
+    },
     "button": {
       "import": "Wähle File",
-      "companyProfile": "Zum Unternehmens Profil"
+      "companyProfile": "Zum Unternehmens Profil",
+      "companyAppointment": "Zu den Terminen des Unternehmens"
     }
   },
   "changePasswordDialog": {
@@ -91,7 +102,9 @@
     "changePassword": "Passwort ändern",
     "homePage": "Startseite",
     "companies": "Unternehmen",
-    "students": "Studenten"
+    "students": "Studenten",
+    "appointments": "Termine",
+    "companyProfile": "Unternehmensprofil"
   },
   "login": {
     "sessionExpired": "Session abgelaufen. Bitte erneut anmelden.",
@@ -116,7 +129,10 @@
       "statusAktiv": "Aktiv setzen",
       "speichern": "Speichern",
       "pictureReload": "Bild aktualisieren",
-      "pictureUpload": "Bild hochladen"
+      "pictureUpload": "Bild hochladen",
+      "teampictureReload": "Teambild aktualisieren",
+      "teampictureUpload": "Teambild hochladen",
+      "deleteImage": "Bild entfernen"
     },
     "label": {
       "name": "Name des Unternehmens",
@@ -143,11 +159,21 @@
       },
       "error": {
         "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
-        "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut."
+        "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.",
+        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus"
       }
     }
   },
   "appointmentsPage": {
     "headline": "Heutige Termine"
+  },
+  "filter": {
+    "institution": "Institution",
+    "academicPrograms": "Akad. Prog."
+  },
+  "csvParserService": {
+    "error": "Keine gültige Tabelle",
+    "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
+    "wrongHeaderStudent": "Der Header muss email beinhalten"
   }
 }

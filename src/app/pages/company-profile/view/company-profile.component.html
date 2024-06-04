@@ -6,17 +6,20 @@
     <div class="form-group company-logo">
       @if (logoSrc) {
         <img [src]="logoSrc" alt="Company Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
-        <input type="file" #fileInput (change)="onFileSelect($event)"
+        <input type="file" #fileInput (change)="onFileSelect($event, true)"
                accept=".jpeg, .jpg, .png" style="display: none;">
         @if (showUploadButton) {
           <button mat-flat-button class="primary-button" (click)="fileInput.click()">
             <mat-icon>file_upload</mat-icon>
             {{ 'companyProfilePage.button.pictureReload' | translate }}
           </button>
+          <button mat-raised-button color="warn"
+              (click)="deleteImage(true)">{{ 'companyProfilePage.button.deleteImage' | translate }}
+          </button>
         }
 
       } @else {
-        <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
+        <input type="file" #fileInput (change)="onFileSelect($event, true)" accept=".jpeg, .jpg, .png" style="display: none;">
         <button mat-flat-button class="primary-button" (click)="fileInput.click()">
           <mat-icon>file_upload</mat-icon>
           {{ 'companyProfilePage.button.pictureUpload' | translate }}
@@ -81,6 +84,30 @@
       </div>
     </div>
 
+    <div class="form-group company-logo">
+      @if (teamPictureSrc) {
+        <img [src]="teamPictureSrc" alt="TeamPicture Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
+        <input type="file" #fileInput (change)="onFileSelect($event, false)" maxsize="1000"
+               accept=".jpeg, .jpg, .png" style="display: none;">
+        @if (showUploadButton) {
+          <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            {{ 'companyProfilePage.button.teampictureReload' | translate }}
+          </button>
+          <button mat-raised-button color="warn"
+            (click)="deleteImage(false)">{{ 'companyProfilePage.button.deleteImage' | translate }}
+          </button>
+        }
+
+      } @else {
+        <input type="file" #fileInput (change)="onFileSelect($event, false)" accept=".jpeg, .jpg, .png" style="display: none;">
+        <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+          <mat-icon>file_upload</mat-icon>
+          {{ 'companyProfilePage.button.teampictureUpload' | translate }}
+        </button>
+      }
+    </div>
+
     <div class="form-group">
       <mat-form-field>
         <mat-label>{{ 'companyProfilePage.label.contactPersonCompany' | translate }}</mat-label>
@@ -122,7 +149,9 @@
 
     <div class="form-group">
       <button mat-raised-button color="warn"
-              (click)="updateStatus()">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
+              (click)="openConfirmationDialog()"
+              type="button"
+              [disabled]="!status">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
       </button>
       <button mat-raised-button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate }}
       </button>
