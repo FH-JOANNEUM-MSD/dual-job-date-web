@@ -4,7 +4,7 @@ import {NavigationEnd, Router} from '@angular/router';
 import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
 import {TranslateService} from '@ngx-translate/core';
-
+import {CompanyService} from '../../../core/services/company.service';
 
 @Component({
   selector: 'app-headernavigation',
@@ -14,20 +14,22 @@ import {TranslateService} from '@ngx-translate/core';
 export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
+  userType: UserType | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private dialogService: DialogService,
     private translateService: TranslateService,
+    private companyService: CompanyService,
   ) {
   }
 
   ngOnInit(): void {
-    const userType = this.authService.getUserType();
+    this.userType = this.authService.getUserType();
     const companyId = this.authService.getCompanyId();
 
-    if (userType === UserType.Company) {
+    if (this.userType === UserType.Company) {
       this.navLinks = [
         {path: `/appointments/${companyId}`, label: 'Termine'},
         {path: `/company-profile/${companyId}`, label: 'Profil'},
@@ -39,12 +41,6 @@ export class HeadernavigationComponent implements OnInit {
         {path: '/student', label: 'Studenten'},
       ];
     }
-
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.updatePageTitle(this.router.url);
-      }
-    });
   }
 
   ngAfterViewInit(): void {
@@ -53,6 +49,7 @@ export class HeadernavigationComponent implements OnInit {
       this.updatePageTitle(this.router.url);
     });
   }
+
   logOut(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
@@ -70,9 +67,21 @@ export class HeadernavigationComponent implements OnInit {
         'navigation.companyProfile'
       );
     }else if(url.startsWith('/appointments/')){
-      this.currentPage = this.translateService.instant(
-        'navigation.appointments'
-      );
+      if(this.userType === UserType.Company){
+        this.currentPage = this.translateService.instant(
+          'navigation.appointments'
+        );
+      }else{
+        let companyId: any = url.substring(url.lastIndexOf('/') + 1);
+        companyId = Number(companyId);
+        this.companyService.getCompanyById(companyId).subscribe((result) => {
+          if (!result) {
+            return;
+          }
+          console.log(result)
+          this.currentPage = result.name;
+        });
+      }
     } else {
       // Map URLs to human-readable page names
       switch (url) {
