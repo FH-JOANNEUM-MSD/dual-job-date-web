@@ -112,16 +112,12 @@ export class CompanyProfileComponent implements OnInit {
     if(userType === UserType.Admin) {
       data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
     }
-    this.dialogService.openConfirmDialog(data).pipe(
-      switchMap(result => {
-        if (!result) {
-          return of(null);
-        }
-
-        this.updateStatus();
-        return of(null);
-      })
-    ).subscribe();
+    this.dialogService.openConfirmDialog(data).pipe().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.updateStatus();
+    });
   }
   updateStatus(): void {
     if (!this.companyId) {

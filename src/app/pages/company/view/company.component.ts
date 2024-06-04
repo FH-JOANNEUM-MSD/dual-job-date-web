@@ -107,16 +107,12 @@ export class CompanyComponent implements OnInit {
     if(isActive) {
       data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
     }
-    this.dialogService.openConfirmDialog(data).pipe(
-      switchMap(result => {
-        if (!result) {
-          return of(null);
-        }
-
-        this.updateStatus(user,event);
-        return of(null);
-      })
-    ).subscribe();
+    this.dialogService.openConfirmDialog(data).pipe().subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.updateStatus(user,event);
+    });
   }
   updateStatus(user: User, event: MouseEvent): void {
     event.stopPropagation();
