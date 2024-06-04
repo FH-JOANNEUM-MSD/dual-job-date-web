@@ -41,11 +41,6 @@ export class HeadernavigationComponent implements OnInit {
 
     this.updatePageTitle(this.router.url);
   }
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private dialogService: DialogService
-  ) {}
 
 
   logOut(): void {
