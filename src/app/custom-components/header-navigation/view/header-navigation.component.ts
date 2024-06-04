@@ -5,6 +5,7 @@ import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CompanyService} from '../../../core/services/company.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-headernavigation',
@@ -22,6 +23,7 @@ export class HeadernavigationComponent implements OnInit {
     private dialogService: DialogService,
     private translateService: TranslateService,
     private companyService: CompanyService,
+    private route: ActivatedRoute,
   ) {
   }
 
@@ -72,7 +74,7 @@ export class HeadernavigationComponent implements OnInit {
           'navigation.appointments'
         );
       }else{
-        let companyId: any = url.substring(url.lastIndexOf('/') + 1);
+        let companyId: any = this.route.snapshot.paramMap.get('companyId');
         companyId = Number(companyId);
         this.companyService.getCompanyById(companyId).subscribe((result) => {
           if (!result) {
