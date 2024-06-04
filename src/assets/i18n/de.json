@@ -139,5 +139,8 @@
         "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut."
       }
     }
+  },
+  "appointmentsPage":{
+    "headline": "Heutige Termine"
   }
 }

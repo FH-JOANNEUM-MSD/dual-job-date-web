@@ -1,13 +1,13 @@
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
-import { UserService } from '../../../core/services/user.service';
-import { UserType } from 'src/app/core/enum/userType';
-import { Component } from '@angular/core';
-import { switchMap, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { DialogService } from '../../../services/dialog.service';
-import { CompanyService } from 'src/app/core/services/company.service';
+import {FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from '../../../services/auth.service';
+import {UserService} from '../../../core/services/user.service';
+import {UserType} from 'src/app/core/enum/userType';
+import {Component} from '@angular/core';
+import {switchMap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {DialogService} from '../../../services/dialog.service';
+import {CompanyService} from 'src/app/core/services/company.service';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +33,8 @@ export class LoginComponent {
     private router: Router,
     private dialogService: DialogService,
     private fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   save() {
     if (this.loginForm.invalid) {
@@ -53,16 +54,24 @@ export class LoginComponent {
           this.authService.setCredentials(result);
 
           if (this.authService.getUserType() === UserType.Company) {
-            return this.authService.setCompanyId().pipe(
-              tap(() => {
-                const companyId = this.authService.getCompanyId();
-                this.router.navigate([`/company-profile/${companyId}`]);
-              })
+            return this.companyService.getCompanyById().pipe(
+              switchMap(company => {
+                if (!company) {
+                  return of(null);
+                }
+                this.authService.setCompanyId(company.id.toString());
+                this.router.navigate([`/company-profile/${company.id}`]);
+
+                if (result.isNew) {
+                  return this.dialogService.openChangePasswordDialog(true);
+                }
+                return of(null);
+              }),
             );
           } else if (this.authService.getUserType() == UserType.Admin) {
             this.router.navigate(['/home']);
           } else {
-            this.formError = 'Nicht gültiger Benutzertyp';
+            this.formError = 'Ungültiger Benutzertyp';
           }
 
           if (result.isNew) {

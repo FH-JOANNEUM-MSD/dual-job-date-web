@@ -1,126 +1,132 @@
-<!-- company-profile.component.html -->
 <app-headernavigation></app-headernavigation>
-<form [formGroup]="form" class="company-form" (ngSubmit)="updateCompany()">
+@if (isLoading) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <form [formGroup]="form" class="company-form" (ngSubmit)="updateCompany()">
     <div class="form-group company-logo">
-        @if(logoSrc){
-             <img [src]="logoSrc" alt="Company Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
-               <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
-                  @if(showUploadButton){
-                     <button mat-flat-button class="primary-button" (click)="fileInput.click()">
-                        <mat-icon>file_upload</mat-icon>
-                        {{ 'companyProfilePage.button.pictureReload' | translate}}
-                       </button>     
-                  }
-                         
-         }
-         @else {
-            <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
-                  <button mat-flat-button class="primary-button" (click)="fileInput.click()">
-                     <mat-icon>file_upload</mat-icon>
-                     {{ 'companyProfilePage.button.pictureUpload' | translate}}
-               </button>     
-            }     
-     </div>
+      @if (logoSrc) {
+        <img [src]="logoSrc" alt="Company Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
+        <input type="file" #fileInput (change)="onFileSelect($event)"
+               accept=".jpeg, .jpg, .png" style="display: none;">
+        @if (showUploadButton) {
+          <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            {{ 'companyProfilePage.button.pictureReload' | translate }}
+          </button>
+        }
+
+      } @else {
+        <input type="file" #fileInput (change)="onFileSelect($event)" accept=".jpeg, .jpg, .png" style="display: none;">
+        <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+          <mat-icon>file_upload</mat-icon>
+          {{ 'companyProfilePage.button.pictureUpload' | translate }}
+        </button>
+      }
+    </div>
     <div class="form-group company-name">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.name' | translate}}</mat-label>
-          <input matInput readonly id="name" type="text" formControlName="name" >
-       </mat-form-field>
-       
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.name' | translate }}</mat-label>
+        <input matInput id="name" type="text" formControlName="name">
+      </mat-form-field>
+
     </div>
-    
+
     <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.description' | translate}}</mat-label>
-          <textarea matInput id="shortDescription" formControlName="shortDescription"></textarea>
-       </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.description' | translate }}</mat-label>
+        <textarea matInput id="shortDescription" formControlName="shortDescription"></textarea>
+      </mat-form-field>
     </div>
- 
+
     <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.branche' | translate}}</mat-label>
-          <input matInput id="industry" formControlName="industry">
-       </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.branche' | translate }}</mat-label>
+        <input matInput id="industry" formControlName="industry">
+      </mat-form-field>
     </div>
- 
+
     <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.website' | translate}}</mat-label>
-          <input matInput id="website" type="url" formControlName="website">
-       </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.website' | translate }}</mat-label>
+        <input matInput id="website" type="url" formControlName="website">
+      </mat-form-field>
     </div>
- 
+
     <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.location' | translate}}</mat-label>
-          <input matInput id="location" formControlName="cities" readonly="">
-       </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.location' | translate }}</mat-label>
+        <input matInput id="location" formControlName="addresses">
+      </mat-form-field>
     </div>
- 
+
     <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.descriptionJob' | translate}}</mat-label>
-          <textarea matInput id="jobDescription" formControlName="jobDescription"></textarea>
-       </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.descriptionJob' | translate }}</mat-label>
+        <textarea matInput id="jobDescription" formControlName="jobDescription"></textarea>
+      </mat-form-field>
     </div>
-    <h3>{{ 'companyProfilePage.label.activities' | translate}}</h3>
-    <p>{{ 'companyProfilePage.label.activitesDescription' | translate}}</p>
-    <div class="form-group test" >
-       <div class=" activities-list">
-        @for (activity of activities; track $index) {
-          <div class="activity-item">
-             <label>{{ activity.name }}</label>
-             <mat-form-field class="exclude-width">
-                <input readonly matInput type="number" placeholder="{{ activity.value }}" min="1" max="5">
-             </mat-form-field>
+    <h3>{{ 'companyProfilePage.label.activities' | translate }}</h3>
+    <p>{{ 'companyProfilePage.label.activitesDescription' | translate }}</p>
+    <div class="form-group test">
+      <div class="activities-list" formArrayName="activities">
+        @for (activity of activities.controls; track $index) {
+          <div class="activity-item" [formGroupName]="$index">
+            <label>{{ activity.value.name }}</label>
+            <mat-form-field class="exclude-width">
+              <input matInput type="number" placeholder="{{ activity.value }}"
+                     formControlName="value" min="0" max="5">
+            </mat-form-field>
           </div>
         }
-       </div>
+      </div>
     </div>
- 
-    <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.contactPersonCompany' | translate}}</mat-label>
-          <input matInput id="contactPersonInCompany" formControlName="contactPersonInCompany">
-       </mat-form-field>
-    </div>
- 
-    <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.contactPersonHRM' | translate}}</mat-label>
-          <input matInput id="contactPersonHRM" formControlName="contactPersonHRM">
-       </mat-form-field>
-    </div>
-    <h3>{{ 'companyProfilePage.label.trainerHeadline' | translate}}</h3>
-    <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.trainerName' | translate}}</mat-label>
-          <input matInput id="trainer" formControlName="trainer">
-       </mat-form-field>
-    </div>
-    <div class="form-group">
-        <mat-form-field>
-            <mat-label>{{ 'companyProfilePage.label.education' | translate}}</mat-label>
-            <input matInput id="trainerTraining" formControlName="trainerTraining">
-         </mat-form-field>
-    </div>
-    <div class="form-group">
-       <mat-form-field>
-          <mat-label>{{ 'companyProfilePage.label.experience' | translate}}</mat-label>
-          <input matInput id="trainerProfessionalExperience" formControlName="trainerProfessionalExperience">
-       </mat-form-field>
-    </div>
-    <div class="form-group">
-        <mat-form-field>
-            <mat-label>{{ 'companyProfilePage.label.currentPosition' | translate}}</mat-label>
-            <input matInput id="trainerPosition" formControlName="trainerPosition">
-         </mat-form-field>
-    </div>
-   
-    <div class="form-group">
-      <button mat-raised-button color="primary" (click)="updateStatus()">{{ 'companyProfilePage.button.statusInaktiv' | translate}}</button>
-      <button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate}}</button>
 
-   </div>
- </form>
- 
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.contactPersonCompany' | translate }}</mat-label>
+        <input matInput id="contactPersonInCompany" formControlName="contactPersonInCompany">
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.contactPersonHRM' | translate }}</mat-label>
+        <input matInput id="contactPersonHRM" formControlName="contactPersonHRM">
+      </mat-form-field>
+    </div>
+    <h3>{{ 'companyProfilePage.label.trainerHeadline' | translate }}</h3>
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.trainerName' | translate }}</mat-label>
+        <input matInput id="trainer" formControlName="trainer">
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.education' | translate }}</mat-label>
+        <input matInput id="trainerTraining" formControlName="trainerTraining">
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.experience' | translate }}</mat-label>
+        <input matInput id="trainerProfessionalExperience" formControlName="trainerProfessionalExperience">
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field>
+        <mat-label>{{ 'companyProfilePage.label.currentPosition' | translate }}</mat-label>
+        <input matInput id="trainerPosition" formControlName="trainerPosition">
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <button mat-raised-button color="warn"
+              (click)="updateStatus()">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
+      </button>
+      <button mat-raised-button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate }}
+      </button>
+
+    </div>
+  </form>
+}

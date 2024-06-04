@@ -14,8 +14,8 @@ import {CompanyService} from '../../../core/services/company.service';
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {switchMap} from "rxjs/operators";
-import { SnackbarService } from 'src/app/services/snackbar.service';
-import { TranslateService } from '@ngx-translate/core';
+import {SnackbarService} from 'src/app/services/snackbar.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company',
@@ -30,7 +30,7 @@ export class CompanyComponent implements OnInit {
     institution: this.fb.nonNullable.control<Institution | null>(null, {
       validators: [Validators.required],
     }),
-    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>(null, {
+    academicProgram: this.fb.nonNullable.control<AcademicProgram | null>({value: null, disabled: true}, {
       validators: [Validators.required],
     }),
   });
@@ -110,11 +110,11 @@ export class CompanyComponent implements OnInit {
           user.company.isActive = !user.company.isActive;
         },
       });
-    if(user.company.isActive){
+    if (user.company.isActive) {
       this.snackbarService.success(this.translateService.instant(
         'companyProfilePage.snackBar.success.setInactive'
       ))
-    }else{
+    } else {
       this.snackbarService.success(this.translateService.instant(
         'companyProfilePage.snackBar.success.setActive'
       ))
@@ -183,12 +183,16 @@ export class CompanyComponent implements OnInit {
 
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
+        case 'name':
+          return item.company.name;
         case 'industry':
           return item.company.industry;
         case 'companyWebsite':
           return item.company.website;
         case 'status':
           return item.company.isActive ? 1 : 0;
+        case 'academicProgram':
+          return item.academicProgram.name;
         default:
           // @ts-ignore
           return item[property];

@@ -1,12 +1,11 @@
-﻿import { Injectable } from '@angular/core';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { Company } from '../model/company';
-import { CompanyDetails } from '../model/companyDetails';
-import { RegisterCompany } from '../model/registerCompany';
-import { Activity } from '../model/activity';
-import { Address } from '../model/address';
+﻿import {Injectable} from '@angular/core';
+import {catchError, map, Observable, of, tap, throwError} from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {environment} from '../../../environments/environment';
+import {Company} from '../model/company';
+import {CompanyDetails} from '../model/companyDetails';
+import {RegisterCompany} from '../model/registerCompany';
+import {Activity} from "../model/activity";
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +13,8 @@ import { Address } from '../model/address';
 export class CompanyService {
   private urlPath: string = '/Company';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   // ****** GET ****** \\
 
@@ -54,36 +54,6 @@ export class CompanyService {
     );
   }
 
-  getCompanyDetails(id: number): Observable<CompanyDetails | null> {
-    return this.http
-      .get<CompanyDetails>(
-        `${environment.apiBasePath}${this.urlPath}/Details?id=${id}`
-      )
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          console.log('test2');
-          return of(null);
-        })
-      );
-  }
-
-  // TODO: NEEDED ?
-  getCompanyActivities(id: string): Observable<Activity[] | null> {
-    return this.http
-      .get<Activity[]>(
-        `${environment.apiBasePath}${this.urlPath}/Activities?id=${id}`
-      )
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
-        })
-      );
-  }
-
   // ****** POST ****** \\
 
   register(input: RegisterCompany): Observable<Company | null> {
@@ -102,7 +72,6 @@ export class CompanyService {
   }
 
   createCompanyActivities(activities: Activity[]): Observable<any> {
-    // TODO implement GlobalStorage / LocalStorage something
     return this.http
       .post<any>(
         `${environment.apiBasePath}${this.urlPath}/Activities`,
@@ -117,34 +86,23 @@ export class CompanyService {
       );
   }
 
-  createCompanyLocation(addresses: Address[]): Observable<any> {
-    return this.http
-      .post<Location[]>(
-        `${environment.apiBasePath}${this.urlPath}/Locations`,
-        addresses
-      )
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
-        })
-      );
-  }
   // ****** PUT ****** \\
 
-  updateCompany(company: Company): Observable<Company | null> {
+  updateCompany(company: CompanyDetails): Observable<boolean> {
     return this.http
       .put<Company>(
         `${environment.apiBasePath}${this.urlPath}/UpdateCompany`,
         company
       )
       .pipe(
-        catchError((error) => {
+        map(_ => {
+          return true;
+        }),
+        catchError(error => {
           // TODO implement Error Handling
           console.error(error);
-          return of(null);
-        })
+          return of(false);
+        }),
       );
   }
 
@@ -164,21 +122,6 @@ export class CompanyService {
         catchError((error) => {
           console.error('Failed to update company status', error);
           return throwError(() => new Error('Failed to update company status'));
-        })
-      );
-  }
-
-  updateCompanyDetails(companyDetails: CompanyDetails): Observable<any> {
-    return this.http
-      .put<any>(
-        `${environment.apiBasePath}${this.urlPath}/Details`,
-        companyDetails
-      )
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
         })
       );
   }

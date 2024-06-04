@@ -26,6 +26,8 @@
     "@ng-select/ng-select": "^12.0.7",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "angular-calendar": "^0.31.1",
+    "date-fns": "^3.6.0",
     "node": "^21.7.1",
     "rxjs": "^7.8.0",
     "tslib": "^2.3.0",

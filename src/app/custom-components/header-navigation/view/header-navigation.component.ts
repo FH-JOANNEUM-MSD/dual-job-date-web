@@ -5,6 +5,7 @@ import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
 import {filter} from "rxjs/operators";
 
+
 @Component({
   selector: 'app-headernavigation',
   templateUrl: './header-navigation.component.html',
@@ -14,27 +15,38 @@ export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
 
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dialogService: DialogService
+  ) {
+  }
+
   ngOnInit(): void {
     const userType = this.authService.getUserType();
+    const companyId = this.authService.getCompanyId();
 
     if (userType === UserType.Company) {
-      this.navLinks = [];
+      this.navLinks = [
+        {path: `/appointments/${companyId}`, label: 'Termine'},
+        {path: `/company-profile/${companyId}`, label: 'Profil'},
+      ];
     } else {
       this.navLinks = [
-        { path: '/home', label: 'Startseite' },
-        { path: '/company', label: 'Unternehmen' },
-        { path: '/student', label: 'Studenten' },
+        {path: '/home', label: 'Startseite'},
+        {path: '/company', label: 'Unternehmen'},
+        {path: '/student', label: 'Studenten'},
       ];
     }
 
     this.updatePageTitle(this.router.url);
   }
-
   constructor(
     private authService: AuthService,
     private router: Router,
     private dialogService: DialogService
   ) {}
+
 
   logOut(): void {
     this.authService.logout();

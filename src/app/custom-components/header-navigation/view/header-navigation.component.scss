@@ -59,6 +59,11 @@ nav {
 
       &.active {
         text-decoration: underline;
+        color: var(--secondary-color-buttons);
+      }
+      &:hover{
+        text-decoration: underline;
+        color: var(--secondary-color-buttons);
       }
     }
 

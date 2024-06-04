@@ -25,11 +25,14 @@ import {StudentDialogComponent} from './dialogs/student-dialog/student-dialog.co
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {CompanyDialogComponent} from "./dialogs/company-dialog/company-dialog.component";
-import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {CompanyProfileComponent} from "./pages/company-profile/view/company-profile.component";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {ChangePasswordDialogComponent} from "./dialogs/change-password-dialog/change-password-dialog.component";
 import {ConfirmDialogComponent} from "./dialogs/confirm-dialog/confirm-dialog.component";
+import {AppointmentsComponent} from "./pages/appointments/appointments.component";
+import {CalendarModule, CalendarUtils, DateAdapter} from "angular-calendar";
+import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
+import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -48,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PageNotFoundComponent,
     CompanyProfileComponent,
     ChangePasswordDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    AppointmentsComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,9 +81,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    CalendarUtils
   ],
   bootstrap: [AppComponent],
 })

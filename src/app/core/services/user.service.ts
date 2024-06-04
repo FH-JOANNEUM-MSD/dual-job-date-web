@@ -103,20 +103,6 @@ export class UserService {
     );
   }
 
-  // TODO What is that
-  deleteUserWithPassword(email: string, password: string): Observable<any | null> {
-    return this.http.post<any>(`${environment.apiBasePath}${this.urlPath}/DeleteUserWithPassword`, {
-      password: password,
-      email: email,
-    }).pipe(
-      catchError(error => {
-        // TODO implement Error Handling
-        console.error(error);
-        return of(null);
-      }),
-    );
-  }
-
   // ****** DELETE ****** \\
 
   deleteUser(id: string): Observable<any | null> {
@@ -182,13 +168,13 @@ export class UserService {
       case UserType.Student:
         subject = 'Einladung zum Dual Job Dating';
         body = `Liebe/r Student,\n\n` +
-          'Wir laden dich herzlich zum Dual Job Dating ein.\n' +
+          'Wir laden Sie herzlich zum Dual Job Dating ein.\n' +
           '\n' +
-          'Hier sind deine Anmeldedaten:\n' +
+          'Hier sind Ihre Anmeldedaten:\n' +
           `\nE-Mail: ${user.email}\n` +
           `Passwort: ${password}\n` +
           '\n' +
-          'Wir freuen uns darauf, dich beim Job-Dating-Event zu sehen und wünschen dir viel Erfolg!\n' +
+          'Wir freuen uns darauf, Sie beim Job-Dating-Event zu sehen und wünschen Ihnen viel Erfolg!\n' +
           '\nMit freundlichen Grüßen,\nFH Joanneum';
         break;
       case UserType.Company:
@@ -196,8 +182,9 @@ export class UserService {
         body = `Sehr geehrte Damen und Herren,\n\n` +
           'Wir laden Sie herzlich zur Registrierung für das Dual Job Dating ein.\n' +
           '\n' +
-          'Bitte registrieren Sie sich über folgenden Link:\n' +
-          `${environment.apiBasePath}/login` +
+          'Hier sind Ihre Anmeldedaten für https://dual-dating.msd-moss-test.fh-joanneum.at/home:\n' +
+          `\nE-Mail: ${user.email}\n` +
+          `Passwort: ${password}\n` +
           '\n' +
           'Wir freuen uns darauf, Sie beim Job-Dating-Event zu sehen!\n' +
           '\nMit freundlichen Grüßen,\nFH Joanneum';

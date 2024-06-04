@@ -1,0 +1,11 @@
+<app-headernavigation></app-headernavigation>
+<div>
+  <h2>{{ 'appointmentsPage.headline' | translate }}</h2>
+  <mwl-calendar-day-view
+  class="custom-calender"
+  [events]="events"
+  [viewDate]="viewDate"
+>
+</mwl-calendar-day-view>
+</div>
+
