@@ -3,7 +3,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
-import {filter} from "rxjs/operators";
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -18,7 +18,8 @@ export class HeadernavigationComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private translateService: TranslateService,
   ) {
   }
 
@@ -54,23 +55,38 @@ export class HeadernavigationComponent implements OnInit {
 
   updatePageTitle(url: string) {
     // Here you can add logic to map URLs to human-readable page names
+
     if (url.startsWith('/company-profile/')) {
-      this.currentPage = 'Unternehmensprofil';
+      this.currentPage = this.translateService.instant(
+        'navigation.companyProfile'
+      );
+    }else if(url.startsWith('/appointments/')){
+      this.currentPage = this.translateService.instant(
+        'navigation.appointments'
+      );
     } else {
       // Map URLs to human-readable page names
       switch (url) {
         case '/home':
-          this.currentPage = 'Startseite';
+          this.currentPage = this.translateService.instant(
+            'navigation.homePage'
+          );
           break;
         case '/company':
-          this.currentPage = 'Unternehmen';
+          this.currentPage = this.translateService.instant(
+            'navigation.companies'
+          );
           break;
         case '/student':
-          this.currentPage = 'Studenten';
+          this.currentPage = this.translateService.instant(
+            'navigation.students'
+          );
           break;
         // Add other cases as needed
         default:
-          this.currentPage = '404';
+          this.currentPage = this.translateService.instant(
+            '404.notFound'
+          );
           break;
       }
     }
