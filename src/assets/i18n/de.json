@@ -160,6 +160,10 @@
   "appointmentsPage":{
     "headline": "Heutige Termine"
   },
+  "filter": {
+    "institution": "Institution",
+    "academicPrograms": "Akad. Prog."
+  },
   "csvParserService": {
     "error": "Keine gültige Tabelle",
     "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
