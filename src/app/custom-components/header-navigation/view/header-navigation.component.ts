@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import {NavigationEnd, Router} from '@angular/router';
-import { UserType } from 'src/app/core/enum/userType';
-import { DialogService } from '../../../services/dialog.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../../services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {UserType} from 'src/app/core/enum/userType';
+import {DialogService} from '../../../services/dialog.service';
 import {TranslateService} from '@ngx-translate/core';
 import {CompanyService} from '../../../core/services/company.service';
-import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-headernavigation',
@@ -68,19 +67,18 @@ export class HeadernavigationComponent implements OnInit {
       this.currentPage = this.translateService.instant(
         'navigation.companyProfile'
       );
-    }else if(url.startsWith('/appointments/')){
-      if(this.userType === UserType.Company){
+    } else if (url.startsWith('/appointments/')) {
+      if (this.userType === UserType.Company) {
         this.currentPage = this.translateService.instant(
           'navigation.appointments'
         );
-      }else{
+      } else {
         let companyId: any = this.route.snapshot.paramMap.get('companyId');
         companyId = Number(companyId);
         this.companyService.getCompanyById(companyId).subscribe((result) => {
           if (!result) {
             return;
           }
-          console.log(result)
           this.currentPage = result.name;
         });
       }

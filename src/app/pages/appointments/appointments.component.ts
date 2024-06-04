@@ -40,7 +40,7 @@ export class AppointmentsComponent implements OnInit {
 
   private loadNeededData() {
     this.companyId = Number(this.route.snapshot.paramMap.get('companyId'));
-    this.appointmentService.getAppointments().subscribe((result) => {
+    this.appointmentService.getAppointments(this.companyId).subscribe((result) => {
       this.isLoading = false;
       if (!result) {
         return;

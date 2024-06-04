@@ -213,8 +213,6 @@ export class CompanyProfileComponent implements OnInit {
         console.error('Error occurred while reading file:', error);
       };
       reader.readAsDataURL(file);
-    } else {
-      console.log('test');
     }
   }
 
