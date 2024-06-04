@@ -77,7 +77,8 @@
     },
     "button": {
       "import": "Wähle File",
-      "companyProfile": "Zum Unternehmens Profil"
+      "companyProfile": "Zum Unternehmens Profil",
+      "companyAppointment": "Zu den Terminen des Unternehmens"
     }
   },
   "changePasswordDialog": {
@@ -94,7 +95,9 @@
     "changePassword": "Passwort ändern",
     "homePage": "Startseite",
     "companies": "Unternehmen",
-    "students": "Studenten"
+    "students": "Studenten",
+    "appointments": "Termine",
+    "companyProfile": "Unternehmensprofil"
   },
   "login": {
     "sessionExpired": "Session abgelaufen. Bitte erneut anmelden.",

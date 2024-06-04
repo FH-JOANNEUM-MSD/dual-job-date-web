@@ -52,9 +52,14 @@
         formControlName="academicProgram"
       ></ng-select>
 
-      <button mat-raised-button color="primary" (click)="redirectToCompanyProfile()" *ngIf="user?.company">
-        {{ 'companyDialog.button.companyProfile' | translate }}      </button>
-
+      <div *ngIf="user?.company" class="refCompany">
+        <button mat-raised-button color="primary" (click)="redirectToCompany('company-profile')">
+          {{ 'companyDialog.button.companyProfile' | translate }}      </button>
+        
+        <button mat-raised-button color="primary" (click)="redirectToCompany('appointments')">
+            {{ 'companyDialog.button.companyAppointment' | translate }}      </button>
+      </div>
+      
     </form>
   }
 </mat-dialog-content>

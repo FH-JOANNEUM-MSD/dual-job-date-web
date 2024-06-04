@@ -186,10 +186,9 @@ export class CompanyDialogComponent implements OnInit {
     });
   }
 
-  redirectToCompanyProfile() {
-    console.log(this.user);
+  redirectToCompany(destination: string) {
     if (this.user && this.user.company && this.user.company.id) {
-      this.router.navigate([`/company-profile/${this.user.company.id}`]);
+      this.router.navigate([`/${destination}/${this.user.company.id}`]);
     }
   }
 }
