@@ -53,7 +53,8 @@ export class LoginComponent {
           }
           this.authService.setCredentials(result);
 
-          if (this.authService.getUserType() === UserType.Company) {
+          const userType = this.authService.getUserType();
+          if (userType === UserType.Company) {
             return this.companyService.getCompanyById().pipe(
               switchMap(company => {
                 if (!company) {
@@ -68,7 +69,7 @@ export class LoginComponent {
                 return of(null);
               }),
             );
-          } else if (this.authService.getUserType() == UserType.Admin) {
+          } else if (userType == UserType.Admin) {
             this.router.navigate(['/home']);
           } else {
             this.formError = 'Ungültiger Benutzertyp';

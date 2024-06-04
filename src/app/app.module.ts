@@ -30,9 +30,10 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {ChangePasswordDialogComponent} from "./dialogs/change-password-dialog/change-password-dialog.component";
 import {ConfirmDialogComponent} from "./dialogs/confirm-dialog/confirm-dialog.component";
 import {AppointmentsComponent} from "./pages/appointments/appointments.component";
-import {CalendarModule, CalendarUtils, DateAdapter} from "angular-calendar";
+import {CalendarDateFormatter, CalendarModule, CalendarUtils, DateAdapter} from "angular-calendar";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
+import {CustomDateFormatter} from "./utils/custom-date-formatter.provider";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -88,7 +89,11 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-    CalendarUtils
+    CalendarUtils,
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter,
+    },
   ],
   bootstrap: [AppComponent],
 })

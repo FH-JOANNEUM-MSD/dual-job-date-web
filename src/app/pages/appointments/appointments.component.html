@@ -1,11 +1,19 @@
 <app-headernavigation></app-headernavigation>
-<div>
-  <h2>{{ 'appointmentsPage.headline' | translate }}</h2>
-  <mwl-calendar-day-view
-  class="custom-calender"
-  [events]="events"
-  [viewDate]="viewDate"
->
-</mwl-calendar-day-view>
-</div>
+@if (isLoading) {
+  <mat-spinner></mat-spinner>
+} @else {
+  <div>
+    <h2>{{ viewDate | date : 'dd.MM.yyyy' }}</h2>
+    <mwl-calendar-day-view
+      [dayEndHour]="dayEndHour"
+      [dayStartHour]="dayStartHour"
+      [events]="events"
+      [hourSegments]="4"
+      [viewDate]="viewDate"
+      class="custom-calender"
+    >
+    </mwl-calendar-day-view>
+  </div>
+
+}
 

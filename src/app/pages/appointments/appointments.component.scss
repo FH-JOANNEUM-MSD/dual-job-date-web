@@ -1,28 +1,29 @@
 
-::ng-deep body{
-    background-color: var(--secondary-color-buttons);
-    h2{
-        margin: 0;
-        padding-top: 60px;
-        padding-left: 60px;
-        padding-bottom: 30px;
-        color: var(--primary-color-text-white);
-    }
-   
-   
+::ng-deep body {
+  h2 {
+    margin: 0;
+    padding-top: 30px;
+    padding-left: 60px;
+    padding-bottom: 30px;
+  }
+
+
 }
-::ng-deep .cal-week-view{
-    margin-left: 60px;
-    margin-right: 60px;
-    height: 100%;
-    border-radius: 10px;
-    border: none;
+
+::ng-deep .cal-week-view {
+  margin-left: 60px;
+  margin-right: 60px;
+  height: 100%;
+  border-radius: 10px;
+  border: none;
 }
-::ng-deep .cal-week-view .cal-time-events{
-    border: none;
+
+::ng-deep .cal-week-view .cal-time-events {
+  border: none;
 }
-::ng-deep .cal-event-title{
-    color: var(--primary-color-buttons);
+
+::ng-deep .cal-event-title {
+  color: var(--primary-color-buttons);
 }
 
 

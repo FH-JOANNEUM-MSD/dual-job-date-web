@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CalendarEvent } from 'angular-calendar';
-import { AppointmentService } from '../../core/services/appointment.service';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {CalendarEvent} from 'angular-calendar';
+import {AppointmentService} from '../../core/services/appointment.service';
+import {ActivatedRoute} from '@angular/router';
 
 const colors = {
   primary: {
@@ -21,15 +21,18 @@ const colors = {
 })
 export class AppointmentsComponent implements OnInit {
   viewDate: Date = new Date();
+  dayStartHour = 6;
+  dayEndHour = 20;
   events: CalendarEvent[] = [];
 
   companyId: number | null = null;
+  isLoading = true;
 
-  // TODO DATUM ANZEIGEN
   constructor(
     private appointmentService: AppointmentService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+  ) {
+  }
 
   ngOnInit() {
     this.loadNeededData();
@@ -38,16 +41,34 @@ export class AppointmentsComponent implements OnInit {
   private loadNeededData() {
     this.companyId = Number(this.route.snapshot.paramMap.get('companyId'));
     this.appointmentService.getAppointments().subscribe((result) => {
+      this.isLoading = false;
       if (!result) {
         return;
       }
+
+      this.dayStartHour = result.reduce((result, current) => {
+        const temp = new Date(current.startTime).getHours();
+        if (temp < result) {
+          return temp;
+        }
+        return result;
+      }, 24) - 1;
+
+      this.dayEndHour = result.reduce((result, current) => {
+        const temp = new Date(current.startTime).getHours();
+        if (temp > result) {
+          return temp;
+        }
+        return result;
+      }, 0) + 1;
+
       this.viewDate = result[0].startTime;
       this.events = result.map((appointment) => {
         return {
           start: new Date(appointment.startTime),
           end: new Date(appointment.endTime),
           title: appointment.student,
-          color: { ...colors.primary },
+          color: {...colors.primary},
         };
       });
     });
