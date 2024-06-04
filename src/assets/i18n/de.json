@@ -71,7 +71,8 @@
     "confirmChangeTitle": "Änderung bestätigen",
     "button": {
       "import": "Wähle File",
-      "companyProfile": "Zum Unternehmens Profil"
+      "companyProfile": "Zum Unternehmens Profil",
+      "companyAppointment": "Zu den Terminen des Unternehmens"
     }
   },
   "changePasswordDialog": {
