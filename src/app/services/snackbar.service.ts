@@ -23,16 +23,4 @@ export class SnackbarService {
       panelClass: ['error-snackbar'],
     });
   }
-
-  reloadPage(message: string, action: string = 'OK', duration: number = 3000){
-    const snackBarRef = this.snackBar.open(message, action, {
-      duration: duration,
-      verticalPosition: 'top',
-      panelClass: ['success-snackbar'],
-    });
-
-    snackBarRef.afterDismissed().subscribe(() => {
-      window.location.reload();
-    });
-  }
 }

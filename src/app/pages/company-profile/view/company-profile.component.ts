@@ -128,11 +128,12 @@ export class CompanyProfileComponent implements OnInit {
       .activateOrDeactivateCompany(this.companyId, false)
       .subscribe({
         next: (_) => {
-          this.snackBarService.reloadPage(
+          this.snackBarService.success(
             this.translateService.instant(
               'companyProfilePage.snackBar.success.setInactive'
             )
           );
+          this.loadNeededData();
         },
         error: (err) => {
           this.snackBarService.error(
