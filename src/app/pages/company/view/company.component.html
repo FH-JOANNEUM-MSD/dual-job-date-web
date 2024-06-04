@@ -1,11 +1,9 @@
 <app-headernavigation></app-headernavigation>
 @if (isLoadingResults) {
-  <mat-spinner></mat-spinner>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
 } @else {
-  <style>
-
-
-  </style>
   <form [formGroup]="form" class="row">
 
     <mat-form-field class="search_bar">
@@ -109,9 +107,8 @@
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row (dblclick)="openCompanyDialog(row.id)"></tr>
 
-      <tr class="mat-row" *matNoDataRow>
-        <!-- TODO Add no Data image or something-->
-        <td class="mat-cell" colspan="4">No data...</td>
+      <tr class="nodataImage" *matNoDataRow>
+        <img ngSrc="assets/images/nodata.png" alt="nodata" height="600" width="800">
       </tr>
     </table>
 

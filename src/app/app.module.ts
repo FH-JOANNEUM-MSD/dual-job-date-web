@@ -33,6 +33,7 @@ import {AppointmentsComponent} from "./pages/appointments/appointments.component
 import {CalendarModule, CalendarUtils, DateAdapter} from "angular-calendar";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
+import {NgOptimizedImage} from "@angular/common";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -54,38 +55,39 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmDialogComponent,
     AppointmentsComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    TranslateModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatButtonModule,
-    NgSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinner,
-    MatDialogModule,
-    MatIconModule,
-    FormsModule,
-    MatMenuModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory,
-    })
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        TranslateModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatButtonModule,
+        NgSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinner,
+        MatDialogModule,
+        MatIconModule,
+        FormsModule,
+        MatMenuModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        CalendarModule.forRoot({
+            provide: DateAdapter,
+            useFactory: adapterFactory,
+        }),
+        NgOptimizedImage
+    ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     CalendarUtils

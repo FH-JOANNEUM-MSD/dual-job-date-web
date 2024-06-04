@@ -1,7 +1,10 @@
 <app-headernavigation></app-headernavigation>
 @if (isLoading) {
-  <mat-spinner></mat-spinner>
-} @else {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+}
+@else {
   <form [formGroup]="form" class="company-form" (ngSubmit)="updateCompany()">
     <div class="form-group company-logo">
       @if (logoSrc) {
