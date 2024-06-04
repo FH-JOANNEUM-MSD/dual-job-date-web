@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CompanyService} from '../../../core/services/company.service';
-import {Company} from 'src/app/core/model/company';
-import {ActivatedRoute} from '@angular/router';
-import {SnackbarService} from 'src/app/services/snackbar.service';
-import {TranslateService} from '@ngx-translate/core';
-import {CompanyDetails} from "../../../core/model/companyDetails";
-import {of, switchMap} from "rxjs";
-import {Activity} from "../../../core/model/activity";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CompanyService } from '../../../core/services/company.service';
+import { Company } from 'src/app/core/model/company';
+import { ActivatedRoute } from '@angular/router';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
+import { CompanyDetails } from '../../../core/model/companyDetails';
+import { of, switchMap } from 'rxjs';
+import { Activity } from '../../../core/model/activity';
 
 @Component({
   selector: 'app-company-profile',
@@ -16,11 +16,15 @@ import {Activity} from "../../../core/model/activity";
 })
 export class CompanyProfileComponent implements OnInit {
   isLoading = true;
+
   form = this.fb.group({
     name: this.fb.nonNullable.control<string>('', {
       validators: [Validators.required],
     }),
     logoBase64: this.fb.control<string | null>(null, {
+      validators: [],
+    }),
+    teamPictureBase64: this.fb.control<string | null>(null, {
       validators: [],
     }),
     industry: this.fb.control<string | null>(null, {
@@ -70,15 +74,21 @@ export class CompanyProfileComponent implements OnInit {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private snackBarService: SnackbarService
-  ) {
-  }
+  ) {}
 
   get activities(): FormArray {
     return this.form.controls.activities as FormArray;
   }
 
   protected get logoSrc(): string | null {
-    return this.form.controls.logoBase64.value ? `data:image/png;base64,${this.form.controls.logoBase64.value}` : null;
+    return this.form.controls.logoBase64.value
+      ? `data:image/png;base64,${this.form.controls.logoBase64.value}`
+      : null;
+  }
+  protected get teamPictureSrc(): string | null {
+    return this.form.controls.teamPictureBase64.value
+      ? `data:image/png;base64,${this.form.controls.teamPictureBase64.value}`
+      : null;
   }
 
   ngOnInit(): void {
@@ -86,7 +96,6 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   updateStatus(): void {
-
     if (!this.companyId) {
       return;
     }
@@ -113,47 +122,63 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   updateCompany(): void {
-
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
     }
     const input = this.getInputFromForm();
 
-    this.companyService.updateCompany(input).pipe(
-      switchMap(result => {
-        const activities = this.form.controls.activities.value;
-        if (!result || !activities) {
-          return of(null);
-        }
+    this.companyService
+      .updateCompany(input)
+      .pipe(
+        switchMap((result) => {
+          const activities = this.form.controls.activities.value;
+          if (!result || !activities) {
+            return of(null);
+          }
 
-        return this.companyService.createCompanyActivities(this.activities.value);
-      })
-    ).subscribe({
-      next: (_) => {
-        this.snackBarService.success(
-          this.translateService.instant(
-            'companyProfilePage.snackBar.success.updateCompany'
-          )
-        );
-      },
-      error: (error) => {
-        this.snackBarService.error(
-          this.translateService.instant(
-            'companyProfilePage.snackBar.error.updateCompany'
-          )
-        );
-        console.error('Failed to update company', error);
-      },
-    });
+          return this.companyService.createCompanyActivities(
+            this.activities.value
+          );
+        })
+      )
+      .subscribe({
+        next: (_) => {
+          this.snackBarService.success(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.success.updateCompany'
+            )
+          );
+        },
+        error: (error) => {
+          this.snackBarService.error(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.updateCompany'
+            )
+          );
+          console.error('Failed to update company', error);
+        },
+      });
   }
 
-  onFileSelect(event: any): void {
+  onFileSelect(event: any, flag: boolean): void {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.form.controls.logoBase64.patchValue(e.target.result.split(',')[1]);
+        const base64Data = e.target.result.split(',')[1];
+
+        if (!this.validateBase64Data(base64Data)) {
+          console.error(
+            'Error: Base64 data exceeds the allowed size or is invalid.'
+          );
+          this.handleOversizeFile();
+          return;
+        }
+
+        this.form.controls[
+          flag ? 'logoBase64' : 'teamPictureBase64'
+        ].patchValue(base64Data);
         this.showUploadButton = false;
         this.imageOpacity = 1;
       };
@@ -161,9 +186,24 @@ export class CompanyProfileComponent implements OnInit {
         console.error('Error occurred while reading file:', error);
       };
       reader.readAsDataURL(file);
+    } else {
+      console.log('test');
     }
   }
 
+  private validateBase64Data(base64Data: string): boolean {
+    if (base64Data.length > 65535) {
+      return false;
+    }
+    return true;
+  }
+  handleOversizeFile() {
+    this.snackBarService.error(
+      this.translateService.instant(
+        'companyProfilePage.snackBar.error.fileSize'
+      )
+    );
+  }
   protected toggleImage() {
     this.showUploadButton = !this.showUploadButton;
     this.imageOpacity = this.imageOpacity === 1 ? 0.5 : 1;
@@ -194,17 +234,17 @@ export class CompanyProfileComponent implements OnInit {
       trainerTraining: company.companyDetails?.trainerTraining,
       trainerPosition: company.companyDetails?.trainerPosition,
       trainerProfessionalExperience:
-      company.companyDetails?.trainerProfessionalExperience,
+        company.companyDetails?.trainerProfessionalExperience,
       website: company.website,
       addresses: company.companyDetails?.addresses,
-      logoBase64: company.logoBase64
+      logoBase64: company.logoBase64,
+      teamPictureBase64: company.companyDetails?.teamPictureBase64,
     });
 
     this.activities.clear();
 
-    company.activities?.forEach(activity => {
-      const answerGroup =
-        this.createActivity(activity);
+    company.activities?.forEach((activity) => {
+      const answerGroup = this.createActivity(activity);
       this.activities.push(answerGroup);
     });
   }
@@ -213,12 +253,11 @@ export class CompanyProfileComponent implements OnInit {
     return this.fb.group({
       name: this.fb.nonNullable.control(activity.name),
       id: this.fb.nonNullable.control(activity.id),
-      value: this.fb.nonNullable.control(activity.value, Validators.required)
+      value: this.fb.nonNullable.control(activity.value, Validators.required),
     });
   }
 
   private getInputFromForm(): CompanyDetails {
-
     return {
       name: this.form.controls.name.value,
       website: this.form.controls.website.value,
@@ -230,11 +269,19 @@ export class CompanyProfileComponent implements OnInit {
       contactPersonHRM: this.form.controls.contactPersonHRM.value,
       trainer: this.form.controls.trainer.value,
       trainerTraining: this.form.controls.trainerTraining.value,
-      trainerProfessionalExperience: this.form.controls.trainerProfessionalExperience.value,
+      trainerProfessionalExperience:
+        this.form.controls.trainerProfessionalExperience.value,
       trainerPosition: this.form.controls.trainerPosition.value,
-      //teamPictureBase64: this.form.controls.name.value,
-      teamPictureBase64: null,
+      teamPictureBase64: this.form.controls.teamPictureBase64.value,
       addresses: this.form.controls.addresses.value,
+    };
+  }
+
+  deleteImage(flag: boolean) {
+    if (flag) {
+      this.form.controls.logoBase64.patchValue('');
+    } else {
+      this.form.controls.teamPictureBase64.patchValue('');
     }
   }
 }
