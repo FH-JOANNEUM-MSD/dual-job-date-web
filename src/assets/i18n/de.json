@@ -109,7 +109,10 @@
       "statusAktiv": "Aktiv setzen",
       "speichern": "Speichern",
       "pictureReload": "Bild aktualisieren",
-      "pictureUpload": "Bild hochladen"
+      "pictureUpload": "Bild hochladen",
+      "teampictureReload": "Teambild aktualisieren",
+      "teampictureUpload": "Teambild hochladen",
+      "deleteImage": "Bild entfernen"
     },
     "label":{
       "name": "Name des Unternehmens",
@@ -136,7 +139,8 @@
       },
       "error":{
         "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
-        "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut."
+        "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.",
+        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus"
       }
     }
   }
