@@ -68,7 +68,7 @@ export class StudentDialogComponent implements OnInit {
       const file = this.form.controls.excel.value!;
       const academicProgramId = this.form.controls.academicProgram.value!.id;
       const institutionId = this.form.controls.academicProgram.value!.institutionId;
-      this.csvParser.parseExcel(file).pipe(
+      this.csvParser.parseExcel(file, UserType.Student).pipe(
         switchMap(result => {
 
           if (!result) {
