@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class SnackbarService {
+
   constructor(private snackBar: MatSnackBar) {}
 
   success(message: string, action: string = 'OK', duration: number = 3000) {
@@ -20,6 +21,18 @@ export class SnackbarService {
       duration: duration,
       verticalPosition: 'top',
       panelClass: ['error-snackbar'],
+    });
+  }
+
+  reloadPage(message: string, action: string = 'OK', duration: number = 3000){
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: duration,
+      verticalPosition: 'top',
+      panelClass: ['success-snackbar'],
+    });
+
+    snackBarRef.afterDismissed().subscribe(() => {
+      window.location.reload();
     });
   }
 }

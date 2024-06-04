@@ -8,6 +8,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {CompanyDetails} from "../../../core/model/companyDetails";
 import {of, switchMap} from "rxjs";
 import {Activity} from "../../../core/model/activity";
+import {DialogService} from "../../../services/dialog.service";
+import {AuthService} from '../../../services/auth.service';
+import {UserType} from "../../../core/enum/userType";
 
 @Component({
   selector: 'app-company-profile',
@@ -16,6 +19,8 @@ import {Activity} from "../../../core/model/activity";
 })
 export class CompanyProfileComponent implements OnInit {
   isLoading = true;
+  status = true;
+
   form = this.fb.group({
     name: this.fb.nonNullable.control<string>('', {
       validators: [Validators.required],
@@ -69,7 +74,9 @@ export class CompanyProfileComponent implements OnInit {
     private companyService: CompanyService,
     private translateService: TranslateService,
     private route: ActivatedRoute,
-    private snackBarService: SnackbarService
+    private snackBarService: SnackbarService,
+    private dialogService: DialogService,
+    private authService: AuthService,
   ) {
   }
 
@@ -85,6 +92,27 @@ export class CompanyProfileComponent implements OnInit {
     this.loadNeededData();
   }
 
+  openConfirmationDialog(): void {
+
+    const userType = this.authService.getUserType();
+    var data = {
+      titleTranslationKey: "companyDialog.confirmChangeTitle",
+      messageTranslationKey: "companyDialog.confirmCompanyInactiveMessage"
+    };
+    if(userType === UserType.Admin) {
+      data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
+    }
+    this.dialogService.openConfirmDialog(data).pipe(
+      switchMap(result => {
+        if (!result) {
+          return of(null);
+        }
+
+        this.updateStatus();
+        return of(null);
+      })
+    ).subscribe();
+  }
   updateStatus(): void {
 
     if (!this.companyId) {
@@ -95,7 +123,7 @@ export class CompanyProfileComponent implements OnInit {
       .activateOrDeactivateCompany(this.companyId, false)
       .subscribe({
         next: (_) => {
-          this.snackBarService.success(
+          this.snackBarService.reloadPage(
             this.translateService.instant(
               'companyProfilePage.snackBar.success.setInactive'
             )
@@ -111,6 +139,9 @@ export class CompanyProfileComponent implements OnInit {
         },
       });
   }
+
+
+
 
   updateCompany(): void {
 
@@ -178,6 +209,7 @@ export class CompanyProfileComponent implements OnInit {
       if (!result) {
         return;
       }
+      this.status = result.isActive;
       this.initForm(result);
     });
   }

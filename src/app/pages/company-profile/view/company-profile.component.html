@@ -122,7 +122,8 @@
 
     <div class="form-group">
       <button mat-raised-button color="warn"
-              (click)="updateStatus()">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
+              (click)="openConfirmationDialog()"
+              [disabled]="!status">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
       </button>
       <button mat-raised-button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate }}
       </button>
