@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../../services/auth.service';
-import {Router} from '@angular/router';
-import {UserType} from 'src/app/core/enum/userType';
-import {DialogService} from '../../../services/dialog.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
+import { UserType } from 'src/app/core/enum/userType';
+import { DialogService } from '../../../services/dialog.service';
+import {filter} from "rxjs/operators";
+
 
 @Component({
   selector: 'app-headernavigation',
@@ -11,6 +13,7 @@ import {DialogService} from '../../../services/dialog.service';
 })
 export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
+  currentPage: string | undefined;
 
   constructor(
     private authService: AuthService,
@@ -35,7 +38,10 @@ export class HeadernavigationComponent implements OnInit {
         {path: '/student', label: 'Studenten'},
       ];
     }
+
+    this.updatePageTitle(this.router.url);
   }
+
 
   logOut(): void {
     this.authService.logout();
@@ -44,5 +50,29 @@ export class HeadernavigationComponent implements OnInit {
 
   openChangePasswordDialog(): void {
     this.dialogService.openChangePasswordDialog().subscribe();
+  }
+
+  updatePageTitle(url: string) {
+    // Here you can add logic to map URLs to human-readable page names
+    if (url.startsWith('/company-profile/')) {
+      this.currentPage = 'Unternehmensprofil';
+    } else {
+      // Map URLs to human-readable page names
+      switch (url) {
+        case '/home':
+          this.currentPage = 'Startseite';
+          break;
+        case '/company':
+          this.currentPage = 'Unternehmen';
+          break;
+        case '/student':
+          this.currentPage = 'Studenten';
+          break;
+        // Add other cases as needed
+        default:
+          this.currentPage = '404';
+          break;
+      }
+    }
   }
 }
