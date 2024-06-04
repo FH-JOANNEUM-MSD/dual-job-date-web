@@ -44,16 +44,17 @@
         appendTo="body"
         bindLabel="keyName"
         formControlName="academicProgram"
+        placeholder="{{ 'filter.institution' | translate }}"
       ></ng-select>
 
       <div *ngIf="user?.company" class="refCompany">
         <button mat-raised-button color="primary" (click)="redirectToCompany('company-profile')">
           {{ 'companyDialog.button.companyProfile' | translate }}      </button>
-        
+
         <button mat-raised-button color="primary" (click)="redirectToCompany('appointments')">
             {{ 'companyDialog.button.companyAppointment' | translate }}      </button>
       </div>
-      
+
     </form>
   }
 </mat-dialog-content>

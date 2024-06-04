@@ -153,5 +153,9 @@
   },
   "appointmentsPage":{
     "headline": "Heutige Termine"
+  },
+  "filter": {
+    "institution": "Institution",
+    "academicPrograms": "Akad. Prog."
   }
 }
