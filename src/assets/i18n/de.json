@@ -89,7 +89,9 @@
     "changePassword": "Passwort ändern",
     "homePage": "Startseite",
     "companies": "Unternehmen",
-    "students": "Studenten"
+    "students": "Studenten",
+    "appointments": "Termine",
+    "companyProfile": "Unternehmensprofil"
   },
   "login": {
     "sessionExpired": "Session abgelaufen. Bitte erneut anmelden.",

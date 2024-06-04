@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
-import {filter} from "rxjs/operators";
-
+import {TranslateService} from '@ngx-translate/core';
+import {CompanyService} from '../../../core/services/company.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-headernavigation',
@@ -14,19 +15,23 @@ import {filter} from "rxjs/operators";
 export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
+  userType: UserType | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private translateService: TranslateService,
+    private companyService: CompanyService,
+    private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit(): void {
-    const userType = this.authService.getUserType();
+    this.userType = this.authService.getUserType();
     const companyId = this.authService.getCompanyId();
 
-    if (userType === UserType.Company) {
+    if (this.userType === UserType.Company) {
       this.navLinks = [
         {path: `/appointments/${companyId}`, label: 'Termine'},
         {path: `/company-profile/${companyId}`, label: 'Profil'},
@@ -38,10 +43,14 @@ export class HeadernavigationComponent implements OnInit {
         {path: '/student', label: 'Studenten'},
       ];
     }
-
-    this.updatePageTitle(this.router.url);
   }
 
+  ngAfterViewInit(): void {
+    // Defer the call to updatePageTitle to ensure the view is fully initialized
+    setTimeout(() => {
+      this.updatePageTitle(this.router.url);
+    });
+  }
 
   logOut(): void {
     this.authService.logout();
@@ -54,23 +63,50 @@ export class HeadernavigationComponent implements OnInit {
 
   updatePageTitle(url: string) {
     // Here you can add logic to map URLs to human-readable page names
+
     if (url.startsWith('/company-profile/')) {
-      this.currentPage = 'Unternehmensprofil';
+      this.currentPage = this.translateService.instant(
+        'navigation.companyProfile'
+      );
+    }else if(url.startsWith('/appointments/')){
+      if(this.userType === UserType.Company){
+        this.currentPage = this.translateService.instant(
+          'navigation.appointments'
+        );
+      }else{
+        let companyId: any = this.route.snapshot.paramMap.get('companyId');
+        companyId = Number(companyId);
+        this.companyService.getCompanyById(companyId).subscribe((result) => {
+          if (!result) {
+            return;
+          }
+          console.log(result)
+          this.currentPage = result.name;
+        });
+      }
     } else {
       // Map URLs to human-readable page names
       switch (url) {
         case '/home':
-          this.currentPage = 'Startseite';
+          this.currentPage = this.translateService.instant(
+            'navigation.homePage'
+          );
           break;
         case '/company':
-          this.currentPage = 'Unternehmen';
+          this.currentPage = this.translateService.instant(
+            'navigation.companies'
+          );
           break;
         case '/student':
-          this.currentPage = 'Studenten';
+          this.currentPage = this.translateService.instant(
+            'navigation.students'
+          );
           break;
         // Add other cases as needed
         default:
-          this.currentPage = '404';
+          this.currentPage = this.translateService.instant(
+            '404.notFound'
+          );
           break;
       }
     }
