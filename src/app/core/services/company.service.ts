@@ -1,5 +1,5 @@
 ﻿import {Injectable} from '@angular/core';
-import {catchError, map, Observable, of, tap, throwError} from 'rxjs';
+import {catchError, map, Observable, of, tap} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Company} from '../model/company';
@@ -90,7 +90,7 @@ export class CompanyService {
 
   updateCompany(company: CompanyDetails): Observable<boolean> {
     return this.http
-      .put<Company>(
+      .put(
         `${environment.apiBasePath}${this.urlPath}/UpdateCompany`,
         company
       )
@@ -109,20 +109,24 @@ export class CompanyService {
   activateOrDeactivateCompany(
     id: number,
     isActive: boolean
-  ): Observable<Company> {
+  ): Observable<boolean> {
     const params = new HttpParams()
       .set('id', id)
       .set('isActive', isActive.toString());
 
     return this.http
-      .put<any>(`${environment.apiBasePath}${this.urlPath}/IsActive`, null, {
+      .put(`${environment.apiBasePath}${this.urlPath}/IsActive`, null, {
         params: params,
       })
       .pipe(
-        catchError((error) => {
-          console.error('Failed to update company status', error);
-          return throwError(() => new Error('Failed to update company status'));
-        })
+        map(_ => {
+          return true;
+        }),
+        catchError(error => {
+          // TODO implement Error Handling
+          console.error(error);
+          return of(false);
+        }),
       );
   }
 }
