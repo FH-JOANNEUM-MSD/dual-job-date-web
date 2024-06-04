@@ -34,6 +34,27 @@ import {CalendarDateFormatter, CalendarModule, CalendarUtils, DateAdapter} from 
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 import {CustomDateFormatter} from "./utils/custom-date-formatter.provider";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatCard} from "@angular/material/card";
+import {
+  DateTimeAdapter,
+  OWL_DATE_TIME_FORMATS,
+  OWL_DATE_TIME_LOCALE,
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule
+} from "@danielmoncada/angular-datetime-picker";
+import {MomentDateTimeAdapter, OwlMomentDateTimeModule} from "@danielmoncada/angular-datetime-picker-moment-adapter";
+
+export const MY_FORMATS = {
+  parseInput: 'DD.MM.YYYY HH:mm',
+  fullPickerInput: 'DD.MM.YYYY HH:mm',
+  datePickerInput: 'DD.MM.YYYY',
+  timePickerInput: 'HH:mm',
+  monthYearLabel: 'MMM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MMMM YYYY',
+};
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -75,6 +96,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatIconModule,
     FormsModule,
     MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
+    MatFormFieldModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    OwlMomentDateTimeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -85,7 +113,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory,
-    })
+    }),
+    MatCard,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
@@ -94,6 +123,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter,
     },
+    {provide: OWL_DATE_TIME_LOCALE, useValue: 'de'},
+    {provide: DateTimeAdapter, useClass: MomentDateTimeAdapter, deps: [OWL_DATE_TIME_LOCALE]},
+    {provide: OWL_DATE_TIME_FORMATS, useValue: MY_FORMATS}
   ],
   bootstrap: [AppComponent],
 })

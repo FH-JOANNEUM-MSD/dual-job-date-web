@@ -67,7 +67,7 @@ export class AppointmentsComponent implements OnInit {
         return {
           start: new Date(appointment.startTime),
           end: new Date(appointment.endTime),
-          title: appointment.student,
+          title: `${appointment.user.firstName} ${appointment.user.lastName} (${appointment.user.email})`,
           color: {...colors.primary},
         };
       });

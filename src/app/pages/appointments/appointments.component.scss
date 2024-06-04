@@ -1,13 +1,19 @@
 
 ::ng-deep body {
-  h2 {
-    margin: 0;
-    padding-top: 30px;
-    padding-left: 60px;
-    padding-bottom: 30px;
+  .container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+      margin: 0;
+      padding-top: 30px;
+      padding-left: 60px;
+      padding-bottom: 30px;
+    }
   }
-
-
 }
 
 ::ng-deep .cal-week-view {

@@ -1,14 +1,16 @@
 ﻿import {Injectable} from '@angular/core';
-import {catchError, Observable, of} from 'rxjs';
+import {catchError, map, Observable, of} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Appointment} from "../model/appointment";
+import {GenerateAppointmentModel} from "../model/generateAppointmentModel";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppointmentService {
-  private urlPath: string = '/Util';
+  private urlPathUtil: string = '/Util';
+  private urlPathMatching: string = '/StudentCompany';
 
   constructor(private http: HttpClient) {
   }
@@ -22,7 +24,7 @@ export class AppointmentService {
     }
 
     return this.http
-      .get<Appointment[]>(`${environment.apiBasePath}${this.urlPath}/AppointmentsByCompanyId`,
+      .get<Appointment[]>(`${environment.apiBasePath}${this.urlPathUtil}/AppointmentsByCompanyId`,
         {params: params,})
       .pipe(
         catchError((error) => {
@@ -30,6 +32,28 @@ export class AppointmentService {
           console.error(error);
           return of(null);
         })
+      );
+  }
+
+  generateAppointments(model: GenerateAppointmentModel): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.set('companyId', model.academicProgramId);
+    params = params.set('startTime', model.startTime.toISOString());
+    params = params.set('endTime', model.endTime.toISOString());
+    params = params.set('matchesPerResult', model.matchesPerResult);
+
+
+    return this.http
+      .get(`${environment.apiBasePath}${this.urlPathMatching}/MatchCompaniesToStudent`, {params: params})
+      .pipe(
+        map(_ => {
+          return true;
+        }),
+        catchError(error => {
+          // TODO implement Error Handling
+          console.error(error);
+          return of(false);
+        }),
       );
   }
 }

@@ -1,7 +1,10 @@
-﻿export interface Appointment {
+﻿import {User} from "./user";
+import {Company} from "./company";
+
+export interface Appointment {
   id: number;
   startTime: Date;
   endTime: Date;
-  student: string;
-  company: string;
+  user: User;
+  company: Company;
 }

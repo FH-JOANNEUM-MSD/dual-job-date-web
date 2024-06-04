@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
 @import "@ng-select/ng-select/themes/default.theme.css";
 @import "node_modules/angular-calendar/css/angular-calendar.css";
+@import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 @import "assets/style/theme";
 @import "assets/style/const";
 
@@ -130,12 +131,15 @@ body {
   .mat-form-field-ripple {
     display: none;
   }
+
   .mat-mdc-form-field-subscript-wrapper {
     height: 0;
   }
-  .mdc-line-ripple{
+
+  .mdc-line-ripple {
     display: none;
   }
+
   .mat-mdc-form-field-focus-overlay {
     background-color: transparent;
   }

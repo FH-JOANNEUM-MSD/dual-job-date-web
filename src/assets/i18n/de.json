@@ -6,7 +6,8 @@
     "search": "Suche..."
   },
   "formErrors": {
-    "required": "Bitte vollständig befüllen"
+    "required": "Bitte vollständig befüllen",
+    "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!"
   },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
@@ -27,7 +28,13 @@
     "password": "Passwort"
   },
   "homePage": {
-    "generateAppointments": "Generiere Termine"
+    "generateAppointments": "Generiere Termine",
+    "confirmGeneration": "Sind Sie sicher, dass Sie neue Termine generieren wollen? Alle derzeit bestehenden werden gelöscht!",
+    "confirmGenerationTitle": "Bestätigen",
+    "start": "Startzeit",
+    "end": "Endzeit",
+    "generationSuccessful": "Generierung war erfolgreich",
+    "generationUnsuccessful": "Fehler beim Generieren"
   },
   "companyPage": {
     "table": {
@@ -103,15 +110,15 @@
     "sorry": "We are sorry.But the page you are looking for is not available.",
     "button": "Back to Login"
   },
-  "companyProfilePage":{
-    "button":{
+  "companyProfilePage": {
+    "button": {
       "statusInaktiv": "Inaktiv setzen",
       "statusAktiv": "Aktiv setzen",
       "speichern": "Speichern",
       "pictureReload": "Bild aktualisieren",
       "pictureUpload": "Bild hochladen"
     },
-    "label":{
+    "label": {
       "name": "Name des Unternehmens",
       "description": "Kurze Beschreibung des Unternehmens",
       "branche": "Branche",
@@ -128,19 +135,19 @@
       "experience": "Erfahrung",
       "currentPosition": "Derzeitige Position/Tätigkeit im Unternehmen:"
     },
-    "snackBar":{
-      "success":{
+    "snackBar": {
+      "success": {
         "setInactive": "Das Unternehmen wurde erfolgreich als inaktiv gesetzt.",
         "setActive": "Das Unternehmen wurde erfolgreich als aktiv gesetzt.",
         "updateCompany": "Das Unternehmen wurde erfolgreich als aktualisiert"
       },
-      "error":{
+      "error": {
         "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
         "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut."
       }
     }
   },
-  "appointmentsPage":{
+  "appointmentsPage": {
     "headline": "Heutige Termine"
   }
 }
