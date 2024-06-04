@@ -158,6 +158,8 @@
     "headline": "Heutige Termine"
   },
   "csvParserService": {
-    "error": "Keine gültige Tabelle"
+    "error": "Keine gültige Tabelle",
+    "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
+    "wrongHeaderStudent": "Der Header muss email beinhalten"
   }
 }

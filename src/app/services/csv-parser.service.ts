@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import {catchError, map, Observable, of} from "rxjs";
 import {SnackbarService} from "./snackbar.service";
 import {TranslateService} from "@ngx-translate/core";
+import {UserType} from "../core/enum/userType";
 
 @Injectable({
   providedIn: 'root',
@@ -11,13 +12,32 @@ export class CsvParserService {
 
   constructor(private snackBarService: SnackbarService, private translateService: TranslateService,
   ) {}
-  parseExcel(file: File): Observable<DataRow[] | null> {
+  parseExcel(file: File, userType: UserType): Observable<DataRow[] | null> {
     return this.readFileAsBinaryString(file).pipe(
       map(e => XLSX.read(e, {type: 'binary'})),
       map(workbook => this.extractDataFromWorkbook(workbook)),
       map(rows => {
         if (this.validateEmail(rows)) {
-          return this.formatDataWithHeaders(rows);
+          if(this.validateHeaders(rows, userType)){
+            return this.formatDataWithHeaders(rows);
+          }
+          else {
+            if(userType === UserType.Company){
+              this.snackBarService.error(
+                this.translateService.instant(
+                  'csvParserService.wrongHeaderCompany'
+                )
+              );
+            }else{
+              this.snackBarService.error(
+                this.translateService.instant(
+                  'csvParserService.wrongHeaderStudent'
+                )
+              );
+            }
+
+            return null;
+          }
         } else {
           this.snackBarService.error(
             this.translateService.instant(
@@ -58,13 +78,26 @@ export class CsvParserService {
   }
 
   private validateEmail(rows: any[]): boolean {
-    //TODO Better validation!
     if (rows.length === 0) return false;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     for (let i = 1; i < rows.length; i++) {
       if (emailRegex.test(rows[i][0])) {
         return true;
       }
+    }
+    return false;
+  }
+
+  private validateHeaders(rows: any[], userType: UserType): boolean{
+    const headers = rows[0];
+    const requiredHeadersForCompany = ['email', 'companyName'];
+    const requiredHeadersForStudent = ['email'];
+
+    if(userType === UserType.Student){
+        return requiredHeadersForStudent.every(header => headers.includes(header));
+    }
+    else if(userType === UserType.Company){
+      return requiredHeadersForCompany.every(header => headers.includes(header));
     }
     return false;
   }
