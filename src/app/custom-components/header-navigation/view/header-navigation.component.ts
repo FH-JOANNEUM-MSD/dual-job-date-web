@@ -15,6 +15,7 @@ export class HeadernavigationComponent implements OnInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
   userType: UserType | null = null;
+  logoLink = {path: `/home`}
 
   constructor(
     private authService: AuthService,

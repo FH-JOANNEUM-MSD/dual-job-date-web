@@ -189,6 +189,7 @@ export class CompanyDialogComponent implements OnInit {
   redirectToCompany(destination: string) {
     if (this.user && this.user.company && this.user.company.id) {
       this.router.navigate([`/${destination}/${this.user.company.id}`]);
+      this.dialogRef.close();
     }
   }
 }

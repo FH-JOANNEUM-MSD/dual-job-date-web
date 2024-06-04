@@ -42,7 +42,7 @@ import {
   OWL_DATE_TIME_FORMATS,
   OWL_DATE_TIME_LOCALE,
   OwlDateTimeModule,
-  OwlNativeDateTimeModule
+  OwlNativeDateTimeModule,
 } from "@danielmoncada/angular-datetime-picker";
 import {MomentDateTimeAdapter, OwlMomentDateTimeModule} from "@danielmoncada/angular-datetime-picker-moment-adapter";
 
