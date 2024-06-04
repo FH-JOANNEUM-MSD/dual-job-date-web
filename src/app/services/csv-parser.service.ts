@@ -1,19 +1,29 @@
 import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
 import {catchError, map, Observable, of} from "rxjs";
+import {SnackbarService} from "./snackbar.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({
   providedIn: 'root',
 })
 export class CsvParserService {
+
+  constructor(private snackBarService: SnackbarService, private translateService: TranslateService,
+  ) {}
   parseExcel(file: File): Observable<DataRow[] | null> {
     return this.readFileAsBinaryString(file).pipe(
       map(e => XLSX.read(e, {type: 'binary'})),
       map(workbook => this.extractDataFromWorkbook(workbook)),
       map(rows => {
-        if (this.validateHeaders(rows)) {
+        if (this.validateEmail(rows)) {
           return this.formatDataWithHeaders(rows);
         } else {
+          this.snackBarService.error(
+            this.translateService.instant(
+              'csvParserService.error'
+            )
+          );
           return null;
         }
       }),
@@ -47,11 +57,16 @@ export class CsvParserService {
     return XLSX.utils.sheet_to_json(worksheet, {header: 1});
   }
 
-  private validateHeaders(rows: any[]): boolean {
+  private validateEmail(rows: any[]): boolean {
     //TODO Better validation!
     if (rows.length === 0) return false;
-    const headers = rows[0];
-    return headers.includes('email'); // Only checking for 'email' as required
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    for (let i = 1; i < rows.length; i++) {
+      if (emailRegex.test(rows[i][0])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private formatDataWithHeaders(rows: any[]): DataRow[] {

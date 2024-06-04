@@ -56,6 +56,9 @@
     "confirmDeleteMessage": "Sind Sie sicher, dass Sie diesen Studenten löschen möchten?",
     "button": {
       "import": "Wähle File"
+    },
+    "import": {
+      "info": "Um eine Excel Datei erfolgreich hochzuladen, wird in der ersten Spalte die Email des Studenten benötigt."
     }
   },
   "companyDialog": {
@@ -69,6 +72,9 @@
     "confirmAdminActiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen Aktiv setzen möchten?",
     "confirmAdminInactiveMessage": "Sind Sie sicher, dass Sie dieses Unternehmen inaktiv setzen möchten?",
     "confirmChangeTitle": "Änderung bestätigen",
+    "import": {
+      "info": "Um eine Excel Datei erfolgreich hochzuladen, wird in der ersten Spalte die Email des Unternehmens benötigt. In der zweiten Zeile muss der Name des Unternehmens angegeben werden."
+    },
     "button": {
       "import": "Wähle File",
       "companyProfile": "Zum Unternehmens Profil"
@@ -150,5 +156,8 @@
   },
   "appointmentsPage":{
     "headline": "Heutige Termine"
+  },
+  "csvParserService": {
+    "error": "Keine gültige Tabelle"
   }
 }
