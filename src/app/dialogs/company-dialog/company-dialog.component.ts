@@ -1,17 +1,18 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { AcademicProgram } from '../../core/model/academicProgram';
-import { AcademicProgramService } from '../../core/services/academic-program.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { forkJoin, of } from 'rxjs';
-import { User } from '../../core/model/user';
-import { CompanyService } from '../../core/services/company.service';
-import { RegisterCompany } from '../../core/model/registerCompany';
-import { UserService } from '../../core/services/user.service';
-import { CsvParserService } from '../../services/csv-parser.service';
-import { switchMap } from 'rxjs/operators';
-import { DialogService } from '../../services/dialog.service';
-import { Router } from '@angular/router';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {AcademicProgram} from '../../core/model/academicProgram';
+import {AcademicProgramService} from '../../core/services/academic-program.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {forkJoin, of} from 'rxjs';
+import {User} from '../../core/model/user';
+import {CompanyService} from '../../core/services/company.service';
+import {RegisterCompany} from '../../core/model/registerCompany';
+import {UserService} from '../../core/services/user.service';
+import {CsvParserService} from '../../services/csv-parser.service';
+import {switchMap} from 'rxjs/operators';
+import {DialogService} from '../../services/dialog.service';
+import {Router} from '@angular/router';
+import {UserType} from "../../core/enum/userType";
 
 @Component({
   selector: 'app-company-dialog',
@@ -77,7 +78,7 @@ export class CompanyDialogComponent implements OnInit {
       const academicProgramId = this.form.controls.academicProgram.value!.id;
 
       this.csvParser
-        .parseExcel(file)
+        .parseExcel(file, UserType.Company)
         .pipe(
           switchMap((result) => {
             if (!result) {

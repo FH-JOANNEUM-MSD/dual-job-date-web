@@ -14,6 +14,12 @@
     <form [formGroup]="form" class="col">
 
       @if (multiple) {
+        <span class="flex-container">
+          <mat-icon>info</mat-icon>
+          <p>
+            {{'studentDialog.import.info' | translate }}
+          </p>
+        </span>
         <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
         <button (click)="fileInput.click()" class="primary-button" mat-flat-button>
           <mat-icon>file_upload</mat-icon>
