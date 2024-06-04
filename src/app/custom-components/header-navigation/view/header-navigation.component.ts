@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import { UserType } from 'src/app/core/enum/userType';
 import { DialogService } from '../../../services/dialog.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -40,10 +40,19 @@ export class HeadernavigationComponent implements OnInit {
       ];
     }
 
-    this.updatePageTitle(this.router.url);
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.updatePageTitle(this.router.url);
+      }
+    });
   }
 
-
+  ngAfterViewInit(): void {
+    // Defer the call to updatePageTitle to ensure the view is fully initialized
+    setTimeout(() => {
+      this.updatePageTitle(this.router.url);
+    });
+  }
   logOut(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
