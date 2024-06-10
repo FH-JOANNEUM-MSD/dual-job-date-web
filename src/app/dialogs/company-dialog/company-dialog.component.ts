@@ -13,6 +13,7 @@ import {switchMap} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog.service';
 import {Router} from '@angular/router';
 import {UserType} from "../../core/enum/userType";
+import {getFormControlErrors} from "../../utils/form-utils";
 
 @Component({
   selector: 'app-company-dialog',
@@ -35,18 +36,19 @@ export class CompanyDialogComponent implements OnInit {
         value: null,
         disabled: !!this.data.id,
       },
-      { validators: this.multiple ? [] : [Validators.required] }
+      {validators: this.multiple ? [] : [Validators.required, Validators.email]}
     ),
     name: this.fb.control<string | null>(
-      { value: null, disabled: !!this.data.id },
-      { validators: this.multiple ? [] : [Validators.required] }
+      {value: null, disabled: !!this.data.id},
+      {validators: this.multiple ? [] : [Validators.required]}
     ),
     academicProgram: this.fb.control<AcademicProgram | null>(
-      { value: null, disabled: !!this.data.id },
-      { validators: [Validators.required] }
+      {value: null, disabled: !!this.data.id},
+      {validators: [Validators.required]}
     ),
   });
   academicPrograms: AcademicProgram[] = [];
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private fb: FormBuilder,
@@ -58,7 +60,8 @@ export class CompanyDialogComponent implements OnInit {
     private dialogService: DialogService,
     private router: Router,
     @Inject(MAT_DIALOG_DATA) private data: any
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadNeededData();
@@ -74,7 +77,6 @@ export class CompanyDialogComponent implements OnInit {
 
     if (this.multiple) {
       const file = this.form.controls.excel.value!;
-      // TODO institutionId
       const academicProgramId = this.form.controls.academicProgram.value!.id;
 
       this.csvParser
@@ -82,13 +84,12 @@ export class CompanyDialogComponent implements OnInit {
         .pipe(
           switchMap((result) => {
             if (!result) {
-              // TODO Show Parsing Error somewhere
               return of(null);
             }
 
             return this.userService.registerCompaniesFromJson(
               result.map((row) => {
-                return { email: row.email!, companyName: row.companyName! };
+                return {email: row.email!, companyName: row.companyName!};
               }),
               2,
               academicProgramId
@@ -123,7 +124,7 @@ export class CompanyDialogComponent implements OnInit {
     }
 
     const file = inputElement.files[0];
-    this.form.patchValue({ excel: file });
+    this.form.patchValue({excel: file});
     this.fileName = file.name;
   }
 
@@ -154,6 +155,13 @@ export class CompanyDialogComponent implements OnInit {
       });
   }
 
+  redirectToCompany(destination: string) {
+    if (this.user && this.user.company && this.user.company.id) {
+      this.router.navigate([`/${destination}/${this.user.company.id}`]);
+      this.dialogRef.close();
+    }
+  }
+
   private loadNeededData() {
     forkJoin({
       user: this.userId ? this.userService.getUserById(this.userId) : of(null),
@@ -165,6 +173,9 @@ export class CompanyDialogComponent implements OnInit {
       }
       if (result.academicPrograms) {
         this.academicPrograms = result.academicPrograms;
+        if (this.academicPrograms.length > 0) {
+          this.form.controls.academicProgram.patchValue(this.academicPrograms[0])
+        }
       }
       this.isLoading = false;
     });
@@ -184,12 +195,5 @@ export class CompanyDialogComponent implements OnInit {
       academicProgram: user.academicProgram,
       name: user.company.name ?? '',
     });
-  }
-
-  redirectToCompany(destination: string) {
-    if (this.user && this.user.company && this.user.company.id) {
-      this.router.navigate([`/${destination}/${this.user.company.id}`]);
-      this.dialogRef.close();
-    }
   }
 }

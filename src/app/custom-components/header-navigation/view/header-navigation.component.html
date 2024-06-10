@@ -1,6 +1,6 @@
 <nav>
   <div class="headerContainer">
-    <img alt="Dual Dating Logo" src="assets/images/logo/dual_dating_logo_neu.png" [routerLink]="logoLink.path">
+    <img [routerLink]="getPath()" alt="Dual Dating Logo" src="assets/images/logo/dual_dating_logo_neu.png">
     <div class="headerHeadlineContainer">
       <h1>Dual Job Dating</h1>
       <h2>{{ currentPage }}</h2>
@@ -25,7 +25,8 @@
         <mat-icon>password</mat-icon>
         <span>{{ 'navigation.changePassword' | translate }}</span>
       </button>
-    </mat-menu>    <mat-menu #menu="matMenu">
+    </mat-menu>
+    <mat-menu #menu="matMenu">
       <button (click)="logOut()" mat-menu-item>
         <mat-icon>logout</mat-icon>
         <span>{{ 'navigation.logout' | translate }}</span>

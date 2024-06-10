@@ -1,4 +1,4 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SnackbarService} from "../../../services/snackbar.service";
 import {AppointmentService} from "../../../core/services/appointment.service";
 import {DialogService} from "../../../services/dialog.service";
@@ -10,6 +10,7 @@ import {AcademicProgramService} from "../../../core/services/academic-program.se
 import {GenerateAppointmentModel} from "../../../core/model/generateAppointmentModel";
 import * as moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
+import {getFormControlErrors} from "../../../utils/form-utils";
 import {OwlDateTimeIntl} from "@danielmoncada/angular-datetime-picker";
 
 @Injectable()
@@ -49,22 +50,23 @@ export class DefaultIntl extends OwlDateTimeIntl {
 export class HomeComponent implements OnInit {
 
   startDate = moment(Date.now());
-
+  start = new Date(new Date().setMinutes(60, 0, 0));
+  end = new Date(new Date().setMinutes(120, 0, 0));
   form = this.fb.group({
     academicProgram: this.fb.control<AcademicProgram | null>(
       null,
       {validators: [Validators.required]}
     ),
-    startTime: this.fb.control<Date | null>(null,
+    startTime: this.fb.control<Date>(this.start,
       {validators: [Validators.required]}),
-    endTime: this.fb.control<Date | null>(
-      null,
+    endTime: this.fb.control<Date>(
+      this.end,
       {validators: [Validators.required]}
     ),
   }, {validators: this.dateLessThan('startTime', 'endTime')});
   academicPrograms: AcademicProgram[] = [];
-  isLoading = false;
-  protected readonly Date = Date;
+  isLoading = true;
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private fb: FormBuilder,
@@ -86,9 +88,6 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
-
     this.dialogService.openConfirmDialog({
       messageTranslationKey: 'homePage.confirmGeneration',
       titleTranslationKey: "homePage.confirmGenerationTitle"
@@ -103,11 +102,10 @@ export class HomeComponent implements OnInit {
     )
       .subscribe(
         result => {
-          if (!result) {
-            this.snackBarService.error(this.translateService.instant('homePage.generationUnsuccessful'))
+          if (result) {
+            this.snackBarService.success(this.translateService.instant('homePage.generationSuccessful'))
             return;
           }
-          this.snackBarService.success(this.translateService.instant('homePage.generationSuccessful'))
         }
       )
   }
@@ -116,7 +114,7 @@ export class HomeComponent implements OnInit {
     return (group: AbstractControl): { [key: string]: any } | null => {
       let start = moment(group.get(startDateTime)?.value);
       let end = moment(group.get(endDateTime)?.value);
-      return start && end && end.isBefore(start) ? {'dateLessThan': true} : null;
+      return start && end && !end.isAfter(start) ? {'dateLessThan': true} : null;
     };
   }
 
@@ -124,6 +122,7 @@ export class HomeComponent implements OnInit {
 
     this.academicProgramService.getAcademicPrograms()
       .subscribe(result => {
+        this.isLoading = false;
         if (!result) {
           return;
         }

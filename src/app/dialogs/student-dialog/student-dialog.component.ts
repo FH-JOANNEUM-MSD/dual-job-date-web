@@ -1,18 +1,17 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, Validators} from "@angular/forms";
-import {Institution} from "../../core/model/institution";
 import {AcademicProgram} from "../../core/model/academicProgram";
 import {UserService} from "../../core/services/user.service";
 import {RegisterUserInput} from "../../core/model/registerUserInput";
 import {User} from "../../core/model/user";
-import {InstitutionService} from "../../core/services/institution.service";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
 import {forkJoin, of} from "rxjs";
 import {UserType} from "../../core/enum/userType";
 import {switchMap} from "rxjs/operators";
 import {CsvParserService} from "../../services/csv-parser.service";
 import {DialogService} from "../../services/dialog.service";
+import {getFormControlErrors} from "../../utils/form-utils";
 
 @Component({
   selector: 'app-student-dialog',
@@ -31,19 +30,18 @@ export class StudentDialogComponent implements OnInit {
       null, {validators: this.multiple ? [Validators.required] : []}
     ),
     email: this.fb.control<string | null>({value: null, disabled: !!this.data.id},
-      {validators: this.multiple ? [] : [Validators.required]}),
+      {validators: this.multiple ? [] : [Validators.required, Validators.email]}),
     academicProgram: this.fb.control<AcademicProgram | null>(
       {value: null, disabled: !!this.data.id},
       {validators: [Validators.required]}
     ),
   });
-  institutions: Institution[] = [];
   academicPrograms: AcademicProgram[] = [];
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private institutionService: InstitutionService,
     private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
@@ -72,7 +70,6 @@ export class StudentDialogComponent implements OnInit {
         switchMap(result => {
 
           if (!result) {
-            // TODO Show Parsing Error somewhere
             return of(null);
           }
 
@@ -147,7 +144,6 @@ export class StudentDialogComponent implements OnInit {
 
     forkJoin({
       user: this.userId ? this.userService.getUserById(this.userId) : of(null),
-      institutions: this.institutionService.getInstitutions(),
       academicPrograms: this.academicProgramService.getAcademicPrograms()
     }).subscribe(result => {
       if (result.user) {
@@ -155,9 +151,9 @@ export class StudentDialogComponent implements OnInit {
       }
       if (result.academicPrograms) {
         this.academicPrograms = result.academicPrograms;
-      }
-      if (result.institutions) {
-        this.institutions = result.institutions;
+        if (this.academicPrograms.length > 0) {
+          this.form.controls.academicProgram.patchValue(this.academicPrograms[0])
+        }
       }
       this.isLoading = false;
     })

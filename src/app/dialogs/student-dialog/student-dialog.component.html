@@ -9,7 +9,9 @@
 
 <mat-dialog-content>
   @if (isLoading) {
-    <mat-spinner></mat-spinner>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
   } @else {
     <form [formGroup]="form" class="col">
 
@@ -17,21 +19,21 @@
         <span class="flex-container">
           <mat-icon>info</mat-icon>
           <p>
-            {{'studentDialog.import.info' | translate }}
+            {{ 'studentDialog.import.info' | translate }}
           </p>
         </span>
         <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
         <button (click)="fileInput.click()" class="primary-button" mat-flat-button>
           <mat-icon>file_upload</mat-icon>
-          <!-- TODO If filename to long fix design-->
           {{ fileName ? fileName : ('studentDialog.button.import' | translate) }}
         </button>
       } @else {
         <mat-form-field>
           <mat-label>{{ 'studentDialog.email' | translate }}</mat-label>
           <input formControlName="email" matInput>
-          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-          <!-- TODO Show correct formError -->
+          <mat-error *ngIf="form.controls.email.invalid">
+            {{ getFormControlErrors(form.controls.email) | translate }}
+          </mat-error>
         </mat-form-field>
       }
       <ng-select
@@ -41,7 +43,7 @@
         appendTo="body"
         bindLabel="keyName"
         formControlName="academicProgram"
-        placeholder="{{ 'filter.institution' | translate }}"
+        placeholder="{{ 'filter.academicPrograms' | translate }}"
       ></ng-select>
 
     </form>

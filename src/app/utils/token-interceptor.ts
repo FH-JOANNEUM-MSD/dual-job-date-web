@@ -62,12 +62,14 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private handleClientError(error: HttpErrorResponse): Observable<never> {
+    // TODO Translate
     const errorMessage = `Clientfehler: ${error.error.message}`;
     this.openSnackBar(errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 
   private handleServerError(error: HttpErrorResponse): Observable<never> {
+    // TODO Translate
     const errorMessage = `Serverfehler: ${error.status} - ${
       error.statusText || error.error.message
     }`;
@@ -117,11 +119,11 @@ export class TokenInterceptor implements HttpInterceptor {
     return this.refreshTokenSubject.pipe(
       filter((token) => token != null),
       take(1),
-      switchMap((token) => next.handle(this.addAuthenticationToken(request)))
+      switchMap((_) => next.handle(this.addAuthenticationToken(request)))
     );
   }
 
-  private logoutUser(type : string = ""): Observable<never> {
+  private logoutUser(type: string = ""): Observable<never> {
     this.isRefreshing = false;
     this.authService.logout();
     this.router.navigateByUrl('/login');

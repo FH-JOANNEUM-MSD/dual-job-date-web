@@ -30,7 +30,6 @@ export class AcademicProgramService {
       )
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
           console.error(error);
           return of(null);
         })

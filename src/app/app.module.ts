@@ -45,6 +45,7 @@ import {
   OwlNativeDateTimeModule,
 } from "@danielmoncada/angular-datetime-picker";
 import {MomentDateTimeAdapter, OwlMomentDateTimeModule} from "@danielmoncada/angular-datetime-picker-moment-adapter";
+import {NgOptimizedImage} from "@angular/common";
 
 export const MY_FORMATS = {
   parseInput: 'DD.MM.YYYY HH:mm',
@@ -115,6 +116,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useFactory: adapterFactory,
     }),
     MatCard,
+    NgOptimizedImage,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

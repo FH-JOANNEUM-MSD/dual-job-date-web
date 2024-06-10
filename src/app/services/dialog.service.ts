@@ -28,7 +28,6 @@ export class DialogService {
   }
 
   openChangePasswordDialog(isNew: boolean = false): Observable<boolean> {
-    // TODO Change from Side Dialog to normal middle dialog
     const dialogRef = this.openDialog(isNew, ChangePasswordDialogComponent)
 
     return dialogRef.afterClosed().pipe(
@@ -43,7 +42,7 @@ export class DialogService {
     return dialogRef.afterClosed();
   }
 
-  private openSideDialog<T, K>(data: K, component: ComponentType<T>): MatDialogRef<T, any> {
+  private openSideDialog<T, K>(data: K, component: ComponentType<T>): MatDialogRef<T> {
     return this.dialog.open(component,
       {
         data: data,
@@ -51,7 +50,7 @@ export class DialogService {
       });
   }
 
-  private openDialog<T, K>(data: K, component: ComponentType<T>): MatDialogRef<T, any> {
+  private openDialog<T, K>(data: K, component: ComponentType<T>): MatDialogRef<T> {
     return this.dialog.open(component,
       {
         data: data,

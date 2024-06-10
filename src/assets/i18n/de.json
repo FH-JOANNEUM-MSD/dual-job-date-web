@@ -6,10 +6,10 @@
     "search": "Suche..."
   },
   "formErrors": {
-    "required": "Bitte befüllen",
-    "requiredPassword": "Bitte Passwort eingeben",
-    "requiredMail": "Bitte vollständige E-Mail Adresse eingeben",
-    "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!"
+    "required": "Bitte vollständig befüllen",
+    "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!",
+    "mismatch": "Passwörter stimmen nicht überein",
+    "email": "Bitte gib eine gültige Email ein"
   },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
@@ -162,7 +162,7 @@
       "error": {
         "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
         "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.",
-        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus"
+        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus, dass maximal 700kb hat"
       }
     }
   },
@@ -175,8 +175,8 @@
   },
   "csvParserService": {
     "error": "Keine gültige Tabelle",
-    "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
-    "wrongHeaderStudent": "Der Header muss email beinhalten"
+    "wrongHeaderCompany": "Der Header muss email und companyName sein!",
+    "wrongHeaderStudent": "Der Header muss email sein!"
   },
   "dateTimePicker": {
     "upSecondLabel" : "Sekunde hoch",

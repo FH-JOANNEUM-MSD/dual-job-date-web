@@ -1,6 +1,8 @@
 <app-headernavigation></app-headernavigation>
 @if (isLoading) {
-  <mat-spinner></mat-spinner>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
 } @else {
   <div class="container">
     <h2>{{ viewDate | date : 'dd.MM.yyyy' }}</h2>

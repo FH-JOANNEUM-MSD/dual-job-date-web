@@ -1,41 +1,48 @@
 <app-headernavigation></app-headernavigation>
-<div class="container">
-  <form [formGroup]="form" class="col">
+@if (isLoading) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <div class="container">
+    <form [formGroup]="form" class="col">
 
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'homePage.start' | translate }}</mat-label>
-      <input [min]="startDate" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="startTime" matInput>
-      <owl-date-time #dt2 [firstDayOfWeek]="1" [pickerType]="'both'"
-                     [stepMinute]="15"></owl-date-time>
-      <mat-error *ngIf="form.controls.startTime.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'homePage.start' | translate }}</mat-label>
+        <input [min]="startDate" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="startTime" matInput>
+        <owl-date-time #dt2 [firstDayOfWeek]="1" [pickerType]="'both'"></owl-date-time>
+        <mat-error
+          *ngIf="form.controls.startTime.invalid">{{ getFormControlErrors(form.controls.startTime) | translate }}
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>{{ 'homePage.end' | translate }}</mat-label>
-      <input [min]="startDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="endTime" matInput>
-      <owl-date-time #dt1 [firstDayOfWeek]="1" [pickerType]="'both'"
-                     [stepMinute]="15"></owl-date-time>
-      <mat-error *ngIf="form.controls.endTime.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ 'homePage.end' | translate }}</mat-label>
+        <input [min]="startDate" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="endTime" matInput>
+        <owl-date-time #dt1 [firstDayOfWeek]="1" [pickerType]="'both'"></owl-date-time>
+        <mat-error *ngIf="form.controls.endTime.invalid">{{ getFormControlErrors(form.controls.endTime) | translate }}
+        </mat-error>
+      </mat-form-field>
 
-    @if (this.form.hasError('dateLessThan')) {
-      <mat-error>
-        {{ 'formErrors.startAfterEnd' | translate }}
-      </mat-error>
-    }
+      @if (this.form.hasError('dateLessThan')) {
+        <mat-error>
+          {{ 'formErrors.startAfterEnd' | translate }}
+        </mat-error>
+      }
 
-    <ng-select
-      [clearable]="false"
-      [items]="academicPrograms"
-      appendTo="body"
-      bindLabel="keyName"
-      class="no-cursor-input"
-      formControlName="academicProgram"
-      placeholder="{{ 'filter.academicPrograms' | translate }}"
-    ></ng-select>
+      <ng-select
+        [clearable]="false"
+        [items]="academicPrograms"
+        appendTo="body"
+        bindLabel="keyName"
+        class="no-cursor-input"
+        formControlName="academicProgram"
+        placeholder="{{ 'filter.academicPrograms' | translate }}"
+      ></ng-select>
 
-    <button (click)="generateAppointments()" class="primary-button"
-            mat-flat-button>{{ 'homePage.generateAppointments' | translate }}
-    </button>
-  </form>
-</div>
+      <button (click)="generateAppointments()" class="primary-button" mat-flat-button>
+        {{ 'homePage.generateAppointments' | translate }}
+      </button>
+    </form>
+  </div>
+}
