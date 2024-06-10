@@ -18,23 +18,6 @@ export class CompanyService {
 
   // ****** GET ****** \\
 
-  getCompanies(): Observable<Company[] | null> {
-    // TODO institutionId and academicProgramId ???
-    return this.http
-      .get<Company[]>(
-        `${environment.apiBasePath}${
-          this.urlPath
-        }/Companies?institutionId=${2}&academicProgramId=${2}`
-      )
-      .pipe(
-        catchError((error) => {
-          // TODO implement Error Handling
-          console.error(error);
-          return of(null);
-        })
-      );
-  }
-
   getCompanyById(id?: number): Observable<Company | null> {
     const url = id
       ? `${environment.apiBasePath}${this.urlPath}?id=${id}`
@@ -47,7 +30,6 @@ export class CompanyService {
         }
       }),
       catchError((error) => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       })
@@ -64,7 +46,6 @@ export class CompanyService {
       )
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
           console.error(error);
           return of(null);
         })
@@ -79,7 +60,6 @@ export class CompanyService {
       )
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
           console.error(error);
           return of(null);
         })
@@ -99,7 +79,6 @@ export class CompanyService {
           return true;
         }),
         catchError(error => {
-          // TODO implement Error Handling
           console.error(error);
           return of(false);
         }),
@@ -123,7 +102,6 @@ export class CompanyService {
           return true;
         }),
         catchError(error => {
-          // TODO implement Error Handling
           console.error(error);
           return of(false);
         }),

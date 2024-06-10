@@ -11,24 +11,25 @@ import {UserType} from "../core/enum/userType";
 export class CsvParserService {
 
   constructor(private snackBarService: SnackbarService, private translateService: TranslateService,
-  ) {}
+  ) {
+  }
+
   parseExcel(file: File, userType: UserType): Observable<DataRow[] | null> {
     return this.readFileAsBinaryString(file).pipe(
       map(e => XLSX.read(e, {type: 'binary'})),
       map(workbook => this.extractDataFromWorkbook(workbook)),
       map(rows => {
         if (this.validateEmail(rows)) {
-          if(this.validateHeaders(rows, userType)){
+          if (this.validateHeaders(rows, userType)) {
             return this.formatDataWithHeaders(rows);
-          }
-          else {
-            if(userType === UserType.Company){
+          } else {
+            if (userType === UserType.Company) {
               this.snackBarService.error(
                 this.translateService.instant(
                   'csvParserService.wrongHeaderCompany'
                 )
               );
-            }else{
+            } else {
               this.snackBarService.error(
                 this.translateService.instant(
                   'csvParserService.wrongHeaderStudent'
@@ -61,7 +62,7 @@ export class CsvParserService {
         observer.next(e.target.result);
         observer.complete();
       };
-      reader.onerror = (e) => {
+      reader.onerror = (_) => {
         observer.error('Error reading file');
       };
 
@@ -88,15 +89,14 @@ export class CsvParserService {
     return false;
   }
 
-  private validateHeaders(rows: any[], userType: UserType): boolean{
+  private validateHeaders(rows: any[], userType: UserType): boolean {
     const headers = rows[0];
     const requiredHeadersForCompany = ['email', 'companyName'];
     const requiredHeadersForStudent = ['email'];
 
-    if(userType === UserType.Student){
-        return requiredHeadersForStudent.every(header => headers.includes(header));
-    }
-    else if(userType === UserType.Company){
+    if (userType === UserType.Student) {
+      return requiredHeadersForStudent.every(header => headers.includes(header));
+    } else if (userType === UserType.Company) {
       return requiredHeadersForCompany.every(header => headers.includes(header));
     }
     return false;

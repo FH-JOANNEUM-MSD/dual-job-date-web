@@ -37,7 +37,6 @@ export class UserService {
       params: params,
     }).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -47,7 +46,6 @@ export class UserService {
   getUserById(id: string): Observable<User | null> {
     return this.http.get<User>(`${environment.apiBasePath}${this.urlPath}/GetUser?id=${id}`).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -62,7 +60,6 @@ export class UserService {
       email: email
     }).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -86,7 +83,6 @@ export class UserService {
         return true;
       }),
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(false);
       }),
@@ -96,7 +92,6 @@ export class UserService {
   generateUserCredentials(userId: string): Observable<Credentials | null> {
     return this.http.post<Credentials>(`${environment.apiBasePath}${this.urlPath}/ResetPassword?id=${userId}`, null).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -108,7 +103,6 @@ export class UserService {
   deleteUser(id: string): Observable<any | null> {
     return this.http.delete(`${environment.apiBasePath}${this.urlPath}/DeleteUser?id=${id}`, {responseType: 'text'}).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -121,7 +115,6 @@ export class UserService {
   register(input: RegisterUserInput): Observable<boolean> {
     return this.http.put(`${environment.apiBasePath}${this.urlPath}/Register`, input, {responseType: 'text'}).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -136,7 +129,6 @@ export class UserService {
     return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterCompaniesFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
       input, {responseType: 'text'}).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -151,7 +143,6 @@ export class UserService {
     return this.http.put(`${environment.apiBasePath}${this.urlPath}/RegisterStudentsFromJson?institutionId=${institutionId}&academicProgramId=${academicProgramId}`,
       input, {responseType: 'text'}).pipe(
       catchError(error => {
-        // TODO implement Error Handling
         console.error(error);
         return of(null);
       }),
@@ -161,8 +152,8 @@ export class UserService {
 
   sendCredentials(user: User, password: string) {
     // TODO Translate
-    let subject = '';
-    let body = '';
+    let subject: string;
+    let body: string;
 
     switch (user.userType) {
       case UserType.Student:

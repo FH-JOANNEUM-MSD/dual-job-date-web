@@ -1,6 +1,6 @@
 ﻿import {AbstractControl} from "@angular/forms";
 
-export function getFormControlErrors(control: AbstractControl<any>): string {
+export function getFormControlErrors(control: AbstractControl): string {
   if (!control.errors) {
     return '';
   }

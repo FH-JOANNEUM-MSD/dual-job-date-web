@@ -5,7 +5,6 @@ import {AcademicProgram} from "../../core/model/academicProgram";
 import {UserService} from "../../core/services/user.service";
 import {RegisterUserInput} from "../../core/model/registerUserInput";
 import {User} from "../../core/model/user";
-import {InstitutionService} from "../../core/services/institution.service";
 import {AcademicProgramService} from "../../core/services/academic-program.service";
 import {forkJoin, of} from "rxjs";
 import {UserType} from "../../core/enum/userType";
@@ -43,7 +42,6 @@ export class StudentDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private institutionService: InstitutionService,
     private csvParser: CsvParserService,
     private academicProgramService: AcademicProgramService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
@@ -72,7 +70,6 @@ export class StudentDialogComponent implements OnInit {
         switchMap(result => {
 
           if (!result) {
-            // TODO Show Parsing Error somewhere
             return of(null);
           }
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserType} from 'src/app/core/enum/userType';
@@ -11,7 +11,7 @@ import {CompanyService} from '../../../core/services/company.service';
   templateUrl: './header-navigation.component.html',
   styleUrl: './header-navigation.component.scss',
 })
-export class HeadernavigationComponent implements OnInit {
+export class HeadernavigationComponent implements OnInit, AfterViewInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
   userType: UserType | null = null;

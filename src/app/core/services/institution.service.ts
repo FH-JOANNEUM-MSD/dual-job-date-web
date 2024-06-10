@@ -16,12 +16,10 @@ export class InstitutionService {
   // ****** GET ****** \\
 
   getInstitutions(): Observable<Institution[] | null> {
-    // TODO institutionId and academicProgramId ???
     return this.http
       .get<Institution[]>(`${environment.apiBasePath}${this.urlPath}/Institutions`)
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
           console.error(error);
           return of(null);
         })
