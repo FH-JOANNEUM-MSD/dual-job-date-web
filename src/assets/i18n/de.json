@@ -160,7 +160,7 @@
       "error": {
         "setInactive": "Fehler beim Setzen des Status. Bitte versuchen Sie es erneut.",
         "updateCompany": "Fehler beim Updaten des Unternehmens. Bitte versuchen Sie es erneut.",
-        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus"
+        "fileSize": "Das Bild ist zu groß, wählen Sie ein anderes Bild aus, dass maximal 700kb hat"
       }
     }
   },
