@@ -84,7 +84,6 @@ export class CompanyDialogComponent implements OnInit {
         .pipe(
           switchMap((result) => {
             if (!result) {
-              // TODO Show Parsing Error somewhere
               return of(null);
             }
 

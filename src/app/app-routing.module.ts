@@ -9,7 +9,6 @@ import {CompanyProfileComponent} from './pages/company-profile/view/company-prof
 import {AppointmentsComponent} from "./pages/appointments/appointments.component";
 import {PageNotFoundComponent} from "./pages/page-not-found/page-not-found.component";
 
-// TODO Translate title
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent, title: 'Login'},

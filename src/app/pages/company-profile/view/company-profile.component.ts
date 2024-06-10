@@ -133,7 +133,7 @@ export class CompanyProfileComponent implements OnInit {
             'companyProfilePage.snackBar.error.setInactive'
           )
         );
-        console.error('Fehler beim Aktualisieren des Status:', error);
+        console.error(error);
         return of(null);
       })
     ).subscribe(result => {

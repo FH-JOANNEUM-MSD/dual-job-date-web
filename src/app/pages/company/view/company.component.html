@@ -7,8 +7,8 @@
   <form [formGroup]="form" class="row">
 
     <mat-form-field class="search_bar">
-        <mat-label>{{ 'generic.search' | translate }}</mat-label>
-        <input matInput (keyup)="applyFilter($event)">
+      <mat-label>{{ 'generic.search' | translate }}</mat-label>
+      <input matInput (keyup)="applyFilter($event)">
     </mat-form-field>
 
     <ng-select
@@ -43,7 +43,9 @@
 
   </form>
   @if (userLoading) {
-    <mat-spinner></mat-spinner>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
   } @else {
     <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
       <ng-container matColumnDef="name">

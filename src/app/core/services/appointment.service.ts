@@ -29,7 +29,6 @@ export class AppointmentService {
         {params: params,})
       .pipe(
         catchError((error) => {
-          // TODO implement Error Handling
           console.error(error);
           return of(null);
         })
@@ -51,7 +50,6 @@ export class AppointmentService {
           return true;
         }),
         catchError(error => {
-          // TODO implement Error Handling
           console.error(error);
           return of(false);
         }),

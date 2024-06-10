@@ -25,7 +25,6 @@
         <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
         <button (click)="fileInput.click()" class="primary-button" mat-flat-button>
           <mat-icon>file_upload</mat-icon>
-          <!-- TODO If filename to long fix design-->
           {{ fileName ? fileName : ('companyDialog.button.import' | translate) }}
         </button>
       } @else {

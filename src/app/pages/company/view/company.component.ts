@@ -99,21 +99,23 @@ export class CompanyComponent implements OnInit {
       this.reloadCompanies();
     });
   }
-  openConfirmationDialog(user: User, event: MouseEvent ,isActive: boolean): void {
-    var data = {
+
+  openConfirmationDialog(user: User, event: MouseEvent, isActive: boolean): void {
+    const data = {
       titleTranslationKey: "companyDialog.confirmChangeTitle",
       messageTranslationKey: "companyDialog.confirmAdminActiveMessage"
     };
-    if(isActive) {
+    if (isActive) {
       data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
     }
     this.dialogService.openConfirmDialog(data).pipe().subscribe(result => {
       if (!result) {
         return;
       }
-      this.updateStatus(user,event);
+      this.updateStatus(user, event);
     });
   }
+
   updateStatus(user: User, event: MouseEvent): void {
     event.stopPropagation();
 

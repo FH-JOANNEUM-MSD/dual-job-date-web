@@ -1,4 +1,4 @@
 ﻿export const environment = {
   production: true,
-  apiBasePath: 'https://dual-dating-backend.msd-moss-test.fh-joanneum.at',
+  apiBasePath: 'https://dual-job-dating.msd-moss-prod.fh-joanneum.at/',
 };
