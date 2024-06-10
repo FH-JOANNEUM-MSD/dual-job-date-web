@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CompanyService} from '../../../core/services/company.service';
-import {Company} from 'src/app/core/model/company';
-import {ActivatedRoute} from '@angular/router';
-import {SnackbarService} from 'src/app/services/snackbar.service';
-import {TranslateService} from '@ngx-translate/core';
-import {CompanyDetails} from "../../../core/model/companyDetails";
-import {catchError, of, switchMap} from "rxjs";
-import {Activity} from "../../../core/model/activity";
-import {DialogService} from "../../../services/dialog.service";
-import {AuthService} from '../../../services/auth.service';
-import {UserType} from "../../../core/enum/userType";
-import {getFormControlErrors} from "../../../utils/form-utils";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CompanyService } from '../../../core/services/company.service';
+import { Company } from 'src/app/core/model/company';
+import { ActivatedRoute } from '@angular/router';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
+import { CompanyDetails } from '../../../core/model/companyDetails';
+import { catchError, of, switchMap } from 'rxjs';
+import { Activity } from '../../../core/model/activity';
+import { DialogService } from '../../../services/dialog.service';
+import { AuthService } from '../../../services/auth.service';
+import { UserType } from '../../../core/enum/userType';
+import { getFormControlErrors } from '../../../utils/form-utils';
 
 @Component({
   selector: 'app-company-profile',
@@ -21,6 +21,7 @@ import {getFormControlErrors} from "../../../utils/form-utils";
 export class CompanyProfileComponent implements OnInit {
   isLoading = true;
   status = true;
+  isAdmin = false;
 
   form = this.fb.group({
     name: this.fb.nonNullable.control<string>('', {
@@ -81,8 +82,14 @@ export class CompanyProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private snackBarService: SnackbarService,
     private dialogService: DialogService,
-    private authService: AuthService,
-  ) {
+    private authService: AuthService
+  ) {}
+
+  checkAdmin(): void {
+    this.isAdmin = this.authService.getUserType() === UserType.Admin;
+    if (this.isAdmin) {
+      this.form.disable();
+    }
   }
 
   get activities(): FormArray {
@@ -103,54 +110,59 @@ export class CompanyProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadNeededData();
+    this.checkAdmin();
   }
 
   openConfirmationDialog(): void {
     const userType = this.authService.getUserType();
     const data = {
-      titleTranslationKey: "companyDialog.confirmChangeTitle",
-      messageTranslationKey: "companyDialog.confirmCompanyInactiveMessage"
+      titleTranslationKey: 'companyDialog.confirmChangeTitle',
+      messageTranslationKey: 'companyDialog.confirmCompanyInactiveMessage',
     };
     if (userType === UserType.Admin) {
-      data.messageTranslationKey = "companyDialog.confirmAdminInactiveMessage";
+      data.messageTranslationKey = 'companyDialog.confirmAdminInactiveMessage';
     }
     const companyId = this.companyId;
     if (!companyId) {
       return;
     }
 
-    this.dialogService.openConfirmDialog(data).pipe(
-      switchMap(result => {
-        if (!result) {
+    this.dialogService
+      .openConfirmDialog(data)
+      .pipe(
+        switchMap((result) => {
+          if (!result) {
+            return of(null);
+          }
+          return this.companyService.activateOrDeactivateCompany(
+            companyId,
+            false
+          );
+        }),
+        catchError((error) => {
+          this.snackBarService.error(
+            this.translateService.instant(
+              'companyProfilePage.snackBar.error.setInactive'
+            )
+          );
+          console.error('Fehler beim Aktualisieren des Status:', error);
           return of(null);
+        })
+      )
+      .subscribe((result) => {
+        if (!result) {
+          return;
         }
-        return this.companyService
-          .activateOrDeactivateCompany(companyId, false)
-      }),
-      catchError(error => {
-        this.snackBarService.error(
+        this.status = false;
+        this.snackBarService.success(
           this.translateService.instant(
-            'companyProfilePage.snackBar.error.setInactive'
+            'companyProfilePage.snackBar.success.setInactive'
           )
         );
-        console.error(error);
-        return of(null);
-      })
-    ).subscribe(result => {
-      if (!result) {
-        return;
-      }
-      this.status = false;
-      this.snackBarService.success(
-        this.translateService.instant(
-          'companyProfilePage.snackBar.success.setInactive'
-        )
-      );
-    });
+      });
   }
 
   updateCompany(): void {
-
     this.form.markAllAsTouched();
     if (this.form.invalid) {
       return;
@@ -207,7 +219,7 @@ export class CompanyProfileComponent implements OnInit {
 
         this.form.controls[
           flag ? 'logoBase64' : 'teamPictureBase64'
-          ].patchValue(base64Data);
+        ].patchValue(base64Data);
         this.showUploadButton = false;
         this.imageOpacity = 1;
       };
@@ -240,8 +252,7 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   private validateBase64Data(base64Data: string): boolean {
-    return base64Data.length <= 65535;
-
+    return base64Data.length <= 955736; // 700 KB in Base64
   }
 
   private loadNeededData() {
@@ -270,7 +281,7 @@ export class CompanyProfileComponent implements OnInit {
       trainerTraining: company.companyDetails?.trainerTraining,
       trainerPosition: company.companyDetails?.trainerPosition,
       trainerProfessionalExperience:
-      company.companyDetails?.trainerProfessionalExperience,
+        company.companyDetails?.trainerProfessionalExperience,
       website: company.website,
       addresses: company.companyDetails?.addresses,
       logoBase64: company.logoBase64,
@@ -306,7 +317,7 @@ export class CompanyProfileComponent implements OnInit {
       trainer: this.form.controls.trainer.value,
       trainerTraining: this.form.controls.trainerTraining.value,
       trainerProfessionalExperience:
-      this.form.controls.trainerProfessionalExperience.value,
+        this.form.controls.trainerProfessionalExperience.value,
       trainerPosition: this.form.controls.trainerPosition.value,
       teamPictureBase64: this.form.controls.teamPictureBase64.value,
       addresses: this.form.controls.addresses.value,

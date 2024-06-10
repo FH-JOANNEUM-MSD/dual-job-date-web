@@ -10,7 +10,7 @@
         <img [src]="logoSrc" alt="Company Logo" [style.opacity]="imageOpacity" (click)="toggleImage()">
         <input type="file" #fileInput (change)="onFileSelect($event, true)"
                accept=".jpeg, .jpg, .png" style="display: none;">
-        @if (showUploadButton) {
+        @if (showUploadButton && !isAdmin) {
           <button mat-flat-button class="primary-button" (click)="fileInput.click()">
             <mat-icon>file_upload</mat-icon>
             {{ 'companyProfilePage.button.pictureReload' | translate }}
@@ -21,12 +21,13 @@
         }
 
       } @else {
-        <input type="file" #fileInput (change)="onFileSelect($event, true)" accept=".jpeg, .jpg, .png"
-               style="display: none;">
-        <button mat-flat-button class="primary-button" (click)="fileInput.click()">
-          <mat-icon>file_upload</mat-icon>
-          {{ 'companyProfilePage.button.pictureUpload' | translate }}
-        </button>
+        @if(!isAdmin){
+          <input type="file" #fileInput (change)="onFileSelect($event, true)" accept=".jpeg, .jpg, .png" style="display: none;">
+          <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            {{ 'companyProfilePage.button.pictureUpload' | translate }}
+          </button>
+        }
       }
     </div>
     <div class="form-group company-name">
@@ -96,12 +97,12 @@
         @for (activity of activities.controls; track $index) {
           <div class="activity-item" [formGroupName]="$index">
             <label>{{ activity.value.name }}</label>
-            <mat-form-field class="exclude-width">
-              <input matInput type="number" placeholder="{{ activity.value }}"
-                     formControlName="value" min="0" max="5">
+            <mat-form-field class="exclude-width">             
               <mat-error
                 *ngIf="activity.invalid">{{ getFormControlErrors(activity) | translate }}
               </mat-error>
+              <input [readonly] = "isAdmin" matInput type="number" placeholder="{{ activity.value }}"
+                formControlName="value" min="0" max="5" >          
             </mat-form-field>
           </div>
         }
@@ -124,12 +125,13 @@
         }
 
       } @else {
-        <input type="file" #fileInput (change)="onFileSelect($event, false)" accept=".jpeg, .jpg, .png"
-               style="display: none;">
-        <button mat-flat-button class="primary-button" (click)="fileInput.click()">
-          <mat-icon>file_upload</mat-icon>
-          {{ 'companyProfilePage.button.teampictureUpload' | translate }}
-        </button>
+        @if (!isAdmin) {
+          <input type="file" #fileInput (change)="onFileSelect($event, false)" accept=".jpeg, .jpg, .png" style="display: none;">
+          <button mat-flat-button class="primary-button" (click)="fileInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            {{ 'companyProfilePage.button.teampictureUpload' | translate }}
+          </button>
+        }
       }
     </div>
 
@@ -196,9 +198,10 @@
               type="button"
               [disabled]="!status">{{ 'companyProfilePage.button.statusInaktiv' | translate }}
       </button>
-      <button mat-raised-button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate }}
-      </button>
-
+      @if(!isAdmin){
+        <button mat-raised-button type="submit" color="primary">{{ 'companyProfilePage.button.speichern' | translate }}
+        </button>
+      }
     </div>
   </form>
 }
