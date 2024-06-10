@@ -19,7 +19,7 @@
         <span class="flex-container">
           <mat-icon>info</mat-icon>
           <p>
-            {{'companyDialog.import.info' | translate }}
+            {{ 'companyDialog.import.info' | translate }}
           </p>
         </span>
         <input #fileInput (change)="onFileSelect($event)" accept=".xlsx, .csv" style="display: none;" type="file">
@@ -32,19 +32,20 @@
         <mat-form-field>
           <mat-label>{{ 'companyDialog.email' | translate }}</mat-label>
           <input formControlName="email" matInput>
-          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-          <!-- TODO Show correct formError -->
+          <mat-error *ngIf="form.controls.email.invalid">
+            {{ getFormControlErrors(form.controls.email) | translate }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>{{ 'companyDialog.name' | translate }}</mat-label>
           <input formControlName="name" matInput>
-          <mat-error *ngIf="form.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-          <!-- TODO Show correct formError -->
+          <mat-error *ngIf="form.controls.name.invalid">
+            {{ getFormControlErrors(form.controls.name) | translate }}
+          </mat-error>
         </mat-form-field>
       }
 
-      <!-- TODO Maybe set inital value because it is required-->
       <ng-select
         class="no-cursor-input"
         [clearable]="false"
@@ -52,15 +53,17 @@
         appendTo="body"
         bindLabel="keyName"
         formControlName="academicProgram"
-        placeholder="{{ 'filter.institution' | translate }}"
+        placeholder="{{ 'filter.academicPrograms' | translate }}"
       ></ng-select>
 
       <div *ngIf="user?.company" class="refCompany">
         <button mat-raised-button color="primary" (click)="redirectToCompany('company-profile')">
-          {{ 'companyDialog.button.companyProfile' | translate }}      </button>
+          {{ 'companyDialog.button.companyProfile' | translate }}
+        </button>
 
         <button mat-raised-button color="primary" (click)="redirectToCompany('appointments')">
-            {{ 'companyDialog.button.companyAppointment' | translate }}      </button>
+          {{ 'companyDialog.button.companyAppointment' | translate }}
+        </button>
       </div>
 
     </form>

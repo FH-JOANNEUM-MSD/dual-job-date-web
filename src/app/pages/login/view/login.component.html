@@ -18,8 +18,8 @@
   </div>
 
   <div class="bottom-left-circle">
-    <svg width="199" height="167" viewBox="0 0 199 167" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="-20" cy="219" r="219" fill="#73B72A"/>
+    <svg fill="none" height="167" viewBox="0 0 199 167" width="199" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="-20" cy="219" fill="#73B72A" r="219"/>
     </svg>
   </div>
   <div class="form-circle">
@@ -28,14 +28,16 @@
         <mat-form-field>
           <mat-label>{{ 'loginPage.email' | translate }}</mat-label>
           <input formControlName="email" matInput type="email">
-          <mat-error *ngIf="loginForm.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-          <!-- TODO Show correct formError -->
+          <mat-error
+            *ngIf="loginForm.controls.email.invalid">{{ getFormControlErrors(loginForm.controls.email) | translate }}
+          </mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-label>{{ 'loginPage.password' | translate }}</mat-label>
           <input formControlName="password" matInput type="password">
-          <mat-error *ngIf="loginForm.controls.password.invalid">{{ 'formErrors.required' | translate }}</mat-error>
-          <!-- TODO Show correct formError -->
+          <mat-error
+            *ngIf="loginForm.controls.password.invalid">{{ getFormControlErrors(loginForm.controls.password) | translate }}
+          </mat-error>
         </mat-form-field>
         <button (click)="save()" class="primary-button"
                 mat-button
