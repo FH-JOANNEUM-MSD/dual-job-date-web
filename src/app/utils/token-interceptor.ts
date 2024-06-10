@@ -127,9 +127,9 @@ export class TokenInterceptor implements HttpInterceptor {
     this.isRefreshing = false;
     this.authService.logout();
     this.router.navigateByUrl('/login');
-    if (type == "wrongLogin") {
-      this.openSnackBar(this.translateService.instant('Wrong Password or Username'));
-    } else {
+    if(type == "wrongLogin"){
+      this.openSnackBar(this.translateService.instant('login.wrongLogin'));
+    }else{
       this.openSnackBar(this.translateService.instant('login.sessionExpired'));
     }
     return throwError(() => new Error('Authentication required.'));

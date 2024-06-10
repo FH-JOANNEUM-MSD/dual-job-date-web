@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {SnackbarService} from "../../../services/snackbar.service";
 import {AppointmentService} from "../../../core/services/appointment.service";
 import {DialogService} from "../../../services/dialog.service";
@@ -11,11 +11,41 @@ import {GenerateAppointmentModel} from "../../../core/model/generateAppointmentM
 import * as moment from "moment";
 import {TranslateService} from "@ngx-translate/core";
 import {getFormControlErrors} from "../../../utils/form-utils";
+import {OwlDateTimeIntl} from "@danielmoncada/angular-datetime-picker";
+
+@Injectable()
+export class DefaultIntl extends OwlDateTimeIntl {
+  constructor(private translateService: TranslateService) {
+    super();
+    this.initTranslations();
+  }
+
+  initTranslations() {
+    this.cancelBtnLabel = this.translateService.instant('dateTimePicker.cancelBtnLabel');
+    this.setBtnLabel = this.translateService.instant('dateTimePicker.setBtnLabel');
+    this.upSecondLabel = this.translateService.instant('dateTimePicker.upSecondLabel');
+    this.upMinuteLabel = this.translateService.instant('dateTimePicker.upMinuteLabel');
+    this.upHourLabel = this.translateService.instant('dateTimePicker.upHourLabel');
+    this.downSecondLabel = this.translateService.instant('dateTimePicker.downSecondLabel');
+    this.downMinuteLabel = this.translateService.instant('dateTimePicker.downMinuteLabel');
+    this.downHourLabel = this.translateService.instant('dateTimePicker.downHourLabel');
+    this.prevMonthLabel = this.translateService.instant('dateTimePicker.prevMonthLabel');
+    this.nextMonthLabel = this.translateService.instant('dateTimePicker.nextMonthLabel');
+    this.prevYearLabel = this.translateService.instant('dateTimePicker.prevYearLabel');
+    this.nextYearLabel = this.translateService.instant('dateTimePicker.nextYearLabel');
+    this.switchToMonthViewLabel = this.translateService.instant('dateTimePicker.switchToMonthViewLabel');
+    this.switchToMultiYearViewLabel = this.translateService.instant('dateTimePicker.switchToMultiYearViewLabel');
+  }
+}
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
+  providers: [
+    { provide: OwlDateTimeIntl, useClass: DefaultIntl },
+  ],
 })
 export class HomeComponent implements OnInit {
 
@@ -97,17 +127,14 @@ export class HomeComponent implements OnInit {
           return;
         }
         this.academicPrograms = result;
-        if (this.academicPrograms.length > 0) {
-          this.form.controls.academicProgram.patchValue(this.academicPrograms[0])
-        }
       })
 
   }
 
   private getInputFromForm(): GenerateAppointmentModel {
     return {
-      endTime: new Date(this.form.controls.endTime.value!),
-      startTime: new Date(this.form.controls.startTime.value!),
+      endTime: this.form.controls.endTime.value!,
+      startTime: this.form.controls.startTime.value!,
       academicProgramId: this.form.controls.academicProgram.value!.id,
       matchesPerResult: 6,
     }
