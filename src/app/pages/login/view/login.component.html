@@ -28,13 +28,13 @@
         <mat-form-field>
           <mat-label>{{ 'loginPage.email' | translate }}</mat-label>
           <input formControlName="email" matInput type="email">
-          <mat-error *ngIf="loginForm.controls.email.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <mat-error *ngIf="loginForm.controls.email.invalid">{{ 'formErrors.requiredMail' | translate }}</mat-error>
           <!-- TODO Show correct formError -->
         </mat-form-field>
         <mat-form-field>
           <mat-label>{{ 'loginPage.password' | translate }}</mat-label>
           <input formControlName="password" matInput type="password">
-          <mat-error *ngIf="loginForm.controls.password.invalid">{{ 'formErrors.required' | translate }}</mat-error>
+          <mat-error *ngIf="loginForm.controls.password.invalid">{{ 'formErrors.requiredPassword' | translate }}</mat-error>
           <!-- TODO Show correct formError -->
         </mat-form-field>
         <button (click)="save()" class="primary-button"

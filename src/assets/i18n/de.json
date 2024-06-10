@@ -6,7 +6,9 @@
     "search": "Suche..."
   },
   "formErrors": {
-    "required": "Bitte vollständig befüllen",
+    "required": "Bitte befüllen",
+    "requiredPassword": "Bitte Passwort eingeben",
+    "requiredMail": "Bitte vollständige E-Mail Adresse eingeben",
     "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!"
   },
   "studentPage": {
@@ -175,5 +177,21 @@
     "error": "Keine gültige Tabelle",
     "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
     "wrongHeaderStudent": "Der Header muss email beinhalten"
+  },
+  "dateTimePicker": {
+    "upSecondLabel" : "Sekunde hoch",
+    "upMinuteLabel" : "Minute hoch",
+    "upHourLabel" : "Stunde hoch",
+    "downSecondLabel" : "Sekunde runter",
+    "downMinuteLabel" : "Minute runter",
+    "downHourLabel" : "Stunde runter",
+    "prevMonthLabel" : "Vorheriger Monat",
+    "nextMonthLabel" : "Nächster Monat",
+    "prevYearLabel" : "Vorheriges Jahr",
+    "nextYearLabel" : "Nächstes Jahr",
+    "switchToMonthViewLabel" : "Wechseln Sie zur Monatsansicht",
+    "switchToMultiYearViewLabel" : "Wählen Sie das Jahr und das Jahrzehnt",
+    "cancelBtnLabel" : "Abbrechen",
+    "setBtnLabel" : "Setzen"
   }
 }
