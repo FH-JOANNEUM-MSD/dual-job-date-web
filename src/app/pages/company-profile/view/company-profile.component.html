@@ -97,17 +97,12 @@
         @for (activity of activities.controls; track $index) {
           <div class="activity-item" [formGroupName]="$index">
             <label>{{ activity.value.name }}</label>
-            <mat-form-field class="exclude-width">
-              @if (isAdmin) {
-                <input readonly matInput type="number" placeholder="{{ activity.value }}"
-                formControlName="value" min="0" max="5" >
-              }@else{
-                <input matInput type="number" placeholder="{{ activity.value }}"
-                formControlName="value" min="0" max="5" >
-              }
+            <mat-form-field class="exclude-width">             
               <mat-error
                 *ngIf="activity.invalid">{{ getFormControlErrors(activity) | translate }}
               </mat-error>
+              <input [readonly] = "isAdmin" matInput type="number" placeholder="{{ activity.value }}"
+                formControlName="value" min="0" max="5" >          
             </mat-form-field>
           </div>
         }

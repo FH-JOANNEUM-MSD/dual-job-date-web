@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CompanyService} from '../../../core/services/company.service';
-import {Company} from 'src/app/core/model/company';
-import {ActivatedRoute} from '@angular/router';
-import {SnackbarService} from 'src/app/services/snackbar.service';
-import {TranslateService} from '@ngx-translate/core';
-import {CompanyDetails} from "../../../core/model/companyDetails";
-import {catchError, of, switchMap} from "rxjs";
-import {Activity} from "../../../core/model/activity";
-import {DialogService} from "../../../services/dialog.service";
-import {AuthService} from '../../../services/auth.service';
-import {UserType} from "../../../core/enum/userType";
-import {getFormControlErrors} from "../../../utils/form-utils";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CompanyService } from '../../../core/services/company.service';
+import { Company } from 'src/app/core/model/company';
+import { ActivatedRoute } from '@angular/router';
+import { SnackbarService } from 'src/app/services/snackbar.service';
+import { TranslateService } from '@ngx-translate/core';
+import { CompanyDetails } from '../../../core/model/companyDetails';
+import { catchError, of, switchMap } from 'rxjs';
+import { Activity } from '../../../core/model/activity';
+import { DialogService } from '../../../services/dialog.service';
+import { AuthService } from '../../../services/auth.service';
+import { UserType } from '../../../core/enum/userType';
+import { getFormControlErrors } from '../../../utils/form-utils';
 
 @Component({
   selector: 'app-company-profile',
@@ -87,18 +87,11 @@ export class CompanyProfileComponent implements OnInit {
 
   checkAdmin(): void {
     this.isAdmin = this.authService.getUserType() === UserType.Admin;
-    console.log(this.isAdmin);
     if (this.isAdmin) {
       this.form.disable();
-      this.disableActivityControls();
     }
   }
 
-  disableActivityControls(): void {
-    this.activities.controls.forEach((control) => {
-      control.disable();
-    });
-  }
   get activities(): FormArray {
     return this.form.controls.activities as FormArray;
   }
