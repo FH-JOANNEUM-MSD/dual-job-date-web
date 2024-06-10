@@ -7,7 +7,9 @@
   },
   "formErrors": {
     "required": "Bitte vollständig befüllen",
-    "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!"
+    "startAfterEnd": "Die Startzeit darf nicht nach der Endzeit liegen!",
+    "mismatch": "Passwörter stimmen nicht überein",
+    "email": "Bitte gib eine gültige Email ein"
   },
   "studentPage": {
     "registerStudent": "Registriere Studenten",
@@ -173,7 +175,7 @@
   },
   "csvParserService": {
     "error": "Keine gültige Tabelle",
-    "wrongHeaderCompany": "Der Header muss email und companyName beinhalten",
-    "wrongHeaderStudent": "Der Header muss email beinhalten"
+    "wrongHeaderCompany": "Der Header muss email und companyName sein!",
+    "wrongHeaderStudent": "Der Header muss email sein!"
   }
 }

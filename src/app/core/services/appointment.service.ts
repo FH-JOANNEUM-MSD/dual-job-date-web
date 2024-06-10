@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Appointment} from "../model/appointment";
 import {GenerateAppointmentModel} from "../model/generateAppointmentModel";
+import {toLocalISOString} from "../../utils/date-utils";
 
 @Injectable({
   providedIn: 'root',
@@ -38,8 +39,8 @@ export class AppointmentService {
   generateAppointments(model: GenerateAppointmentModel): Observable<boolean> {
     let params = new HttpParams();
     params = params.set('companyId', model.academicProgramId);
-    params = params.set('startTime', model.startTime.toISOString());
-    params = params.set('endTime', model.endTime.toISOString());
+    params = params.set('startTime', toLocalISOString(model.startTime));
+    params = params.set('endTime', toLocalISOString(model.endTime));
     params = params.set('matchesPerResult', model.matchesPerResult);
 
 

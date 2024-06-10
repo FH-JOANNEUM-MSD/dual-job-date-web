@@ -11,6 +11,7 @@ import {Activity} from "../../../core/model/activity";
 import {DialogService} from "../../../services/dialog.service";
 import {AuthService} from '../../../services/auth.service';
 import {UserType} from "../../../core/enum/userType";
+import {getFormControlErrors} from "../../../utils/form-utils";
 
 @Component({
   selector: 'app-company-profile',
@@ -71,6 +72,7 @@ export class CompanyProfileComponent implements OnInit {
   showUploadButton: boolean = false;
 
   companyId: number | null = null;
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private fb: FormBuilder,

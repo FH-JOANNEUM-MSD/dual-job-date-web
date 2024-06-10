@@ -5,6 +5,7 @@ import {UserService} from "../../core/services/user.service";
 import {switchMap} from "rxjs/operators";
 import {of} from "rxjs";
 import {DialogService} from "../../services/dialog.service";
+import {getFormControlErrors} from "../../utils/form-utils";
 
 @Component({
   selector: 'app-change-password-dialog',
@@ -28,6 +29,7 @@ export class ChangePasswordDialogComponent {
       null, {validators: [Validators.required]}
     ),
   }, {validators: this.passwordMatchValidator()});
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +45,7 @@ export class ChangePasswordDialogComponent {
       const newPassword = formGroup.get('newPassword')?.value;
       const confirmPassword = formGroup.get('confirmPassword')?.value;
       if (newPassword !== confirmPassword) {
-        return {'formErrors.mismatch': true};
+        return {'mismatch': true};
       }
       return null;
     };

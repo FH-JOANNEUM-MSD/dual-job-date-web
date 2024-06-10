@@ -8,6 +8,7 @@ import {switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {DialogService} from '../../../services/dialog.service';
 import {CompanyService} from 'src/app/core/services/company.service';
+import {getFormControlErrors} from "../../../utils/form-utils";
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent {
   });
 
   formError: string | null = null;
+  protected readonly getFormControlErrors = getFormControlErrors;
 
   constructor(
     private userService: UserService,
