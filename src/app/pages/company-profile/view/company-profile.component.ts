@@ -149,17 +149,18 @@ export class CompanyProfileComponent implements OnInit {
           return of(null);
         })
       )
-      .subscribe((result) => {
-        if (!result) {
-          return;
-        }
-        this.status = false;
-        this.snackBarService.success(
-          this.translateService.instant(
-            'companyProfilePage.snackBar.success.setInactive'
-          )
-        );
-      });
+     
+    ).subscribe(result => {
+      if (!result) {
+        return;
+      }
+      this.status = false;
+      this.snackBarService.success(
+        this.translateService.instant(
+          'companyProfilePage.snackBar.success.setInactive'
+        )
+      );
+    });
   }
 
   updateCompany(): void {
