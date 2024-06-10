@@ -15,7 +15,7 @@ export class HeadernavigationComponent implements OnInit, AfterViewInit {
   navLinks: any[] = [];
   currentPage: string | undefined;
   userType: UserType | null = null;
-  logoLink = {path: `/home`}
+
 
   constructor(
     private authService: AuthService,
@@ -109,5 +109,9 @@ export class HeadernavigationComponent implements OnInit, AfterViewInit {
           break;
       }
     }
+  }
+
+  getPath() {
+    return this.authService.getUserType() == UserType.Admin ? '/home' : `/company-profile/${this.authService.getCompanyId()}`;
   }
 }

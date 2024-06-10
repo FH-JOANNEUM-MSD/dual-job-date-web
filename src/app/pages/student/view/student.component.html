@@ -2,10 +2,11 @@
 @if (isLoading) {
   <div class="spinner-container">
     <mat-spinner></mat-spinner>
-  </div>} @else {
+  </div>
+} @else {
   <form [formGroup]="form" class="row">
 
-    <mat-form-field  class="search_bar">
+    <mat-form-field class="search_bar">
       <mat-label>{{ 'generic.search' | translate }}</mat-label>
       <input matInput (keyup)="applyFilter($event)">
     </mat-form-field>
@@ -43,8 +44,8 @@
   @if (userLoading) {
     <div class="spinner-container">
       <mat-spinner></mat-spinner>
-    </div>  }
-  @else {
+    </div>
+  } @else {
     <table [dataSource]="dataSource" class="mat-elevation-z8" mat-table matSort>
 
       <ng-container matColumnDef="email">
@@ -80,7 +81,7 @@
       <tr (dblclick)="openStudentDialog(row.id)" *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 
       <div class="nodataImage" *matNoDataRow>
-        <img ngSrc="assets/images/nodata.png" alt="nodata" height="600" width="800">
+        <img src="assets/images/nodata.png" alt="nodata" height="600" width="800">
       </div>
     </table>
 
