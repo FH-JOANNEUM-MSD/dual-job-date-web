@@ -20,6 +20,7 @@ import { UserType } from '../../../core/enum/userType';
 export class CompanyProfileComponent implements OnInit {
   isLoading = true;
   status = true;
+  isAdmin = false;
 
   form = this.fb.group({
     name: this.fb.nonNullable.control<string>('', {
@@ -82,6 +83,20 @@ export class CompanyProfileComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+  checkAdmin(): void {
+    this.isAdmin = this.authService.getUserType() === UserType.Admin;
+    console.log(this.isAdmin);
+    if (this.isAdmin) {
+      this.form.disable();
+      this.disableActivityControls();
+    }
+  }
+
+  disableActivityControls(): void {
+    this.activities.controls.forEach((control) => {
+      control.disable();
+    });
+  }
   get activities(): FormArray {
     return this.form.controls.activities as FormArray;
   }
@@ -100,6 +115,7 @@ export class CompanyProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadNeededData();
+    this.checkAdmin();
   }
 
   openConfirmationDialog(): void {
@@ -241,7 +257,7 @@ export class CompanyProfileComponent implements OnInit {
   }
 
   private validateBase64Data(base64Data: string): boolean {
-    return base64Data.length <= 955736;
+    return base64Data.length <= 955736; // 700 KB in Base64
   }
 
   private loadNeededData() {
