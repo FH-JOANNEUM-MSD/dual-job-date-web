@@ -173,7 +173,7 @@ export class UserService {
         body = `Sehr geehrte Damen und Herren,\n\n` +
           'Wir laden Sie herzlich zur Registrierung für das Dual Job Dating ein.\n' +
           '\n' +
-          'Hier sind Ihre Anmeldedaten für https://dual-dating.msd-moss-test.fh-joanneum.at/home:\n' +
+          'Hier sind Ihre Anmeldedaten für https://dual-job-dating.msd-moss-prod.fh-joanneum.at/login:\n' +
           `\nE-Mail: ${user.email}\n` +
           `Passwort: ${password}\n` +
           '\n' +
