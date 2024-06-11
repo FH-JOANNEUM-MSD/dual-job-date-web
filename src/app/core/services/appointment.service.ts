@@ -37,11 +37,10 @@ export class AppointmentService {
 
   generateAppointments(model: GenerateAppointmentModel): Observable<boolean> {
     let params = new HttpParams();
-    params = params.set('companyId', model.academicProgramId);
-    params = params.set('startTime', toLocalISOString(model.startTime));
-    params = params.set('endTime', toLocalISOString(model.endTime));
-    params = params.set('matchesPerResult', model.matchesPerResult);
-
+    params = params.set('AcademicProgramId', model.academicProgramId);
+    params = params.set('StartTime', toLocalISOString(model.startTime));
+    params = params.set('EndTime', toLocalISOString(model.endTime));
+    params = params.set('MatchesPerStudent', model.matchesPerResult);
 
     return this.http
       .get(`${environment.apiBasePath}${this.urlPathMatching}/MatchCompaniesToStudent`, {params: params})
