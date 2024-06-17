@@ -8,7 +8,7 @@ A CI/CD Pipeline for the Section Web of the Dual Job Dating project. The goal of
 
 This YAML file defines a Continuous Integration/Continuous Deployment (CI/CD) pipeline for an Angular project using Github Actions. The pipeline is triggered on push or pull request events to the main branch, and on release creation.
 
-To use this workflow, you will need to push or merge to the `main` branch.
+To use this workflow, you will need to push or merge to the `main` or `develop` branch.
 
 ### Jobs
 
@@ -53,5 +53,5 @@ The `deploy` job requires the following permissions:
 
 ## Limitations
 
-- The pipeline is triggered on push or pull request events to the main branch, and on release creation.
+- The pipeline is triggered on push or pull request events to the main and develop branch, and on release creation.
 - The pipeline does not automatically deploy the application to the Kubernetes cluster. To deploy the application, you will need to manually deploy the image to the Kubernetes cluster using the `kubectl rollout restart deployment` command.
