@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
   pull_request:
     branches:
       - main
@@ -47,8 +48,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Prod
         run: npm run build:ci
+        if: github.ref == 'refs/heads/main'
+
+      - name: Build Dev
+        run: npm run build:ci-dev
+        if: github.ref == 'refs/heads/develop'
 
       - name: Archive application
         uses: actions/upload-artifact@v4
@@ -84,6 +90,13 @@ jobs:
           context: .
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:build-develop
+      - name: Build and push Docker image Prod
+        uses: docker/build-push-action@v5
+        if: github.ref == 'refs/heads/main'
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:build-main
 
   notify_failure:
     name: Notify on Build, Test or Dockerization Failure
